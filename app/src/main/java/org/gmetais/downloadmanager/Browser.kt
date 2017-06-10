@@ -16,4 +16,9 @@ class Browser : Fragment() {
         mBinding.folderPath.text = "chemin du dossier"
         return mBinding.root
     }
+
+    override fun onStart() {
+        super.onStart()
+        RequestManager.browseRoot(mBinding.root.context)
+    }
 }

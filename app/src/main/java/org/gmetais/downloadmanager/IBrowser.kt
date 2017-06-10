@@ -1,3 +1,5 @@
+package org.gmetais.downloadmanager
+
 import org.gmetais.downloadmanager.Directory
 import org.gmetais.downloadmanager.RequestBody
 import org.gmetais.downloadmanager.SharedFile
