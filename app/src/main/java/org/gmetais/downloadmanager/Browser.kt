@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import org.gmetais.downloadmanager.databinding.BrowserBinding
 
 class Browser : Fragment() {
@@ -13,12 +14,24 @@ class Browser : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = BrowserBinding.inflate(inflater ?: LayoutInflater.from(activity))
-        mBinding.folderPath.text = "chemin du dossier"
         return mBinding.root
     }
 
     override fun onStart() {
         super.onStart()
-        RequestManager.browseRoot(mBinding.root.context)
+        RequestManager.browseRoot(this::update)
+    }
+
+    private fun update(directory: Directory?, errorMsg : String?) {
+        if (directory == null) {
+            Toast.makeText(mBinding.root.context, errorMsg, Toast.LENGTH_SHORT).show()
+            return
+        }
+        mBinding.path = directory.Path
+        val filesList = directory.Files
+        val sb: StringBuilder = StringBuilder()
+        for (file in filesList)
+            sb.append(file.Path).append("\n")
+        Toast.makeText(mBinding.root.context, sb.toString(), Toast.LENGTH_LONG).show()
     }
 }

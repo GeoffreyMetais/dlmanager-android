@@ -1,7 +1,5 @@
 package org.gmetais.downloadmanager
 
-import android.content.Context
-import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,23 +18,16 @@ object RequestManager {
         browserService = retrofit.create(IBrowser::class.java)
     }
 
-    fun browseRoot(ctx : Context) {
+    fun browseRoot(callback: (Directory?, String?) -> Unit) {
         val files = browserService.browseRoot()
         files.enqueue(object : Callback<Directory> {
             override fun onResponse(call: Call<Directory>,
                                     response: Response<Directory>) {
-                val directory = response.body()
-                if (directory != null) {
-                    val filesList = directory.Files
-                    val sb: StringBuilder = StringBuilder()
-                    for (file in filesList)
-                        sb.append(file.Path).append("\n")
-                    Toast.makeText(ctx, sb.toString(), Toast.LENGTH_LONG).show()
-                }
+                callback(response.body(), null)
             }
 
             override fun onFailure(call: Call<Directory>, t: Throwable) {
-                Toast.makeText(ctx, t.message, Toast.LENGTH_SHORT).show()
+                callback(null, t.message)
             }
         })
     }
