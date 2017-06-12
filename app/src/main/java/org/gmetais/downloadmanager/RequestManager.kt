@@ -18,16 +18,20 @@ object RequestManager {
         browserService = retrofit.create(IBrowser::class.java)
     }
 
-    fun browseRoot(callback: (Directory?, String?) -> Unit) {
+    fun browseRoot(onSuccess: (Directory) -> Unit, onFailure: (String) -> Unit) {
         val files = browserService.browseRoot()
         files.enqueue(object : Callback<Directory> {
             override fun onResponse(call: Call<Directory>,
                                     response: Response<Directory>) {
-                callback(response.body(), null)
+                val body : Directory? = response.body()
+                if (body != null)
+                    onSuccess(body)
+                else
+                    onFailure("Error reading response")
             }
 
             override fun onFailure(call: Call<Directory>, t: Throwable) {
-                callback(null, t.message)
+                onFailure(t.message ?: "Internal error")
             }
         })
     }

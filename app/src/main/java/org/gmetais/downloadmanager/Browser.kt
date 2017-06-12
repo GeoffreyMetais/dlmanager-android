@@ -19,19 +19,19 @@ class Browser : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        RequestManager.browseRoot(this::update)
+        RequestManager.browseRoot(this::update, this::onServiceFailure)
     }
 
-    private fun update(directory: Directory?, errorMsg : String?) {
-        if (directory == null) {
-            Toast.makeText(mBinding.root.context, errorMsg, Toast.LENGTH_SHORT).show()
-            return
-        }
+    private fun update(directory: Directory) {
         mBinding.path = directory.Path
         val filesList = directory.Files
         val sb: StringBuilder = StringBuilder()
         for (file in filesList)
             sb.append(file.Path).append("\n")
         Toast.makeText(mBinding.root.context, sb.toString(), Toast.LENGTH_LONG).show()
+    }
+
+    private fun onServiceFailure(msg: String) {
+        //TODO
     }
 }
