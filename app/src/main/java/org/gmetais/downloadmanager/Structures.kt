@@ -1,7 +1,5 @@
 package org.gmetais.downloadmanager
 
-import retrofit2.http.Field
-
 data class File(
         val Path: String,
         val IsDir: Boolean,
