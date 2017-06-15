@@ -8,13 +8,12 @@ import org.gmetais.downloadmanager.databinding.BrowserItemBinding
 
 class BrowserAdapter(val filesList : List<File>) : Adapter<BrowserAdapter.ViewHolder>() {
 
-
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): BrowserAdapter.ViewHolder {
-        return ViewHolder(BrowserItemBinding.inflate(LayoutInflater.from(parent?.context), parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrowserAdapter.ViewHolder {
+        return ViewHolder(BrowserItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    override fun onBindViewHolder(holder: BrowserAdapter.ViewHolder?, position: Int) {
-        holder?.binding?.file = filesList[position]
+    override fun onBindViewHolder(holder: BrowserAdapter.ViewHolder, position: Int) {
+        holder.binding.file = filesList[position]
     }
 
     override fun getItemCount(): Int {
