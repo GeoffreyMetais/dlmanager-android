@@ -2,10 +2,10 @@ package org.gmetais.downloadmanager
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import org.gmetais.downloadmanager.databinding.BrowserBinding
 
 class Browser : Fragment() {
@@ -14,6 +14,7 @@ class Browser : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = BrowserBinding.inflate(inflater ?: LayoutInflater.from(activity))
+        mBinding.filesList.layoutManager = LinearLayoutManager(mBinding.root.context)
         return mBinding.root
     }
 
@@ -24,11 +25,7 @@ class Browser : Fragment() {
 
     private fun update(directory: Directory) {
         mBinding.path = directory.Path
-        val filesList = directory.Files
-        val sb: StringBuilder = StringBuilder()
-        for (file in filesList)
-            sb.append(file.Path).append("\n")
-        Toast.makeText(mBinding.root.context, sb.toString(), Toast.LENGTH_LONG).show()
+        mBinding.filesList.adapter = BrowserAdapter(directory.Files.sortedBy { !it.IsDir })
     }
 
     private fun onServiceFailure(msg: String) {
