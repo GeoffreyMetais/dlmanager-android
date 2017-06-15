@@ -1,6 +1,7 @@
 package org.gmetais.downloadmanager
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -24,11 +25,11 @@ class Browser : Fragment() {
     }
 
     private fun update(directory: Directory) {
-        mBinding.path = directory.Path
+        activity.title = directory.Path
         mBinding.filesList.adapter = BrowserAdapter(directory.Files.sortedBy { !it.IsDir })
     }
 
     private fun onServiceFailure(msg: String) {
-        //TODO
+        Snackbar.make(mBinding.root, msg, Snackbar.LENGTH_SHORT).show()
     }
 }
