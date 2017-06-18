@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                     .add(R.id.fragment_placeholder, Browser(), "browser")
-//                    .addToBackStack("browser")
                     .commit()
         }
         mNavigation = findViewById(R.id.navigation)

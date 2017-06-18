@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import org.gmetais.downloadmanager.databinding.BrowserBinding
 
-class Browser : Fragment() {
+class Browser(val path : String? = null) : Fragment(), BrowserAdapter.IBrowser {
 
     private lateinit var mBinding: BrowserBinding
 
@@ -21,15 +21,22 @@ class Browser : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        RequestManager.browseRoot(this::update, this::onServiceFailure)
+        RequestManager.browse(path, this::update, this::onServiceFailure)
     }
 
     private fun update(directory: Directory) {
-        activity.title = directory.Path
-        mBinding.filesList.adapter = BrowserAdapter(directory.Files.sortedBy { !it.IsDir })
+        activity.title = directory.Path.getNameFromPath()
+        mBinding.filesList.adapter = BrowserAdapter(this, directory.Files.sortedBy { !it.IsDir })
     }
 
     private fun onServiceFailure(msg: String) {
         Snackbar.make(mBinding.root, msg, Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun browse(path : String) {
+        activity.supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_placeholder, Browser(path), path.getNameFromPath())
+                .addToBackStack(this.path?.getNameFromPath() ?: "root")
+                .commit()
     }
 }

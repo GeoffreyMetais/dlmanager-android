@@ -6,7 +6,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.gmetais.downloadmanager.databinding.BrowserItemBinding
 
-class BrowserAdapter(val filesList : List<File>) : Adapter<BrowserAdapter.ViewHolder>() {
+class BrowserAdapter(val browserHandler: IBrowser, val filesList : List<File>) : Adapter<BrowserAdapter.ViewHolder>() {
+
+    interface IBrowser {
+        fun browse(path : String)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrowserAdapter.ViewHolder {
         return ViewHolder(BrowserItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -20,5 +24,9 @@ class BrowserAdapter(val filesList : List<File>) : Adapter<BrowserAdapter.ViewHo
         return filesList.size
     }
 
-    class ViewHolder(val binding : BrowserItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding : BrowserItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.browser = this@BrowserAdapter.browserHandler
+        }
+    }
 }

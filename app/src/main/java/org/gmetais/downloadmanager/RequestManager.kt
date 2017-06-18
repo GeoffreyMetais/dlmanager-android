@@ -8,8 +8,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RequestManager {
     private val BASE_URL = "http://192.168.1.18:8088/"
-
     private val browserService: IBrowser
+
     init {
         val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -18,8 +18,8 @@ object RequestManager {
         browserService = retrofit.create(IBrowser::class.java)
     }
 
-    fun browseRoot(onSuccess: (Directory) -> Unit, onFailure: (String) -> Unit) {
-        val files = browserService.browseRoot()
+    fun browse(path : String?, onSuccess: (Directory) -> Unit, onFailure: (String) -> Unit) {
+        val files = if (path == null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))
         files.enqueue(object : Callback<Directory> {
             override fun onResponse(call: Call<Directory>,
                                     response: Response<Directory>) {
