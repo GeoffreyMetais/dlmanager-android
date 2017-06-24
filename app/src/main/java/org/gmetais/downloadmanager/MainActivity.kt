@@ -13,6 +13,9 @@ class MainActivity : AppCompatActivity() {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
+            mNavigation.selectedItemId -> {
+                return@OnNavigationItemSelectedListener false
+            }
             R.id.navigation_shares -> {
                 supportFragmentManager.fragments.clear()
                 supportFragmentManager.beginTransaction()
