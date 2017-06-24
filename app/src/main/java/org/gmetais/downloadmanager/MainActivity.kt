@@ -1,11 +1,8 @@
 package org.gmetais.downloadmanager
 
-import android.app.Activity
 import android.os.Bundle
-import android.support.annotation.IdRes
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,9 +40,5 @@ class MainActivity : AppCompatActivity() {
                     .commit()
         }
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-    }
-
-    fun <T : View> Activity.bind(@IdRes res : Int) : Lazy<T> {
-        return lazy(LazyThreadSafetyMode.NONE) { findViewById<T>(res) }
     }
 }
