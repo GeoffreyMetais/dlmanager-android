@@ -12,7 +12,7 @@
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="@{file.isDir}"
+        android:clickable="@{file.isDirectory}"
         android:onClick="@{(v) -> browser.open(file.path)}">
 
         <ImageView
@@ -20,7 +20,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:layout_constraintStart_toStartOf="parent"
-            android:src="@{file.isDir ? @drawable/ic_folder : @drawable/ic_file}"/>
+            android:src="@{file.isDirectory ? @drawable/ic_folder : @drawable/ic_file}"/>
         <TextView
             android:id="@+id/item_name"
             android:layout_width="0dp"

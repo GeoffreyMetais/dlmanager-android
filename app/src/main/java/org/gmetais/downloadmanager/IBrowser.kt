@@ -6,10 +6,10 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface IBrowser {
-    @POST("go/open")
+    @POST("go/browse")
     fun browseDir(@Body request: RequestBody): Call<Directory>
 
-    @GET("go/open")
+    @GET("go/browse")
     fun browseRoot(): Call<Directory>
 
     @GET("go/list")

@@ -2,7 +2,7 @@ package org.gmetais.downloadmanager
 
 data class File(
         val path: String,
-        val isDir: Boolean,
+        val isDirectory: Boolean,
         val size: Long)
 data class Directory(val path: String,
                      val files: List<File>)

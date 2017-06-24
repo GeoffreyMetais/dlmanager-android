@@ -26,7 +26,7 @@ class Browser(val path : String? = null) : Fragment(), BrowserAdapter.IHandler {
 
     private fun update(directory: Directory) {
         activity.title = directory.path.getNameFromPath()
-        mBinding.filesList.adapter = BrowserAdapter(this, directory.files.sortedBy { !it.isDir })
+        mBinding.filesList.adapter = BrowserAdapter(this, directory.files.sortedBy { !it.isDirectory })
     }
 
     private fun onServiceFailure(msg: String) {
