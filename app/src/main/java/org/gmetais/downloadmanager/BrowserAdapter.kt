@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.gmetais.downloadmanager.databinding.BrowserItemBinding
 
-class BrowserAdapter(val browserHandler: IBrowser, val filesList : List<File>) : Adapter<BrowserAdapter.ViewHolder>() {
+class BrowserAdapter(val browserHandler: IHandler, val filesList : List<File>) : Adapter<BrowserAdapter.ViewHolder>() {
 
-    interface IBrowser {
-        fun browse(path : String)
+    interface IHandler {
+        fun open(path : String)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrowserAdapter.ViewHolder {

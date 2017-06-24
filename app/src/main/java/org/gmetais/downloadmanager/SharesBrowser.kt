@@ -9,7 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import org.gmetais.downloadmanager.databinding.BrowserBinding
 
-class Browser(val path : String? = null) : Fragment(), BrowserAdapter.IHandler {
+
+class SharesBrowser : Fragment(), SharesAdapter.ShareHandler {
 
     private lateinit var mBinding: BrowserBinding
 
@@ -21,22 +22,20 @@ class Browser(val path : String? = null) : Fragment(), BrowserAdapter.IHandler {
 
     override fun onStart() {
         super.onStart()
-        RequestManager.browse(path, this::update, this::onServiceFailure)
+        RequestManager.listShares(this::update, this::onServiceFailure)
     }
 
-    private fun update(directory: Directory) {
-        activity.title = directory.path.getNameFromPath()
-        mBinding.filesList.adapter = BrowserAdapter(this, directory.files.sortedBy { !it.isDir })
+    private fun update(shares: List<SharedFile>) {
+        activity.title = "Shares"
+        mBinding.filesList.adapter = SharesAdapter(this, shares)
     }
 
     private fun onServiceFailure(msg: String) {
-        Snackbar.make(mBinding.root, msg, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(mBinding.root, msg, Snackbar.LENGTH_LONG).show()
     }
 
-    override fun open(path : String) {
-        activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_placeholder, Browser(path), path.getNameFromPath())
-                .addToBackStack(this.path?.getNameFromPath() ?: "root")
-                .commit()
+    override fun open(share: SharedFile) {
+        Snackbar.make(mBinding.root, "opening ${share.name} with link ${share.link}", Snackbar.LENGTH_LONG).show()
+//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

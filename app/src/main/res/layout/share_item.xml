@@ -3,24 +3,24 @@
     <data>
         <import type="org.gmetais.downloadmanager.StructuresKt" />
         <variable
-            name="browser"
-            type="org.gmetais.downloadmanager.BrowserAdapter.IHandler" />
+            name="handler"
+            type="org.gmetais.downloadmanager.SharesAdapter.ShareHandler" />
         <variable
-            name="file"
-            type="org.gmetais.downloadmanager.File" />
+            name="item"
+            type="org.gmetais.downloadmanager.SharedFile" />
     </data>
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="@{file.isDir}"
-        android:onClick="@{(v) -> browser.open(file.path)}">
+        android:clickable="true"
+        android:onClick="@{(v) -> handler.open(item)}">
 
         <ImageView
             android:id="@+id/item_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:layout_constraintStart_toStartOf="parent"
-            android:src="@{file.isDir ? @drawable/ic_folder : @drawable/ic_file}"/>
+            android:src="@drawable/ic_file"/>
         <TextView
             android:id="@+id/item_name"
             android:layout_width="0dp"
@@ -30,6 +30,6 @@
             app:layout_constraintStart_toEndOf="@+id/item_icon"
             app:layout_constraintEnd_toEndOf="parent"
             android:gravity="center_vertical"
-            android:text="@{StructuresKt.getNameFromPath(file.path)}"/>
+            android:text="@{item.name}"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

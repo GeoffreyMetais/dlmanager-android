@@ -35,4 +35,22 @@ object RequestManager {
             }
         })
     }
+
+    fun listShares(onSuccess: (List<SharedFile>) -> Unit, onFailure: (String) -> Unit) {
+        val shares = browserService.getShares()
+        shares.enqueue(object : Callback<List<SharedFile>> {
+            override fun onResponse(call: Call<List<SharedFile>>,
+                                    response: Response<List<SharedFile>>) {
+                val body : List<SharedFile>? = response.body()
+                if (body != null)
+                    onSuccess(body)
+                else
+                    onFailure("Error reading response")
+            }
+
+            override fun onFailure(call: Call<List<SharedFile>>, t: Throwable) {
+                onFailure(t.message ?: "Internal error")
+            }
+        })
+    }
 }

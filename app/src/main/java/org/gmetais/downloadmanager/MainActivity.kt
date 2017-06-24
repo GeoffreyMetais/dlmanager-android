@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment_placeholder, Browser(), "browser")
+                    .add(R.id.fragment_placeholder, SharesBrowser(), "browser")
                     .commit()
         }
         mNavigation = findViewById(R.id.navigation)
