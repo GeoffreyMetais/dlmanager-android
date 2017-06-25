@@ -2,6 +2,7 @@ package org.gmetais.downloadmanager
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -12,14 +13,16 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             mNavigation.selectedItemId -> false
             R.id.navigation_shares -> {
-                supportFragmentManager.fragments.clear()
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_placeholder, SharesBrowser(), "shares")
                         .commit()
                 true
             }
             R.id.navigation_browse -> {
-                supportFragmentManager.beginTransaction()
+                if (supportFragmentManager.popBackStackImmediate("root", FragmentManager.POP_BACK_STACK_INCLUSIVE))
+                    supportFragmentManager.beginTransaction().remove(supportFragmentManager.findFragmentByTag("shares")).commit()
+                else
+                    supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_placeholder, Browser(), "browser")
                         .commit()
                 true
@@ -38,5 +41,13 @@ class MainActivity : AppCompatActivity() {
                     .commit()
         }
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+    }
+
+    override fun onBackPressed() {
+        if ("shares".equals(supportFragmentManager.findFragmentById(R.id.fragment_placeholder)?.tag)) {
+            finish()
+            return
+        }
+        super.onBackPressed()
     }
 }
