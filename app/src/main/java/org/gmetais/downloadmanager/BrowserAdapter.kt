@@ -9,7 +9,7 @@ import org.gmetais.downloadmanager.databinding.BrowserItemBinding
 class BrowserAdapter(val browserHandler: IHandler, val filesList : List<File>) : Adapter<BrowserAdapter.ViewHolder>() {
 
     interface IHandler {
-        fun open(path : String)
+        fun open(file : File)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrowserAdapter.ViewHolder {

@@ -14,4 +14,7 @@ interface IBrowser {
 
     @GET("go/list")
     fun getShares(): Call<List<SharedFile>>
+
+    @POST("go/add")
+    fun add(@Body file: SharedFile) : Call<Void>
 }

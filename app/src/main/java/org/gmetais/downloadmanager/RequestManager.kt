@@ -53,4 +53,16 @@ object RequestManager {
             }
         })
     }
+
+    fun add(file: SharedFile, onResponse: (Boolean) -> Unit) {
+        browserService.add(file).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>,
+                                    response: Response<Void>) {
+                onResponse(response.isSuccessful)
+            }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                onResponse(false)
+            }
+        })
+    }
 }
