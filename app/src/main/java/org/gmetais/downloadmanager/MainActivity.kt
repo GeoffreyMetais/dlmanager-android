@@ -10,24 +10,22 @@ class MainActivity : AppCompatActivity() {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            mNavigation.selectedItemId -> {
-                return@OnNavigationItemSelectedListener false
-            }
+            mNavigation.selectedItemId -> false
             R.id.navigation_shares -> {
                 supportFragmentManager.fragments.clear()
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_placeholder, SharesBrowser(), "shares")
                         .commit()
-                return@OnNavigationItemSelectedListener true
+                true
             }
             R.id.navigation_browse -> {
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_placeholder, Browser(), "browser")
                         .commit()
-                return@OnNavigationItemSelectedListener true
+                true
             }
+            else -> false
         }
-        false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
