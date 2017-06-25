@@ -9,9 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import org.gmetais.downloadmanager.databinding.BrowserBinding
 
-class Browser(val path : String? = null) : Fragment(), BrowserAdapter.IHandler {
+class Browser(var path : String? = null) : Fragment(), BrowserAdapter.IHandler {
 
     private lateinit var mBinding: BrowserBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState !== null)
+            path = savedInstanceState.getString("path")
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = BrowserBinding.inflate(inflater ?: LayoutInflater.from(activity))
@@ -22,6 +28,11 @@ class Browser(val path : String? = null) : Fragment(), BrowserAdapter.IHandler {
     override fun onStart() {
         super.onStart()
         RequestManager.browse(path, this::update, this::onServiceFailure)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putString("path", path)
     }
 
     private fun update(directory: Directory) {
