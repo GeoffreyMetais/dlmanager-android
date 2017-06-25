@@ -25,8 +25,8 @@ class Browser(var path : String? = null) : Fragment(), BrowserAdapter.IHandler {
         return mBinding.root
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         RequestManager.browse(path, this::update, this::onServiceFailure)
     }
 

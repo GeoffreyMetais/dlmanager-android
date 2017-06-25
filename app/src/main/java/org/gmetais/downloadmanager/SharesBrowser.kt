@@ -21,8 +21,8 @@ class SharesBrowser : Fragment(), SharesAdapter.ShareHandler {
         return mBinding.root
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         RequestManager.listShares(this::update, this::onServiceFailure)
     }
 
