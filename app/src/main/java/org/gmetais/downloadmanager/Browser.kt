@@ -19,8 +19,8 @@ class Browser(var path : String? = null) : Fragment(), BrowserAdapter.IHandler {
             path = savedInstanceState.getString("path")
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = BrowserBinding.inflate(inflater ?: LayoutInflater.from(activity))
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mBinding = BrowserBinding.inflate(inflater)
         mBinding.filesList.layoutManager = LinearLayoutManager(mBinding.root.context)
         return mBinding.root
     }

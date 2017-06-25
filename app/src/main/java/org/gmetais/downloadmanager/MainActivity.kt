@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if ("shares".equals(supportFragmentManager.findFragmentById(R.id.fragment_placeholder)?.tag)) {
+        if ("shares" == supportFragmentManager.findFragmentById(R.id.fragment_placeholder)?.tag) {
             finish()
             return
         }
