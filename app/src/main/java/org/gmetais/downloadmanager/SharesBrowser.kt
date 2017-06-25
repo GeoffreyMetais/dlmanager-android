@@ -1,5 +1,6 @@
 package org.gmetais.downloadmanager
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -35,7 +36,8 @@ class SharesBrowser : Fragment(), SharesAdapter.ShareHandler {
     }
 
     override fun open(share: SharedFile) {
-        Snackbar.make(mBinding.root, "opening ${share.name} with link ${share.link}", Snackbar.LENGTH_LONG).show()
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        startActivity(Intent(Intent.ACTION_SEND)
+                .putExtra(Intent.EXTRA_TEXT, share.link)
+                .setType("text/plain"))
     }
 }
