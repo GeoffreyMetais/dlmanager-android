@@ -2,7 +2,6 @@ package org.gmetais.downloadmanager
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -19,12 +18,14 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.navigation_browse -> {
-                if (supportFragmentManager.popBackStackImmediate("root", FragmentManager.POP_BACK_STACK_INCLUSIVE))
-                    supportFragmentManager.beginTransaction().remove(supportFragmentManager.findFragmentByTag("shares")).commit()
-                else
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_placeholder, Browser(), "browser")
-                        .commit()
+                with(supportFragmentManager) {
+                    if (popBackStackImmediate("root", android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE))
+                        beginTransaction().remove(supportFragmentManager.findFragmentByTag("shares")).commit()
+                    else
+                        beginTransaction()
+                            .replace(org.gmetais.downloadmanager.R.id.fragment_placeholder, org.gmetais.downloadmanager.Browser(), "browser")
+                            .commit()
+                }
                 true
             }
             else -> false
