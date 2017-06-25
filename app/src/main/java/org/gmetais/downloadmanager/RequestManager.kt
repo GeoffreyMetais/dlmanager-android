@@ -11,15 +11,14 @@ object RequestManager {
     private val browserService: IBrowser
 
     init {
-        val retrofit = Retrofit.Builder()
+        browserService = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(MoshiConverterFactory.create())
-                .build()
-        browserService = retrofit.create(IBrowser::class.java)
+                .build().create(IBrowser::class.java)
     }
 
     fun browse(path : String?, onSuccess: (Directory) -> Unit, onFailure: (String) -> Unit) {
-        val files = if (path == null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))
+        val files = if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))
         files.enqueue(object : Callback<Directory> {
             override fun onResponse(call: Call<Directory>,
                                     response: Response<Directory>) {
@@ -42,7 +41,7 @@ object RequestManager {
             override fun onResponse(call: Call<List<SharedFile>>,
                                     response: Response<List<SharedFile>>) {
                 val body : List<SharedFile>? = response.body()
-                if (body != null)
+                if (body !== null)
                     onSuccess(body)
                 else
                     onFailure("Error reading response")
