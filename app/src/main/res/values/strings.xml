@@ -2,4 +2,7 @@
     <string name="app_name">Download Manager</string>
     <string name="shares">Shares</string>
     <string name="browse">Browse</string>
+    <string name="create_download_link_for">Create download link for %1$s</string>
+    <string name="edit_share_hint">Share name</string>
+    <string name="share_ok">Go</string>
 </resources>

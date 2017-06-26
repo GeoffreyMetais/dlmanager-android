@@ -1,6 +1,5 @@
 package org.gmetais.downloadmanager
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -53,20 +52,11 @@ class Browser(var path : String? = null) : Fragment(), BrowserAdapter.IHandler {
                     .addToBackStack(this.path?.getNameFromPath() ?: "root")
                     .commit()
         } else {
-            val builder = AlertDialog.Builder(activity)
-            builder.setMessage("Create link for file ${file.path}?")
-                    .setTitle(file.path.getNameFromPath())
-            //DialogInterface dialog, int id
-            builder.setPositiveButton(android.R.string.ok, { dialog, _ -> RequestManager.add(SharedFile(path = file.path), this::onAddResponse)
-                dialog.dismiss()
-            })
-            builder.setNegativeButton(android.R.string.cancel, { dialog, _ -> dialog.dismiss() })
-            val dialog = builder.create()
-            dialog.show()
+            val linkCreatorDialog = LinkCreatorDialog()
+            val args = Bundle(1)
+            args.putString("path", file.path)
+            linkCreatorDialog.arguments = args
+            linkCreatorDialog.show(activity.supportFragmentManager, "linking park")
         }
-    }
-
-    fun onAddResponse(success: Boolean) {
-        Snackbar.make(mBinding.root, if (success) "success" else "failure", Snackbar.LENGTH_LONG).show()
     }
 }
