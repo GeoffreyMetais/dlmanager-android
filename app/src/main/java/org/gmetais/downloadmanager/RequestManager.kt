@@ -64,4 +64,16 @@ object RequestManager {
             }
         })
     }
+
+    fun delete(key: String, onResponse: (Boolean) -> Unit) {
+        browserService.delete(key).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>,
+                                    response: Response<Void>) {
+                onResponse(response.isSuccessful)
+            }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                onResponse(false)
+            }
+        })
+    }
 }

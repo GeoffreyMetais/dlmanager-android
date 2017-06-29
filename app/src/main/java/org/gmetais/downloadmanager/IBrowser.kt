@@ -1,9 +1,7 @@
 package org.gmetais.downloadmanager
 
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface IBrowser {
     @POST("go/browse")
@@ -17,4 +15,7 @@ interface IBrowser {
 
     @POST("go/add")
     fun add(@Body file: SharedFile) : Call<Void>
+
+    @DELETE("go/del/{name}")
+    fun delete(@Path("name") name: String) : Call<Void>
 }
