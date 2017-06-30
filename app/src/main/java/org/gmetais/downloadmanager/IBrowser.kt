@@ -11,7 +11,7 @@ interface IBrowser {
     fun browseRoot(): Call<Directory>
 
     @GET("go/list")
-    fun getShares(): Call<List<SharedFile>>
+    fun getShares(): Call<MutableList<SharedFile>>
 
     @POST("go/add")
     fun add(@Body file: SharedFile) : Call<Void>

@@ -26,7 +26,7 @@ class SharesBrowser : Fragment(), SharesAdapter.ShareHandler {
         RequestManager.listShares(this::update, this::onServiceFailure)
     }
 
-    private fun update(shares: List<SharedFile>) {
+    private fun update(shares: MutableList<SharedFile>) {
         activity.title = "Shares"
         mBinding.filesList.adapter = SharesAdapter(this, shares)
     }
@@ -39,5 +39,16 @@ class SharesBrowser : Fragment(), SharesAdapter.ShareHandler {
         startActivity(Intent(Intent.ACTION_SEND)
                 .putExtra(Intent.EXTRA_TEXT, share.link)
                 .setType("text/plain"))
+    }
+
+    override fun delete(share: SharedFile) {
+        RequestManager.delete(share.name, this::onDelResponse)
+    }
+
+    fun onDelResponse(name: String, success: Boolean) {
+        if (success)
+            (mBinding.filesList.adapter as SharesAdapter).remove(name)
+        else
+            Snackbar.make(mBinding.root, "failure", Snackbar.LENGTH_LONG).show()
     }
 }
