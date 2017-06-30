@@ -14,8 +14,7 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="@{(v) -> handler.open(item)}"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp" >
+        android:layout_margin="16dp" >
         <TextView
             android:id="@+id/item_name"
             android:layout_width="0dp"
@@ -32,7 +31,6 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="4dp"
             android:src="@drawable/ic_remove_circle"
             android:onClick="@{(v) -> handler.delete(item)}"/>
     </android.support.constraint.ConstraintLayout>

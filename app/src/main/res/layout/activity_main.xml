@@ -18,7 +18,9 @@
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-    android:background="@android:color/background_light"/>
+        android:background="@android:color/background_light"
+        android:elevation="2dp"
+        tools:targetApi="lollipop" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

@@ -29,6 +29,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_icon"
             app:layout_constraintEnd_toEndOf="parent"
+            android:maxLines="2"
             android:gravity="center_vertical"
             android:text="@{HelpersKt.getNameFromPath(file.path)}"/>
     </android.support.constraint.ConstraintLayout>
