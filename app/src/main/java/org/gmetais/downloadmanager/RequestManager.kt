@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RequestManager {
-    private val BASE_URL = "http://192.168.1.18:8088/"
+    private val BASE_URL = "http://gmetais.netlib.re/"
     private val browserService: IBrowser
 
     init {
