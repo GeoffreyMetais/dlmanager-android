@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import org.gmetais.downloadmanager.model.SharesListModel
 
 class LinkCreatorDialog : BottomSheetDialogFragment(), View.OnClickListener {
@@ -32,14 +34,14 @@ class LinkCreatorDialog : BottomSheetDialogFragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
-        RequestManager.add(SharedFile(path = mPath, name = mEditText?.text.toString()), this::onAddResponse)
-    }
+        val file = SharedFile(path = mPath, name = mEditText?.text.toString())
+        async(CommonPool) {
+            if (RequestManager.add(file).isSuccessful) {
+                shares.invalidate()
+                dismiss()
+            } else
+                Snackbar.make(view!!, "failure", Snackbar.LENGTH_LONG).show()
 
-    fun onAddResponse(success: Boolean) {
-        if (success) {
-            shares.invalidate()
-            dismiss()
-        } else
-            Snackbar.make(view!!, "failure", Snackbar.LENGTH_LONG).show()
+        }
     }
 }

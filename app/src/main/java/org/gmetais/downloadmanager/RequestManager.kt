@@ -32,16 +32,8 @@ object RequestManager {
         return browserService.getShares().execute()
     }
 
-    fun add(file: SharedFile, onResponse: (Boolean) -> Unit) {
-        browserService.add(file).enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>,
-                                    response: Response<Void>) {
-                onResponse(response.isSuccessful)
-            }
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                onResponse(false)
-            }
-        })
+    fun add(file: SharedFile) : Response<Void> {
+        return browserService.add(file).execute()
     }
 
     fun delete(key: String) : Boolean {
