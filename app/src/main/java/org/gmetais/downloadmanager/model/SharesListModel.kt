@@ -34,8 +34,10 @@ class SharesListModel : ViewModel() {
     fun delete(share: SharedFile) {
         Thread(Runnable {
             if (RequestManager.delete(share.name)) {
-                shares.value?.remove(share)
-                shares.postValue(shares.value)
+                shares.value?.let {
+                    it.remove(share)
+                    shares.postValue(it)
+                }
             }
         }).start()
     }
