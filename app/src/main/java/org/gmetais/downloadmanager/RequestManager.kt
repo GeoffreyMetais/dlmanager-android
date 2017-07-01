@@ -23,22 +23,9 @@ object RequestManager {
                 .build().create(IBrowser::class.java)
     }
 
-    fun browse(path : String?, onSuccess: (Directory) -> Unit, onFailure: (String) -> Unit) {
+    fun browse(path : String?) : Response<Directory> {
         val files = if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))
-        files.enqueue(object : Callback<Directory> {
-            override fun onResponse(call: Call<Directory>,
-                                    response: Response<Directory>) {
-                val body : Directory? = response.body()
-                if (body != null)
-                    onSuccess(body)
-                else
-                    onFailure("Error reading response")
-            }
-
-            override fun onFailure(call: Call<Directory>, t: Throwable) {
-                onFailure(t.message ?: "Internal error")
-            }
-        })
+        return files.execute()
     }
 
     fun listShares() : Response<MutableList<SharedFile>> {

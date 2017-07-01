@@ -28,12 +28,11 @@ class SharesListModel : ViewModel() {
 
     fun loadShares() {
         async(CommonPool) {
-            val response = RequestManager.listShares()
-            if (response.isSuccessful)
-                launch(UI) {
-                    shares.value = response.body()
-                }
-            invalidated = false
+            with(RequestManager.listShares()) {
+                if (isSuccessful)
+                    launch(UI) { shares.value = body() }
+                invalidated = false
+            }
         }
     }
 

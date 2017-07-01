@@ -1,23 +1,21 @@
 package org.gmetais.downloadmanager
 
+import android.arch.lifecycle.LifecycleFragment
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.gmetais.downloadmanager.databinding.BrowserBinding
+import org.gmetais.downloadmanager.model.DirectoryModel
 
-class Browser(var path : String? = null) : Fragment(), BrowserAdapter.IHandler {
+class Browser(val path : String? = null) : LifecycleFragment(), BrowserAdapter.IHandler {
 
     private lateinit var mBinding: BrowserBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (savedInstanceState !== null)
-            path = savedInstanceState.getString("path")
-    }
+    val mCurrentDirectory: DirectoryModel by lazy { ViewModelProviders.of(this).get(DirectoryModel::class.java) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = BrowserBinding.inflate(inflater)
@@ -27,19 +25,13 @@ class Browser(var path : String? = null) : Fragment(), BrowserAdapter.IHandler {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        RequestManager.browse(path, this::update, this::onServiceFailure)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        outState?.putString("path", path)
+        mCurrentDirectory.path = path
+        mCurrentDirectory.directory.observe(this, Observer { update(it!!) })
     }
 
     private fun update(directory: Directory) {
-        activity?.let {
-            it.title = directory.path.getNameFromPath()
-            mBinding.filesList.adapter = BrowserAdapter(this, directory.files.sortedBy { !it.isDirectory })
-        }
+        activity.title = directory.path.getNameFromPath()
+        mBinding.filesList.adapter = BrowserAdapter(this, directory.files.sortedBy { !it.isDirectory })
     }
 
     private fun onServiceFailure(msg: String) {
