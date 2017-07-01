@@ -1,21 +1,24 @@
 package org.gmetais.downloadmanager
 
+import android.arch.lifecycle.LifecycleFragment
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.gmetais.downloadmanager.databinding.BrowserBinding
+import org.gmetais.downloadmanager.model.SharesListModel
 
 
-class SharesBrowser : Fragment(), SharesAdapter.ShareHandler {
+class SharesBrowser : LifecycleFragment(), SharesAdapter.ShareHandler {
 
     private lateinit var mBinding: BrowserBinding
+    val shares: SharesListModel by lazy { ViewModelProviders.of(activity).get(SharesListModel::class.java) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = BrowserBinding.inflate(inflater)
@@ -24,7 +27,7 @@ class SharesBrowser : Fragment(), SharesAdapter.ShareHandler {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        RequestManager.listShares(this::update, this::onServiceFailure)
+        shares.getSharesList().observe(this, Observer<MutableList<SharedFile>> { update(it!!) })
         mBinding.filesList.layoutManager = LinearLayoutManager(mBinding.root.context)
         mBinding.filesList.addItemDecoration(DividerItemDecoration(mBinding.filesList.context, DividerItemDecoration.VERTICAL))
     }
@@ -45,7 +48,7 @@ class SharesBrowser : Fragment(), SharesAdapter.ShareHandler {
     }
 
     override fun delete(share: SharedFile) {
-        RequestManager.delete(share.name, this::onDelResponse)
+        shares.delete(share)
     }
 
     fun onDelResponse(name: String, success: Boolean) {

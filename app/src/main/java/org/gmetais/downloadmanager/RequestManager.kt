@@ -35,22 +35,8 @@ object RequestManager {
         })
     }
 
-    fun listShares(onSuccess: (MutableList<SharedFile>) -> Unit, onFailure: (String) -> Unit) {
-        val shares = browserService.getShares()
-        shares.enqueue(object : Callback<MutableList<SharedFile>> {
-            override fun onResponse(call: Call<MutableList<SharedFile>>,
-                                    response: Response<MutableList<SharedFile>>) {
-                val body : MutableList<SharedFile>? = response.body()
-                if (body !== null)
-                    onSuccess(body)
-                else
-                    onFailure("Error reading response")
-            }
-
-            override fun onFailure(call: Call<MutableList<SharedFile>>, t: Throwable) {
-                onFailure(t.message ?: "Internal error")
-            }
-        })
+    fun listShares() : Response<MutableList<SharedFile>> {
+        return browserService.getShares().execute()
     }
 
     fun add(file: SharedFile, onResponse: (Boolean) -> Unit) {
@@ -65,15 +51,7 @@ object RequestManager {
         })
     }
 
-    fun delete(key: String, onResponse: (String, Boolean) -> Unit) {
-        browserService.delete(key).enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>,
-                                    response: Response<Void>) {
-                onResponse(key, response.isSuccessful)
-            }
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                onResponse(key, false)
-            }
-        })
+    fun delete(key: String) : Boolean {
+        return browserService.delete(key).execute().isSuccessful
     }
 }

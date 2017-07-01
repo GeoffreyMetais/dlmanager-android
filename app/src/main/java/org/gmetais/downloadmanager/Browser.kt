@@ -37,7 +37,7 @@ class Browser(var path : String? = null) : Fragment(), BrowserAdapter.IHandler {
     }
 
     private fun update(directory: Directory) {
-        activity.title = directory.path.getNameFromPath()
+        activity?.title = directory.path.getNameFromPath()
         mBinding.filesList.adapter = BrowserAdapter(this, directory.files.sortedBy { !it.isDirectory })
     }
 
