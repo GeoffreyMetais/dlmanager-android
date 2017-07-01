@@ -30,7 +30,7 @@ class SharesListModel : ViewModel() {
         async(CommonPool) {
             with(RequestManager.listShares()) {
                 if (isSuccessful)
-                    launch(UI) { shares.value = body() }
+                    shares.postValue(body())
                 invalidated = false
             }
         }
@@ -41,9 +41,7 @@ class SharesListModel : ViewModel() {
             if (RequestManager.delete(share.name)) {
                 shares.value?.let {
                     it.remove(share)
-                    launch(UI) {
-                        shares.value = it
-                    }
+                    shares.postValue(it)
                 }
             }
         }

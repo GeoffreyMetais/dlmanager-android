@@ -21,7 +21,7 @@ class DirectoryModel : ViewModel() {
         async(CommonPool) {
             with (RequestManager.browse(path)) {
                 if (isSuccessful)
-                    launch(UI) { directory.value = body() }
+                    directory.postValue(body())
             }
         }
     }
