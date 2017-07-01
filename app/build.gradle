@@ -3,6 +3,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
@@ -31,6 +37,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     kapt "com.android.databinding:compiler:$rootProject.ext.android_plugin_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$rootProject.ext.kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.ext.kotlinx_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.ext.kotlinx_version"
     implementation "com.android.support:appcompat-v7:$rootProject.ext.appCompatVersion"
     implementation "com.android.support:support-fragment:$rootProject.ext.appCompatVersion"
     implementation "com.android.support:design:$rootProject.ext.appCompatVersion"
