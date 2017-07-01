@@ -3,7 +3,6 @@ package org.gmetais.downloadmanager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -37,8 +36,10 @@ class Browser(var path : String? = null) : Fragment(), BrowserAdapter.IHandler {
     }
 
     private fun update(directory: Directory) {
-        activity?.title = directory.path.getNameFromPath()
-        mBinding.filesList.adapter = BrowserAdapter(this, directory.files.sortedBy { !it.isDirectory })
+        activity?.let {
+            it.title = directory.path.getNameFromPath()
+            mBinding.filesList.adapter = BrowserAdapter(this, directory.files.sortedBy { !it.isDirectory })
+        }
     }
 
     private fun onServiceFailure(msg: String) {
