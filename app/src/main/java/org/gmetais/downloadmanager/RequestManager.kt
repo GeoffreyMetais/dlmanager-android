@@ -1,3 +1,5 @@
+@file:Suppress("EXPERIMENTAL_FEATURE_WARNING")
+
 package org.gmetais.downloadmanager
 
 import okhttp3.Credentials
@@ -23,20 +25,20 @@ object RequestManager {
                 .build().create(IBrowser::class.java)
     }
 
-    fun browse(path : String?) : Response<Directory> {
+    suspend fun browse(path : String?) : Response<Directory> {
         val files = if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))
         return files.execute()
     }
 
-    fun listShares() : Response<MutableList<SharedFile>> {
+    suspend fun listShares() : Response<MutableList<SharedFile>> {
         return browserService.getShares().execute()
     }
 
-    fun add(file: SharedFile) : Response<Void> {
+    suspend fun add(file: SharedFile) : Response<Void> {
         return browserService.add(file).execute()
     }
 
-    fun delete(key: String) : Boolean {
+    suspend fun delete(key: String) : Boolean {
         return browserService.delete(key).execute().isSuccessful
     }
 
