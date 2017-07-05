@@ -6,9 +6,9 @@ import android.support.v4.app.Fragment
 import android.view.View
 
 fun  String.getNameFromPath(): String {
-    val trailing = this.endsWith('/')
-    val index = if (!trailing) this.lastIndexOf('/') else this.substring(0, this.length-2).lastIndexOf('/')
-    return this.substring(index+1, if (trailing) this.length-1 else this.length)
+    if (!this.endsWith('/'))
+        return this.substringAfterLast('/')
+    return this.substringBeforeLast('/').substringAfterLast('/')
 }
 
 fun <T : View> Activity.bind(@IdRes res : Int) : Lazy<T> {
