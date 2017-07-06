@@ -30,7 +30,7 @@ class SharesBrowser : LifecycleFragment(), SharesAdapter.ShareHandler {
         mBinding.filesList.layoutManager = LinearLayoutManager(mBinding.root.context)
         mBinding.filesList.addItemDecoration(DividerItemDecoration(mBinding.filesList.context, DividerItemDecoration.VERTICAL))
         mBinding.filesList.adapter = SharesAdapter(this)
-        shares.getSharesList().observe(this, Observer<MutableList<SharedFile>> { update(it!!) })
+        shares.shares.observe(this, Observer<MutableList<SharedFile>> { update(it!!) })
     }
 
     private fun update(shares: MutableList<SharedFile>) {
@@ -52,7 +52,7 @@ class SharesBrowser : LifecycleFragment(), SharesAdapter.ShareHandler {
         shares.delete(share)
     }
 
-    fun onDelResponse(name: String, success: Boolean) {
+    fun onDelResponse(success: Boolean) {
         if (!success)
             Snackbar.make(mBinding.root, "failure", Snackbar.LENGTH_LONG).show()
     }

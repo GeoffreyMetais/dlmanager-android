@@ -34,11 +34,10 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
             val file = SharedFile(path = mPath, name = mBinding.editName.text.toString())
             async(CommonPool) {
                 if (RequestManager.add(file).isSuccessful) {
-                    shares.invalidate()
+                    shares.add(file)
                     dismiss()
                 } else
                     Snackbar.make(view!!, "failure", Snackbar.LENGTH_LONG).show()
-
             }
         }
     }

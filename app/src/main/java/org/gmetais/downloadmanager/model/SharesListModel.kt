@@ -3,27 +3,16 @@ package org.gmetais.downloadmanager.model
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.RequestManager
 import org.gmetais.downloadmanager.SharedFile
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 class SharesListModel : ViewModel() {
 
-    @Volatile var invalidated = false
     val shares : MutableLiveData<MutableList<SharedFile>> by lazy {
         loadShares()
         MutableLiveData<MutableList<SharedFile>>()
-    }
-
-    fun getSharesList() : MutableLiveData<MutableList<SharedFile>> {
-        if (invalidated) {
-            loadShares()
-            invalidated = false
-        }
-        return shares
     }
 
     fun loadShares() {
@@ -31,7 +20,15 @@ class SharesListModel : ViewModel() {
             with(RequestManager.listShares()) {
                 if (isSuccessful)
                     shares.postValue(body())
-                invalidated = false
+            }
+        }
+    }
+
+    fun add(share: SharedFile) {
+        async(CommonPool) {
+            shares.value?.let {
+                it.add(share)
+                shares.postValue(it)
             }
         }
     }
@@ -45,9 +42,5 @@ class SharesListModel : ViewModel() {
                 }
             }
         }
-    }
-
-    fun invalidate() {
-        invalidated = true
     }
 }
