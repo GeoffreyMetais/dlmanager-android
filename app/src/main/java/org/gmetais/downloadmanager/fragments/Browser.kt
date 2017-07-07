@@ -8,19 +8,19 @@ import android.view.View
 import org.gmetais.downloadmanager.*
 import org.gmetais.downloadmanager.model.DirectoryModel
 
-class Browser(val path : String? = null) : BaseBrowser(), BrowserAdapter.IHandler {
+class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
-    val mCurrentDirectory: DirectoryModel by lazy { ViewModelProviders.of(this, DirectoryModel.Factory(path)).get(DirectoryModel::class.java) }
+    val mCurrentDirectory: DirectoryModel by lazy { ViewModelProviders.of(this, DirectoryModel.Factory(arguments?.getString("path"))).get(DirectoryModel::class.java) }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
         mCurrentDirectory.directory.observe(this, Observer { update(it!!) })
         showProgress()
     }
 
     private fun update(directory: Directory) {
         showProgress(false)
-        activity.title = directory.path.getNameFromPath()
         mBinding.filesList.adapter = BrowserAdapter(this, directory.files.sortedBy { !it.isDirectory })
     }
 
@@ -30,9 +30,13 @@ class Browser(val path : String? = null) : BaseBrowser(), BrowserAdapter.IHandle
 
     override fun open(file: File) {
         if (file.isDirectory) {
+            val browser = Browser()
+            val bundle = Bundle(1)
+            bundle.putString("path", file.path)
+            browser.arguments = bundle
             activity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_placeholder, Browser(file.path), file.path.getNameFromPath())
-                    .addToBackStack(this.path?.getNameFromPath() ?: "root")
+                    .replace(R.id.fragment_placeholder, browser, file.path.getNameFromPath())
+                    .addToBackStack(activity.title.toString())
                     .commit()
         } else {
             val linkCreatorDialog = LinkCreatorDialog()
