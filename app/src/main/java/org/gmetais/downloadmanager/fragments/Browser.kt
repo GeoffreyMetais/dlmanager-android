@@ -30,12 +30,8 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
     override fun open(file: File) {
         if (file.isDirectory) {
-            val browser = Browser()
-            val bundle = Bundle(1)
-            bundle.putString("path", file.path)
-            browser.arguments = bundle
             activity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_placeholder, browser, file.path.getNameFromPath())
+                    .replace(R.id.fragment_placeholder, Browser().putStringExtra("path", file.path), file.path.getNameFromPath())
                     .addToBackStack(activity.title.toString())
                     .commit()
         } else {
