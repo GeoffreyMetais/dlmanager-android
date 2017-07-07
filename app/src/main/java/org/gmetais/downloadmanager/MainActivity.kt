@@ -3,6 +3,8 @@ package org.gmetais.downloadmanager
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import org.gmetais.downloadmanager.fragments.Browser
+import org.gmetais.downloadmanager.fragments.SharesBrowser
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +25,7 @@ class MainActivity : AppCompatActivity() {
                         beginTransaction().remove(supportFragmentManager.findFragmentByTag("shares")).commit()
                     else
                         beginTransaction()
-                            .replace(org.gmetais.downloadmanager.R.id.fragment_placeholder, org.gmetais.downloadmanager.Browser(), "browser")
+                            .replace(org.gmetais.downloadmanager.R.id.fragment_placeholder, Browser(), "browser")
                             .commit()
                 }
                 true

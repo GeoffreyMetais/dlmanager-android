@@ -1,35 +1,26 @@
-package org.gmetais.downloadmanager
+package org.gmetais.downloadmanager.fragments
 
-import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import org.gmetais.downloadmanager.databinding.BrowserBinding
+import org.gmetais.downloadmanager.*
 import org.gmetais.downloadmanager.model.DirectoryModel
 
-class Browser(val path : String? = null) : LifecycleFragment(), BrowserAdapter.IHandler {
+class Browser(val path : String? = null) : BaseBrowser(), BrowserAdapter.IHandler {
 
-    private lateinit var mBinding: BrowserBinding
     val mCurrentDirectory: DirectoryModel by lazy { ViewModelProviders.of(this).get(DirectoryModel::class.java) }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = BrowserBinding.inflate(inflater)
-        mBinding.filesList.layoutManager = LinearLayoutManager(mBinding.root.context)
-        return mBinding.root
-    }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mCurrentDirectory.path = path
         mCurrentDirectory.directory.observe(this, Observer { update(it!!) })
+        showProgress()
     }
 
     private fun update(directory: Directory) {
+        showProgress(false)
         activity.title = directory.path.getNameFromPath()
         mBinding.filesList.adapter = BrowserAdapter(this, directory.files.sortedBy { !it.isDirectory })
     }
