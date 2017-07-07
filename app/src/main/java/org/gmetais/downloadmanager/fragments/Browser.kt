@@ -10,11 +10,10 @@ import org.gmetais.downloadmanager.model.DirectoryModel
 
 class Browser(val path : String? = null) : BaseBrowser(), BrowserAdapter.IHandler {
 
-    val mCurrentDirectory: DirectoryModel by lazy { ViewModelProviders.of(this).get(DirectoryModel::class.java) }
+    val mCurrentDirectory: DirectoryModel by lazy { ViewModelProviders.of(this, DirectoryModel.Factory(path)).get(DirectoryModel::class.java) }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mCurrentDirectory.path = path
         mCurrentDirectory.directory.observe(this, Observer { update(it!!) })
         showProgress()
     }
