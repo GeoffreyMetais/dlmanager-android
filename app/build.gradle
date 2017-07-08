@@ -23,6 +23,13 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        //Load local properties
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        buildConfigField "String", "API_URL", "\"${properties.getProperty("api.url")}\""
+        buildConfigField "String", "API_USERNAME", "\"${properties.getProperty('api.username')}\""
+        buildConfigField "String", "API_SECRET", "\"${properties.getProperty('api.secret')}\""
     }
     buildTypes {
         release {
@@ -54,3 +61,4 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.3.0'
 }
+

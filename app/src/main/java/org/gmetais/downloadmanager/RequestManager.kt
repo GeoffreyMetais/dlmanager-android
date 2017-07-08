@@ -12,14 +12,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RequestManager {
-    private val BASE_URL = "http://gmetais.netlib.re/"
     private val browserService: IBrowser
 
     init {
         browserService = Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(BuildConfig.API_URL)
                 .client(OkHttpClient.Builder()
-                        .addInterceptor(BasicAuthInterceptor("dekans", "password"))
+                        .addInterceptor(BasicAuthInterceptor(BuildConfig.API_USERNAME, BuildConfig.API_SECRET))
                         .build())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build().create(IBrowser::class.java)
