@@ -43,4 +43,8 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
             linkCreatorDialog.show(activity.supportFragmentManager, "linking park")
         }
     }
+
+    override fun onRefresh() {
+        mCurrentDirectory.loadData()
+    }
 }

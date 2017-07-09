@@ -45,4 +45,8 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         showProgress()
         shares.delete(share)
     }
+
+    override fun onRefresh() {
+        shares.loadData()
+    }
 }
