@@ -3,7 +3,7 @@
     <data>
         <variable
             name="handler"
-            type="org.gmetais.downloadmanager.SharesAdapter.ShareHandler" />
+            type="org.gmetais.downloadmanager.adapters.SharesAdapter.ShareHandler" />
         <variable
             name="item"
             type="org.gmetais.downloadmanager.SharedFile" />

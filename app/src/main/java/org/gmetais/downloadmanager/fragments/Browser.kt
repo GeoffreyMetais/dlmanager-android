@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.view.View
 import org.gmetais.downloadmanager.*
+import org.gmetais.downloadmanager.adapters.BrowserAdapter
 import org.gmetais.downloadmanager.model.BaseModel
 import org.gmetais.downloadmanager.model.DirectoryModel
 
@@ -15,8 +16,9 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mFilesList.adapter = BrowserAdapter(this)
         activity.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
-        mCurrentDirectory.dataResult.observe(this, Observer { update(it!!) })
+        mCurrentDirectory.dataResult.observe(this, Observer<BaseModel.Result> { update(it!!) })
         showProgress()
     }
 
@@ -24,7 +26,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
         when (result) {
-            is BaseModel.Result.Success<*> -> mFilesList.adapter = BrowserAdapter(this, (result.content as Directory).files.sortedBy { !it.isDirectory })
+            is BaseModel.Result.Success<*> -> (mFilesList.adapter as BrowserAdapter).update((result.content as Directory).files)
             is BaseModel.Result.Error -> Snackbar.make(mFilesList, result.message, Snackbar.LENGTH_LONG).show()
         }
     }
@@ -40,7 +42,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
             val args = Bundle(1)
             args.putString("path", file.path)
             linkCreatorDialog.arguments = args
-            linkCreatorDialog.show(activity.supportFragmentManager, "linking park")
+            linkCreatorDialog.show(activity.supportFragmentManager, "linkin park")
         }
     }
 
