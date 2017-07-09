@@ -26,7 +26,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
         when (result) {
-            is BaseModel.Result.Success<*> -> (mBinding.filesList.adapter as BrowserAdapter).update((result.content as Directory).files)
+            is BaseModel.Result.Success<*> -> (mBinding.filesList.adapter as BrowserAdapter).update((result.content as Directory).files.sortedBy { !it.isDirectory })
             is BaseModel.Result.Error -> Snackbar.make(mBinding.filesList, result.message, Snackbar.LENGTH_LONG).show()
         }
     }

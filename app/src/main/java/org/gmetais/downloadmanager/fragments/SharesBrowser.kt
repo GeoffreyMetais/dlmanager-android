@@ -30,7 +30,7 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
         when (result) {
-            is BaseModel.Result.Success<*> -> (mBinding.filesList.adapter as SharesAdapter).update(result.content as List<SharedFile>)
+            is BaseModel.Result.Success<*> -> (mBinding.filesList.adapter as SharesAdapter).update((result.content as List<SharedFile>).sortedBy { it.name.toLowerCase() })
             is BaseModel.Result.Error -> Snackbar.make(mBinding.filesList, result.message, Snackbar.LENGTH_LONG).show()
         }
     }
