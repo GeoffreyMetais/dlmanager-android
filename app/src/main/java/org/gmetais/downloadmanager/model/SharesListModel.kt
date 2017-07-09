@@ -18,7 +18,7 @@ class SharesListModel : ViewModel() {
     fun loadShares() {
         async(CommonPool) {
             with(RequestManager.listShares()) {
-                shares.postValue(if (isSuccessful) Response.Success(body()!!) else Response.Error(code(), message()))
+                shares.postValue(if (isSuccessful) Response.Success(body()!!) else Response.Error(code(), errorBody()?.source()?.readUtf8() ?: message()))
             }
         }
     }
