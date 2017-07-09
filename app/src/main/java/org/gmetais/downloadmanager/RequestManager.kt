@@ -5,11 +5,11 @@ package org.gmetais.downloadmanager
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 
 object RequestManager {
     private val browserService: IBrowser
@@ -19,6 +19,8 @@ object RequestManager {
                 .baseUrl(BuildConfig.API_URL)
                 .client(OkHttpClient.Builder()
                         .addInterceptor(BasicAuthInterceptor(BuildConfig.API_USERNAME, BuildConfig.API_SECRET))
+                        .connectTimeout(5, TimeUnit.SECONDS)
+                        .readTimeout(5, TimeUnit.SECONDS)
                         .build())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build().create(IBrowser::class.java)
@@ -26,19 +28,35 @@ object RequestManager {
 
     suspend fun browse(path : String?) : Response<Directory> {
         val files = if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))
-        return files.execute()
+        try {
+            return files.execute()
+        } catch(e: Exception) {
+            return Response.error(408, ResponseBody.create(null, e.localizedMessage))
+        }
     }
 
     suspend fun listShares() : Response<MutableList<SharedFile>> {
-        return browserService.getShares().execute()
+        try {
+            return browserService.getShares().execute()
+        } catch(e: Exception) {
+            return Response.error(408, ResponseBody.create(null, e.localizedMessage))
+        }
     }
 
     suspend fun add(file: SharedFile) : Response<Void> {
-        return browserService.add(file).execute()
+        try {
+            return browserService.add(file).execute()
+        } catch(e: Exception) {
+            return Response.error(408, ResponseBody.create(null, e.localizedMessage))
+        }
     }
 
     suspend fun delete(key: String) : Boolean {
-        return browserService.delete(key).execute().isSuccessful
+        try {
+            return browserService.delete(key).execute().isSuccessful
+        } catch(e: Exception) {
+            return false
+        }
     }
 
     class BasicAuthInterceptor(val username : String, val passw : String) : Interceptor {
