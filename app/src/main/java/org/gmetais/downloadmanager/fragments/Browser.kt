@@ -13,7 +13,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
     val mCurrentDirectory: DirectoryModel by lazy { ViewModelProviders.of(this, DirectoryModel.Factory(arguments?.getString("path"))).get(DirectoryModel::class.java) }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
         mCurrentDirectory.dataResult.observe(this, Observer { update(it!!) })
@@ -24,8 +24,8 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
         when (result) {
-            is BaseModel.Result.Success<*> -> mBinding.filesList.adapter = BrowserAdapter(this, (result.content as Directory).files.sortedBy { !it.isDirectory })
-            is BaseModel.Result.Error -> Snackbar.make(mBinding.root, result.message, Snackbar.LENGTH_LONG).show()
+            is BaseModel.Result.Success<*> -> mFilesList.adapter = BrowserAdapter(this, (result.content as Directory).files.sortedBy { !it.isDirectory })
+            is BaseModel.Result.Error -> Snackbar.make(mFilesList, result.message, Snackbar.LENGTH_LONG).show()
         }
     }
 
