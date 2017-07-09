@@ -16,7 +16,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mFilesList.adapter = BrowserAdapter(this)
+        mBinding.filesList.adapter = BrowserAdapter(this)
         activity.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
         mCurrentDirectory.dataResult.observe(this, Observer<BaseModel.Result> { update(it!!) })
         showProgress()
@@ -26,8 +26,8 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
         when (result) {
-            is BaseModel.Result.Success<*> -> (mFilesList.adapter as BrowserAdapter).update((result.content as Directory).files)
-            is BaseModel.Result.Error -> Snackbar.make(mFilesList, result.message, Snackbar.LENGTH_LONG).show()
+            is BaseModel.Result.Success<*> -> (mBinding.filesList.adapter as BrowserAdapter).update((result.content as Directory).files)
+            is BaseModel.Result.Error -> Snackbar.make(mBinding.filesList, result.message, Snackbar.LENGTH_LONG).show()
         }
     }
 

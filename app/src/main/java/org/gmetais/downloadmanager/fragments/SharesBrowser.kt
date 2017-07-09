@@ -19,8 +19,8 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mFilesList.addItemDecoration(DividerItemDecoration(mFilesList.context, DividerItemDecoration.VERTICAL))
-        mFilesList.adapter = SharesAdapter(this)
+        mBinding.filesList.addItemDecoration(DividerItemDecoration(mBinding.filesList.context, DividerItemDecoration.VERTICAL))
+        mBinding.filesList.adapter = SharesAdapter(this)
         shares.dataResult.observe(this, Observer<BaseModel.Result> { update(it!!) })
         activity.title = "Shares"
         showProgress()
@@ -30,8 +30,8 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
         when (result) {
-            is BaseModel.Result.Success<*> -> (mFilesList.adapter as SharesAdapter).update(result.content as List<SharedFile>)
-            is BaseModel.Result.Error -> Snackbar.make(mFilesList, result.message, Snackbar.LENGTH_LONG).show()
+            is BaseModel.Result.Success<*> -> (mBinding.filesList.adapter as SharesAdapter).update(result.content as List<SharedFile>)
+            is BaseModel.Result.Error -> Snackbar.make(mBinding.filesList, result.message, Snackbar.LENGTH_LONG).show()
         }
     }
 
