@@ -16,8 +16,8 @@ fun <T : View> Activity.bind(@IdRes res : Int) : Lazy<T> {
     return lazy(LazyThreadSafetyMode.NONE) { findViewById<T>(res) }
 }
 
-fun <T : View> Fragment.bind(@IdRes res : Int) : Lazy<T?> {
-    return lazy(LazyThreadSafetyMode.NONE) { view?.findViewById<T>(res) }
+fun <T : View> Fragment.bind(@IdRes res : Int) : Lazy<T> {
+    return lazy(LazyThreadSafetyMode.NONE) { view!!.findViewById<T>(res) }
 }
 
 fun <T : View> View.bind(@IdRes res : Int) : Lazy<T> {
