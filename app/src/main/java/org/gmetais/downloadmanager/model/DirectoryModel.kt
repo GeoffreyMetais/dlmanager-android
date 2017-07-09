@@ -1,29 +1,15 @@
 package org.gmetais.downloadmanager.model
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
 import org.gmetais.downloadmanager.Directory
 import org.gmetais.downloadmanager.RequestManager
+import retrofit2.Response
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
-class DirectoryModel(val path: String?) : ViewModel() {
+class DirectoryModel(val path: String?) : BaseModel<Directory>() {
 
-    val directory: MutableLiveData<Directory> by lazy {
-        loadDirectory()
-        MutableLiveData<Directory>()
-    }
-
-    private fun loadDirectory() {
-        async(CommonPool) {
-            with (RequestManager.browse(path)) {
-                if (isSuccessful)
-                    directory.postValue(body())
-            }
-        }
-    }
+    suspend override fun call(): Response<out Directory> = RequestManager.browse(path)
 
     class Factory(val path: String?) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

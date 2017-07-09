@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.view.View
 import org.gmetais.downloadmanager.*
+import org.gmetais.downloadmanager.model.BaseModel
 import org.gmetais.downloadmanager.model.DirectoryModel
 
 class Browser : BaseBrowser(), BrowserAdapter.IHandler {
@@ -15,17 +16,17 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
-        mCurrentDirectory.directory.observe(this, Observer { update(it!!) })
+        mCurrentDirectory.dataResult.observe(this, Observer { update(it!!) })
         showProgress()
     }
 
-    private fun update(directory: Directory) {
+    private fun update(result: BaseModel.Result) {
         showProgress(false)
-        mBinding.filesList.adapter = BrowserAdapter(this, directory.files.sortedBy { !it.isDirectory })
-    }
-
-    private fun onServiceFailure(msg: String) {
-        Snackbar.make(mBinding.root, msg, Snackbar.LENGTH_SHORT).show()
+        @Suppress("UNCHECKED_CAST")
+        when (result) {
+            is BaseModel.Result.Success<*> -> mBinding.filesList.adapter = BrowserAdapter(this, (result.content as Directory).files.sortedBy { !it.isDirectory })
+            is BaseModel.Result.Error -> Snackbar.make(mBinding.root, result.message, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     override fun open(file: File) {

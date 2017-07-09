@@ -9,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.view.View
 import org.gmetais.downloadmanager.SharedFile
 import org.gmetais.downloadmanager.SharesAdapter
+import org.gmetais.downloadmanager.model.BaseModel
 import org.gmetais.downloadmanager.model.SharesListModel
 
 
@@ -20,16 +21,17 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         super.onViewCreated(view, savedInstanceState)
         mBinding.filesList.addItemDecoration(DividerItemDecoration(mBinding.filesList.context, DividerItemDecoration.VERTICAL))
         mBinding.filesList.adapter = SharesAdapter(this)
-        shares.shares.observe(this, Observer<SharesListModel.Response> { update(it!!) })
+        shares.dataResult.observe(this, Observer<BaseModel.Result> { update(it!!) })
         activity.title = "Shares"
         showProgress()
     }
 
-    private fun update(response: SharesListModel.Response) {
+    private fun update(result: BaseModel.Result) {
         showProgress(false)
-        when (response) {
-            is SharesListModel.Response.Success -> (mBinding.filesList.adapter as SharesAdapter).update(response.shares)
-            is SharesListModel.Response.Error -> Snackbar.make(mBinding.root, response.message, Snackbar.LENGTH_LONG).show()
+        @Suppress("UNCHECKED_CAST")
+        when (result) {
+            is BaseModel.Result.Success<*> -> (mBinding.filesList.adapter as SharesAdapter).update(result.content as List<SharedFile>)
+            is BaseModel.Result.Error -> Snackbar.make(mBinding.root, result.message, Snackbar.LENGTH_LONG).show()
         }
     }
 
