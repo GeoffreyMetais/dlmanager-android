@@ -9,14 +9,19 @@ import org.gmetais.downloadmanager.repo.ApiRepo
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 abstract class BaseModel<out T> : ViewModel() {
     @Suppress("EXPERIMENTAL_FEATURE_WARNING")
-    abstract suspend fun call(): ApiRepo.Result
+    abstract suspend fun call(): Result
 
-    val dataResult: MutableLiveData<ApiRepo.Result> by lazy {
+    val dataResult: MutableLiveData<Result> by lazy {
         loadData()
-        MutableLiveData<ApiRepo.Result>()
+        MutableLiveData<Result>()
     }
 
     fun loadData() {
         async(CommonPool) { dataResult.postValue(call()) }
+    }
+
+    sealed class Result {
+        data class Success<out T>(val content: T) : Result()
+        data class Error(val code: Int, val message: String) : Result()
     }
 }

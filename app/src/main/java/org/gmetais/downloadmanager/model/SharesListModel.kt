@@ -13,7 +13,7 @@ class SharesListModel : BaseModel<MutableList<SharedFile>>() {
     @Suppress("UNCHECKED_CAST")
     fun add(share: SharedFile) {
         async(CommonPool) {
-            (dataResult.value as? ApiRepo.Result.Success<MutableList<SharedFile>>)?.let {
+            (dataResult.value as? BaseModel.Result.Success<MutableList<SharedFile>>)?.let {
                 it.content.add(share)
                 dataResult.postValue(it)
             }
@@ -24,7 +24,7 @@ class SharesListModel : BaseModel<MutableList<SharedFile>>() {
     fun delete(share: SharedFile) {
         async(CommonPool) {
             if (ApiRepo.delete(share.name)) {
-                (dataResult.value as? ApiRepo.Result.Success<MutableList<SharedFile>>)?.let {
+                (dataResult.value as? BaseModel.Result.Success<MutableList<SharedFile>>)?.let {
                     it.content.remove(share)
                     dataResult.postValue(it)
                 }

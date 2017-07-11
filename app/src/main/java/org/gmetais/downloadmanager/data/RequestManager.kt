@@ -14,6 +14,14 @@ import java.util.concurrent.TimeUnit
 object RequestManager {
     private val browserService: IBrowser
 
+    fun browse(path : String?) : Response<Directory> = (if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))).execute()
+
+    fun listShares(): Response<MutableList<SharedFile>> = browserService.getShares().execute()
+
+    fun add(file: SharedFile) = browserService.add(file).execute().isSuccessful
+
+    fun delete(key: String) = browserService.delete(key).execute().isSuccessful
+
     init {
         browserService = Retrofit.Builder()
                 .baseUrl(BuildConfig.API_URL)
@@ -24,29 +32,6 @@ object RequestManager {
                         .build())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build().create(IBrowser::class.java)
-    }
-
-    fun browse(path : String?) : Response<Directory> {
-        val files = if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))
-        return files.execute()
-    }
-
-    fun listShares(): Response<MutableList<SharedFile>> = browserService.getShares().execute()
-
-    suspend fun add(file: SharedFile) : Boolean {
-        try {
-            return browserService.add(file).execute().isSuccessful
-        } catch(e: Exception) {
-            return false
-        }
-    }
-
-    suspend fun delete(key: String) : Boolean {
-        try {
-            return browserService.delete(key).execute().isSuccessful
-        } catch(e: Exception) {
-            return false
-        }
     }
 
     private class BasicAuthInterceptor(val username : String, val passw : String) : Interceptor {

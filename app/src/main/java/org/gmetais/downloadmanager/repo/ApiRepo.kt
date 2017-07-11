@@ -4,34 +4,38 @@ package org.gmetais.downloadmanager.repo
 
 import org.gmetais.downloadmanager.data.RequestManager
 import org.gmetais.downloadmanager.data.SharedFile
+import org.gmetais.downloadmanager.model.BaseModel
 import retrofit2.Response
-
 
 object ApiRepo {
 
-    sealed class Result {
-        data class Success<out T>(val content: T) : Result()
-        data class Error(val code: Int, val message: String) : Result()
-    }
+    suspend fun browse(path: String?) = retrofitResponseCall { RequestManager.browse(path) }
 
-    suspend fun browse(path: String?) = retrofitCall { RequestManager.browse(path) }
+    suspend fun listShares() = retrofitResponseCall { RequestManager.listShares() }
 
-    suspend fun listShares() = retrofitCall { RequestManager.listShares() }
+    suspend fun add(file: SharedFile) = retrofitBooleanCall { RequestManager.add(file) }
 
-    suspend fun add(file: SharedFile) = RequestManager.add(file)
+    suspend fun delete(key: String) = retrofitBooleanCall { RequestManager.delete(key) }
 
-    suspend fun delete(key: String) = RequestManager.delete(key)
-
-    private inline fun <T> retrofitCall(call: () -> Response<T>) : Result {
+    private inline fun <T> retrofitResponseCall(call: () -> Response<T>) : BaseModel.Result {
         try {
             with (call()) {
                 if (isSuccessful)
-                    return Result.Success(body()!!)
+                    return BaseModel.Result.Success(body()!!)
                 else
-                    return Result.Error(code(), errorBody()?.source()?.readUtf8() ?: message())
+                    return BaseModel.Result.Error(code(), message())
             }
         } catch(e: Exception) {
-            return Result.Error(code = 408, message = e.localizedMessage)
+            return BaseModel.Result.Error(code = 408, message = e.localizedMessage)
         }
+    }
+
+    private inline fun retrofitBooleanCall(call: () -> Boolean) : Boolean {
+        try {
+            return call()
+        } catch(e: Exception) {
+            return false
+        }
+
     }
 }
