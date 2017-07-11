@@ -1,4 +1,4 @@
-package org.gmetais.downloadmanager
+package org.gmetais.downloadmanager.data
 
 import retrofit2.Call
 import retrofit2.http.*

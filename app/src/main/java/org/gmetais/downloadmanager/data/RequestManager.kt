@@ -1,11 +1,11 @@
 @file:Suppress("EXPERIMENTAL_FEATURE_WARNING")
 
-package org.gmetais.downloadmanager
+package org.gmetais.downloadmanager.data
 
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
+import org.gmetais.downloadmanager.BuildConfig
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -26,28 +26,18 @@ object RequestManager {
                 .build().create(IBrowser::class.java)
     }
 
-    suspend fun browse(path : String?) : Response<Directory> {
+    fun browse(path : String?) : Response<Directory> {
         val files = if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))
-        try {
-            return files.execute()
-        } catch(e: Exception) {
-            return Response.error(408, ResponseBody.create(null, e.localizedMessage))
-        }
+        return files.execute()
     }
 
-    suspend fun listShares() : Response<MutableList<SharedFile>> {
-        try {
-            return browserService.getShares().execute()
-        } catch(e: Exception) {
-            return Response.error(408, ResponseBody.create(null, e.localizedMessage))
-        }
-    }
+    fun listShares(): Response<MutableList<SharedFile>> = browserService.getShares().execute()
 
-    suspend fun add(file: SharedFile) : Response<Void> {
+    suspend fun add(file: SharedFile) : Boolean {
         try {
-            return browserService.add(file).execute()
+            return browserService.add(file).execute().isSuccessful
         } catch(e: Exception) {
-            return Response.error(408, ResponseBody.create(null, e.localizedMessage))
+            return false
         }
     }
 
@@ -59,7 +49,7 @@ object RequestManager {
         }
     }
 
-    class BasicAuthInterceptor(val username : String, val passw : String) : Interceptor {
+    private class BasicAuthInterceptor(val username : String, val passw : String) : Interceptor {
         val credentials : String by lazy { Credentials.basic(username, passw) }
         override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
             val request = chain.request()

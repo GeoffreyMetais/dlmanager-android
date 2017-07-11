@@ -3,7 +3,7 @@ package org.gmetais.downloadmanager.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import org.gmetais.downloadmanager.File
+import org.gmetais.downloadmanager.data.File
 import org.gmetais.downloadmanager.databinding.BrowserItemBinding
 
 class BrowserAdapter(val browserHandler: IHandler) : BaseAdapter<File, BrowserAdapter.ViewHolder>() {

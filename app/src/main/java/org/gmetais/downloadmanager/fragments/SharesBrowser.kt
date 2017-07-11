@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DividerItemDecoration
 import android.view.View
-import org.gmetais.downloadmanager.SharedFile
+import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.adapters.SharesAdapter
-import org.gmetais.downloadmanager.model.BaseModel
 import org.gmetais.downloadmanager.model.SharesListModel
+import org.gmetais.downloadmanager.repo.ApiRepo
 
 
 class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
@@ -21,17 +21,17 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         super.onViewCreated(view, savedInstanceState)
         mBinding.filesList.addItemDecoration(DividerItemDecoration(mBinding.filesList.context, DividerItemDecoration.VERTICAL))
         mBinding.filesList.adapter = SharesAdapter(this)
-        shares.dataResult.observe(this, Observer<BaseModel.Result> { update(it!!) })
+        shares.dataResult.observe(this, Observer<ApiRepo.Result> { update(it!!) })
         activity.title = "Shares"
         showProgress()
     }
 
-    private fun update(result: BaseModel.Result) {
+    private fun update(result: ApiRepo.Result) {
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
         when (result) {
-            is BaseModel.Result.Success<*> -> (mBinding.filesList.adapter as SharesAdapter).update((result.content as List<SharedFile>).sortedBy { it.name.toLowerCase() })
-            is BaseModel.Result.Error -> Snackbar.make(mBinding.filesList, result.message, Snackbar.LENGTH_LONG).show()
+            is ApiRepo.Result.Success<*> -> (mBinding.filesList.adapter as SharesAdapter).update((result.content as List<SharedFile>).sortedBy { it.name.toLowerCase() })
+            is ApiRepo.Result.Error -> Snackbar.make(mBinding.filesList, result.message, Snackbar.LENGTH_LONG).show()
         }
     }
 

@@ -3,7 +3,7 @@ package org.gmetais.downloadmanager.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import org.gmetais.downloadmanager.SharedFile
+import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.ShareItemBinding
 
 class SharesAdapter(val handler: ShareHandler) : BaseAdapter<SharedFile, SharesAdapter.ViewHolder>() {

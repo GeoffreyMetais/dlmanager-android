@@ -1,4 +1,6 @@
-package org.gmetais.downloadmanager
+package org.gmetais.downloadmanager.data
+
+import org.gmetais.downloadmanager.getNameFromPath
 
 data class File(
         val path: String,

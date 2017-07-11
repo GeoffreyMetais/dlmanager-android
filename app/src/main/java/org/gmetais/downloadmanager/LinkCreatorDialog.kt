@@ -9,8 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
+import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
 import org.gmetais.downloadmanager.model.SharesListModel
+import org.gmetais.downloadmanager.repo.ApiRepo
 
 class LinkCreatorDialog : BottomSheetDialogFragment() {
 
@@ -33,7 +35,7 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
         fun onClick(view: View?) {
             val file = SharedFile(path = mPath, name = mBinding.editName.text.toString())
             async(CommonPool) {
-                if (RequestManager.add(file).isSuccessful) {
+                if (ApiRepo.add(file)) {
                     shares.add(file)
                     dismiss()
                 } else

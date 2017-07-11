@@ -6,7 +6,7 @@
             type="org.gmetais.downloadmanager.adapters.SharesAdapter.ShareHandler" />
         <variable
             name="item"
-            type="org.gmetais.downloadmanager.SharedFile" />
+            type="org.gmetais.downloadmanager.data.SharedFile" />
     </data>
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
