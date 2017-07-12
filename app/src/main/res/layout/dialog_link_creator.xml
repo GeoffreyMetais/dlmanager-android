@@ -40,7 +40,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{title}"
-                android:imeOptions="actionDone"/>
+                android:maxLines="1"
+                android:inputType="text"
+                android:imeOptions="actionSend"/>
         </android.support.design.widget.TextInputLayout>
         <Button
             android:id="@+id/link_action"
