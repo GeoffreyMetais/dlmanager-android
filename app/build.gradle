@@ -51,9 +51,9 @@ dependencies {
     implementation "com.android.support:design:$rootProject.ext.appCompatVersion"
     implementation "com.android.support:support-vector-drawable:$rootProject.ext.appCompatVersion"
     implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta1'
-    implementation "android.arch.lifecycle:runtime:1.0.0-alpha3"
-    implementation "android.arch.lifecycle:extensions:1.0.0-alpha3"
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha3"
+    implementation "android.arch.lifecycle:runtime:$rootProject.ext.archVersion"
+    implementation "android.arch.lifecycle:extensions:$rootProject.ext.archVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$rootProject.ext.archVersion"
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

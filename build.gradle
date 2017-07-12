@@ -5,6 +5,7 @@ buildscript {
     ext.kotlinx_version = '0.16'
     ext.android_plugin_version = '3.0.0-alpha6'
     ext.appCompatVersion = '26.0.0-beta2'
+    ext.archVersion = '1.0.0-alpha4'
     repositories {
         maven { url 'https://maven.google.com' }
         jcenter()
