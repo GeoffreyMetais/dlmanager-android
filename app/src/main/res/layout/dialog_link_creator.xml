@@ -2,7 +2,7 @@
 <layout>
     <data>
         <variable
-            name="hanler"
+            name="handler"
             type="org.gmetais.downloadmanager.LinkCreatorDialog.ClickHandler" />
         <variable
             name="title"
@@ -39,7 +39,8 @@
                 android:id="@+id/edit_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{title}"/>
+                android:text="@{title}"
+                android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
         <Button
             android:id="@+id/link_action"
@@ -51,6 +52,6 @@
             android:text="@string/share_ok"
             android:textColor="@color/colorPrimary"
             style="?android:attr/borderlessButtonStyle"
-            android:onClick="@{hanler::onClick}"/>
+            android:onClick="@{() -> handler.onClick()}"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -28,19 +28,27 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.title = mPath.getNameFromPath()
-        mBinding.hanler = ClickHandler()
+        mBinding.handler = ClickHandler()
+        mBinding.editName.setOnEditorActionListener { _, _, _ ->
+            addFile()
+            true
+        }
     }
 
     inner class ClickHandler {
-        fun onClick(view: View?) {
-            val file = SharedFile(path = mPath, name = mBinding.editName.text.toString())
-            async(CommonPool) {
-                if (ApiRepo.add(file)) {
-                    shares.add(file)
-                    dismiss()
-                } else
-                    Snackbar.make(view!!, "failure", Snackbar.LENGTH_LONG).show()
-            }
+        fun onClick() {
+            addFile()
+        }
+    }
+
+    private fun addFile() {
+        val file = SharedFile(path = mPath, name = mBinding.editName.text.toString())
+        async(CommonPool) {
+            if (ApiRepo.add(file)) {
+                shares.add(file)
+                dismiss()
+            } else
+                Snackbar.make(mBinding.root, "failure", Snackbar.LENGTH_LONG).show()
         }
     }
 }
