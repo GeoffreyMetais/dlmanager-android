@@ -6,7 +6,7 @@ import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.repo.ApiRepo
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
-class DirectoryModel(val path: String?) : BaseModel<Directory>() {
+class DirectoryModel(val path: String?) : BaseModel() {
 
     override suspend fun call() = ApiRepo.browse(path)
 

@@ -6,7 +6,7 @@ import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.repo.ApiRepo
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
-class SharesListModel : BaseModel<MutableList<SharedFile>>() {
+class SharesListModel : BaseModel() {
 
     override suspend fun call() = ApiRepo.listShares()
 
