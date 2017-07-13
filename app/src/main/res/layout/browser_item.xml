@@ -3,24 +3,25 @@
     <data>
         <import type="org.gmetais.downloadmanager.HelpersKt" />
         <variable
-            name="browser"
+            name="handler"
             type="org.gmetais.downloadmanager.adapters.BrowserAdapter.IHandler" />
         <variable
-            name="file"
+            name="item"
             type="org.gmetais.downloadmanager.data.File" />
     </data>
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:onClick="@{(v) -> browser.open(file)}">
+        android:focusable="true"
+        android:onClick="@{(v) -> handler.open(item)}">
 
         <ImageView
             android:id="@+id/item_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:layout_constraintStart_toStartOf="parent"
-            android:src="@{file.isDirectory ? @drawable/ic_folder : @drawable/ic_file}"/>
+            android:src="@{item.isDirectory ? @drawable/ic_folder : @drawable/ic_file}"/>
         <TextView
             android:id="@+id/item_name"
             android:layout_width="0dp"
@@ -31,6 +32,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:maxLines="2"
             android:gravity="center_vertical"
-            android:text="@{HelpersKt.getNameFromPath(file.path)}"/>
+            android:text="@{HelpersKt.getNameFromPath(item.path)}"/>
     </android.support.constraint.ConstraintLayout>
 </layout>
