@@ -1,4 +1,4 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_width_percent">1.0</dimen>
+    <dimen name="activity_width_percent">0.8</dimen>
 </resources>
