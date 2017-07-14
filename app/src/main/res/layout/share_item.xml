@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="handler"
@@ -9,12 +10,13 @@
             type="org.gmetais.downloadmanager.data.SharedFile" />
     </data>
     <android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
         android:onClick="@{(v) -> handler.open(item)}"
-        android:layout_margin="16dp" >
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" >
         <TextView
             android:id="@+id/item_name"
             android:layout_width="0dp"
@@ -30,8 +32,10 @@
             android:id="@+id/item_delete_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/ic_remove_circle"
-            android:onClick="@{(v) -> handler.delete(item)}"/>
+            android:onClick="@{(v) -> handler.delete(item)}" />
     </android.support.constraint.ConstraintLayout>
 </layout>
