@@ -10,30 +10,6 @@ class MainActivity : AppCompatActivity() {
 
     val mNavigation by bind<BottomNavigationView>(R.id.navigation)
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            mNavigation.selectedItemId -> false
-            R.id.navigation_shares -> {
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_placeholder, SharesBrowser(), "shares")
-                        .commit()
-                true
-            }
-            R.id.navigation_browse -> {
-                with(supportFragmentManager) {
-                    if (popBackStackImmediate("root", android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE))
-                        beginTransaction().remove(supportFragmentManager.findFragmentByTag("shares")).commit()
-                    else
-                        beginTransaction()
-                            .replace(org.gmetais.downloadmanager.R.id.fragment_placeholder, Browser(), "browser")
-                            .commit()
-                }
-                true
-            }
-            else -> false
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -52,5 +28,29 @@ class MainActivity : AppCompatActivity() {
             return
         }
         super.onBackPressed()
+    }
+
+    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when (item.itemId) {
+            mNavigation.selectedItemId -> false
+            R.id.navigation_shares -> {
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_placeholder, SharesBrowser(), "shares")
+                        .commit()
+                true
+            }
+            R.id.navigation_browse -> {
+                with(supportFragmentManager) {
+                    if (popBackStackImmediate("root", android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE))
+                        beginTransaction().remove(supportFragmentManager.findFragmentByTag("shares")).commit()
+                    else
+                        beginTransaction()
+                                .replace(org.gmetais.downloadmanager.R.id.fragment_placeholder, Browser(), "browser")
+                                .commit()
+                }
+                true
+            }
+            else -> false
+        }
     }
 }
