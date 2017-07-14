@@ -4,7 +4,6 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
-import org.gmetais.downloadmanager.repo.ApiRepo
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 abstract class BaseModel : ViewModel() {

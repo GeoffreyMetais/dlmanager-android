@@ -2,7 +2,6 @@ package org.gmetais.downloadmanager.model
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.repo.ApiRepo
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")

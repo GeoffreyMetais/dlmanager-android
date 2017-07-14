@@ -5,7 +5,6 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import org.gmetais.downloadmanager.R
 import org.gmetais.downloadmanager.bind
-import org.gmetais.downloadmanager.data.RequestManager
 import org.gmetais.downloadmanager.ui.fragments.Browser
 import org.gmetais.downloadmanager.ui.fragments.Preferences
 import org.gmetais.downloadmanager.ui.fragments.SharesBrowser

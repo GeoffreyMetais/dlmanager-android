@@ -1,11 +1,9 @@
 package org.gmetais.downloadmanager
 
-import android.app.Application
-
-class Application : Application() {
+class Application : android.app.Application() {
 
     companion object {
-        lateinit var instance : org.gmetais.downloadmanager.Application
+        lateinit var instance : Application
         fun getContext() = instance
     }
 
