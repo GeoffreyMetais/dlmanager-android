@@ -5,4 +5,9 @@
     <string name="create_download_link_for">Create download link for %1$s</string>
     <string name="edit_share_hint">Share name</string>
     <string name="share_ok">Go</string>
+    <string name="settings_username">Username</string>
+    <string name="settings_password">Password</string>
+    <string name="settings_server_url">Server URL</string>
+    <string name="settings_server_url_summary">append with \':portnumber\' if needed</string>
+    <string name="settings">Settings</string>
 </resources>

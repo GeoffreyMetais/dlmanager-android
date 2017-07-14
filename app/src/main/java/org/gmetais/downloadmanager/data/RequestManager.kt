@@ -2,10 +2,11 @@
 
 package org.gmetais.downloadmanager.data
 
+import android.preference.PreferenceManager
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import org.gmetais.downloadmanager.BuildConfig
+import org.gmetais.downloadmanager.Application
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -23,10 +24,11 @@ object RequestManager {
     fun delete(key: String) = browserService.delete(key).execute().isSuccessful
 
     init {
+        val pm = PreferenceManager.getDefaultSharedPreferences(Application.getContext())
         browserService = Retrofit.Builder()
-                .baseUrl(BuildConfig.API_URL)
+                .baseUrl(pm.getString("server_url", ""))
                 .client(OkHttpClient.Builder()
-                        .addInterceptor(BasicAuthInterceptor(BuildConfig.API_USERNAME, BuildConfig.API_SECRET))
+                        .addInterceptor(BasicAuthInterceptor(pm.getString("username", ""), pm.getString("password", "")))
                         .connectTimeout(5, TimeUnit.SECONDS)
                         .readTimeout(5, TimeUnit.SECONDS)
                         .build())

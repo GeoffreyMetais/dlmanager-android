@@ -1,10 +1,14 @@
-package org.gmetais.downloadmanager
+package org.gmetais.downloadmanager.ui
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import org.gmetais.downloadmanager.fragments.Browser
-import org.gmetais.downloadmanager.fragments.SharesBrowser
+import org.gmetais.downloadmanager.R
+import org.gmetais.downloadmanager.bind
+import org.gmetais.downloadmanager.data.RequestManager
+import org.gmetais.downloadmanager.ui.fragments.Browser
+import org.gmetais.downloadmanager.ui.fragments.Preferences
+import org.gmetais.downloadmanager.ui.fragments.SharesBrowser
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,9 +49,15 @@ class MainActivity : AppCompatActivity() {
                         beginTransaction().remove(supportFragmentManager.findFragmentByTag("shares")).commit()
                     else
                         beginTransaction()
-                                .replace(org.gmetais.downloadmanager.R.id.fragment_placeholder, Browser(), "browser")
+                                .replace(R.id.fragment_placeholder, Browser(), "browser")
                                 .commit()
                 }
+                true
+            }
+            R.id.navigation_settings -> {
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_placeholder, Preferences(), "settings")
+                        .commit()
                 true
             }
             else -> false
