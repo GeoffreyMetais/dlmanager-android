@@ -3,7 +3,7 @@
     <data>
         <variable
             name="handler"
-            type="org.gmetais.downloadmanager.LinkCreatorDialog.ClickHandler" />
+            type="org.gmetais.downloadmanager.ui.LinkCreatorDialog.ClickHandler" />
         <variable
             name="title"
             type="String" />

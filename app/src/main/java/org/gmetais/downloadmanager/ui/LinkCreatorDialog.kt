@@ -1,4 +1,4 @@
-package org.gmetais.downloadmanager
+package org.gmetais.downloadmanager.ui
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -11,6 +11,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
+import org.gmetais.downloadmanager.getNameFromPath
 import org.gmetais.downloadmanager.model.SharesListModel
 import org.gmetais.downloadmanager.repo.ApiRepo
 

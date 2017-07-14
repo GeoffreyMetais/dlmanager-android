@@ -1,4 +1,4 @@
-package org.gmetais.downloadmanager.fragments
+package org.gmetais.downloadmanager.ui.fragments
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders

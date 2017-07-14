@@ -1,11 +1,11 @@
-package org.gmetais.downloadmanager.fragments
+package org.gmetais.downloadmanager.ui.fragments
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.view.View
-import org.gmetais.downloadmanager.LinkCreatorDialog
+import org.gmetais.downloadmanager.ui.LinkCreatorDialog
 import org.gmetais.downloadmanager.R
 import org.gmetais.downloadmanager.adapters.BrowserAdapter
 import org.gmetais.downloadmanager.data.Directory
