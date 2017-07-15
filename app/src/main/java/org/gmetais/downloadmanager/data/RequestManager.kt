@@ -7,6 +7,7 @@ import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.gmetais.downloadmanager.Application
+import org.gmetais.downloadmanager.BuildConfig
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -26,9 +27,9 @@ object RequestManager {
     init {
         val pm = PreferenceManager.getDefaultSharedPreferences(Application.getContext())
         browserService = Retrofit.Builder()
-                .baseUrl(pm.getString("server_url", ""))
+                .baseUrl(pm.getString("server_url", BuildConfig.API_URL))
                 .client(OkHttpClient.Builder()
-                        .addInterceptor(BasicAuthInterceptor(pm.getString("username", ""), pm.getString("password", "")))
+                        .addInterceptor(BasicAuthInterceptor(pm.getString("username", BuildConfig.API_USERNAME), pm.getString("password", BuildConfig.API_SECRET)))
                         .connectTimeout(5, TimeUnit.SECONDS)
                         .readTimeout(5, TimeUnit.SECONDS)
                         .build())
