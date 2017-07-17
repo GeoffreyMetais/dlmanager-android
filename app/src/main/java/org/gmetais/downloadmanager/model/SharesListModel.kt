@@ -11,16 +11,6 @@ class SharesListModel : BaseModel() {
     override suspend fun call() = ApiRepo.listShares()
 
     @Suppress("UNCHECKED_CAST")
-    fun add(share: SharedFile) {
-        async(CommonPool) {
-            (dataResult.value as? BaseModel.Result.Success<MutableList<SharedFile>>)?.let {
-                it.content.add(share)
-                dataResult.postValue(it)
-            }
-        }
-    }
-
-    @Suppress("UNCHECKED_CAST")
     fun delete(share: SharedFile) {
         async(CommonPool) {
             if (ApiRepo.delete(share.name)) {
