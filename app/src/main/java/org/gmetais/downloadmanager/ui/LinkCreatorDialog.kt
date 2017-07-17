@@ -46,7 +46,7 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
         val file = SharedFile(path = mPath, name = mBinding.editName.text.toString())
         async(CommonPool) {
             if (ApiRepo.add(file)) {
-                shares.add(file)
+                shares.loadData()
                 dismiss()
             } else
                 Snackbar.make(mBinding.root, "failure", Snackbar.LENGTH_LONG).show()
