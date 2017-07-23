@@ -4,8 +4,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
-import org.gmetais.downloadmanager.ui.LinkCreatorDialog
+import android.widget.Filterable
 import org.gmetais.downloadmanager.R
 import org.gmetais.downloadmanager.adapters.BrowserAdapter
 import org.gmetais.downloadmanager.data.Directory
@@ -14,10 +16,19 @@ import org.gmetais.downloadmanager.getNameFromPath
 import org.gmetais.downloadmanager.model.BaseModel
 import org.gmetais.downloadmanager.model.DirectoryModel
 import org.gmetais.downloadmanager.putStringExtra
+import org.gmetais.downloadmanager.ui.FilterDelegate
+import org.gmetais.downloadmanager.ui.LinkCreatorDialog
+import java.lang.ref.WeakReference
 
 class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
-    val mCurrentDirectory: DirectoryModel by lazy { ViewModelProviders.of(this, DirectoryModel.Factory(arguments?.getString("path"))).get(DirectoryModel::class.java) }
+    private val mCurrentDirectory: DirectoryModel by lazy { ViewModelProviders.of(this, DirectoryModel.Factory(arguments?.getString("path"))).get(DirectoryModel::class.java) }
+    private lateinit var mFilterDelegate : FilterDelegate
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -25,6 +36,17 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         activity.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
         mCurrentDirectory.dataResult.observe(this, Observer<BaseModel.Result> { update(it!!) })
         showProgress()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.browser, menu)
+        mFilterDelegate = FilterDelegate(WeakReference(mBinding.filesList.adapter as Filterable), menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onPause() {
+        mFilterDelegate.close()
+        super.onPause()
     }
 
     private fun update(result: BaseModel.Result) {
