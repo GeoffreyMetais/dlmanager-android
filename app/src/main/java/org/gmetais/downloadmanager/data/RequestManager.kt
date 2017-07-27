@@ -3,11 +3,17 @@
 package org.gmetais.downloadmanager.data
 
 import android.preference.PreferenceManager
+import kotlinx.coroutines.experimental.CancellableContinuation
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.gmetais.downloadmanager.Application
 import org.gmetais.downloadmanager.BuildConfig
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -16,13 +22,13 @@ import java.util.concurrent.TimeUnit
 object RequestManager {
     private val browserService: IBrowser
 
-    fun browse(path : String?) : Response<Directory> = (if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))).execute()
+    fun browse(path : String?) : Call<Directory> = (if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, "")))
 
-    fun listShares(): Response<MutableList<SharedFile>> = browserService.getShares().execute()
+    fun listShares(): Call<MutableList<SharedFile>> = browserService.getShares()
 
-    fun add(file: SharedFile) = browserService.add(file).execute().isSuccessful
+    fun add(file: SharedFile) = browserService.add(file)
 
-    fun delete(key: String) = browserService.delete(key).execute().isSuccessful
+    fun delete(key: String) = browserService.delete(key)
 
     init {
         val pm = PreferenceManager.getDefaultSharedPreferences(Application.getContext())
