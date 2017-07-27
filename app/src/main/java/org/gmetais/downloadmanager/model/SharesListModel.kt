@@ -1,7 +1,7 @@
 package org.gmetais.downloadmanager.model
 
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.repo.ApiRepo
 
@@ -12,7 +12,7 @@ class SharesListModel : BaseModel() {
 
     @Suppress("UNCHECKED_CAST")
     fun delete(share: SharedFile) {
-        async(CommonPool) {
+        launch(CommonPool) {
             if (ApiRepo.delete(share.name)) {
                 (dataResult.value as? BaseModel.Result.Success<MutableList<SharedFile>>)?.let {
                     it.content.remove(share)

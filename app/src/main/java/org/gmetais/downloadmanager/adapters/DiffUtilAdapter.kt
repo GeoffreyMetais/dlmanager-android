@@ -24,9 +24,10 @@ abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.A
     @Suppress("EXPERIMENTAL_FEATURE_WARNING")
     private fun internalUpdate(list: List<D>) {
         launch(CommonPool) {
-            val result = DiffUtil.calculateDiff(DiffCallback(list), false)
+            val finalList = list.toList()
+            val result = DiffUtil.calculateDiff(DiffCallback(finalList), false)
             launch(UI) {
-                mDataset = list
+                mDataset = finalList
                 result.dispatchUpdatesTo(this@DiffUtilAdapter)
                 processQueue()
             }
