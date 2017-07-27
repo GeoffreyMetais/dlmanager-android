@@ -2,7 +2,6 @@
 
 package org.gmetais.downloadmanager.repo
 
-import kotlinx.coroutines.experimental.CancellableContinuation
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import org.gmetais.downloadmanager.data.RequestManager
 import org.gmetais.downloadmanager.data.SharedFile
