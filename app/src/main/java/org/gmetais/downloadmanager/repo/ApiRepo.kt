@@ -22,11 +22,15 @@ object ApiRepo {
 
 
     private suspend inline fun <reified T> retrofitResponseCall(crossinline call: () -> Call<T>) : BaseModel.Result {
-        with(retrofitSuspendCall(call)) {
-            if (isSuccessful)
-                return BaseModel.Result.Success(body()!!)
-            else
-                return BaseModel.Result.Error(code(), message())
+        try {
+            with(retrofitSuspendCall(call)) {
+                if (isSuccessful)
+                    return BaseModel.Result.Success(body()!!)
+                else
+                    return BaseModel.Result.Error(code(), message())
+            }
+        } catch(e: Exception) {
+            return BaseModel.Result.Error(408, e.localizedMessage)
         }
 
     }
