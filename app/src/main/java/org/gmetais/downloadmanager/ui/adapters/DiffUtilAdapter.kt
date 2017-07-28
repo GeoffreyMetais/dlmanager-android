@@ -1,4 +1,4 @@
-package org.gmetais.downloadmanager.adapters
+package org.gmetais.downloadmanager.ui.adapters
 
 import android.support.annotation.MainThread
 import android.support.v7.util.DiffUtil

@@ -9,7 +9,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.widget.Filterable
 import org.gmetais.downloadmanager.R
-import org.gmetais.downloadmanager.adapters.BrowserAdapter
+import org.gmetais.downloadmanager.ui.adapters.BrowserAdapter
 import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.data.File
 import org.gmetais.downloadmanager.getNameFromPath

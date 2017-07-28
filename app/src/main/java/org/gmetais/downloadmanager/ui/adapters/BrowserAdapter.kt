@@ -1,4 +1,4 @@
-package org.gmetais.downloadmanager.adapters
+package org.gmetais.downloadmanager.ui.adapters
 
 import android.widget.Filter
 import android.widget.Filterable

@@ -4,7 +4,7 @@
         <import type="org.gmetais.downloadmanager.HelpersKt" />
         <variable
             name="handler"
-            type="org.gmetais.downloadmanager.adapters.BrowserAdapter.IHandler" />
+            type="org.gmetais.downloadmanager.ui.adapters.BrowserAdapter.IHandler" />
         <variable
             name="item"
             type="org.gmetais.downloadmanager.data.File" />

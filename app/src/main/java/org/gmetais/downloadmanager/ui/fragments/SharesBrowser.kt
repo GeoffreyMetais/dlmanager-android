@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DividerItemDecoration
 import android.view.View
-import org.gmetais.downloadmanager.adapters.SharesAdapter
+import org.gmetais.downloadmanager.ui.adapters.SharesAdapter
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.model.BaseModel
 import org.gmetais.downloadmanager.model.SharesListModel

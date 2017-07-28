@@ -1,4 +1,4 @@
-package org.gmetais.downloadmanager.adapters
+package org.gmetais.downloadmanager.ui.adapters
 
 import org.gmetais.downloadmanager.R
 import org.gmetais.downloadmanager.data.SharedFile
