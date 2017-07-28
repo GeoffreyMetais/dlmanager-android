@@ -20,34 +20,28 @@ object ApiRepo {
 
     suspend fun delete(key: String) = retrofitBooleanCall { RequestManager.delete(key) }
 
-
-    private suspend inline fun <reified T> retrofitResponseCall(crossinline call: () -> Call<T>) : BaseModel.Result {
-        try {
-            with(retrofitSuspendCall(call)) {
-                if (isSuccessful)
-                    return BaseModel.Result.Success(body()!!)
-                else
-                    return BaseModel.Result.Error(code(), message())
-            }
-        } catch(e: Exception) {
-            return BaseModel.Result.Error(408, e.localizedMessage)
+    private suspend inline fun <reified T> retrofitResponseCall(crossinline call: () -> Call<T>) = try {
+        with(retrofitSuspendCall(call)) {
+            if (isSuccessful)
+                BaseModel.Result.Success(body()!!)
+            else
+                BaseModel.Result.Error(code(), message())
         }
-
+    } catch(e: Exception) {
+        BaseModel.Result.Error(408, e.localizedMessage)
     }
 
-    private suspend inline fun retrofitBooleanCall(crossinline call: () -> Call<Void>) : Boolean {
-        try {
-            return retrofitSuspendCall(call).isSuccessful
-        } catch(e: Exception) {
-            return false
-        }
+
+    private suspend inline fun retrofitBooleanCall(crossinline call: () -> Call<Void>) = try {
+        retrofitSuspendCall(call).isSuccessful
+    } catch(e: Exception) {
+        false
     }
 
     private suspend inline fun <reified T> retrofitSuspendCall(crossinline call: () -> Call<T>) : Response<T> = suspendCoroutine { continuation ->
-            call.invoke().enqueue(object : Callback<T> {
-                override fun onResponse(call: Call<T>?, response: Response<T>) = continuation.resume(response)
-                override fun onFailure(call: Call<T>, t: Throwable) = continuation.resumeWithException(t)
-            })
-        }
+        call.invoke().enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>?, response: Response<T>) = continuation.resume(response)
+            override fun onFailure(call: Call<T>, t: Throwable) = continuation.resumeWithException(t)
+        })
     }
 }
