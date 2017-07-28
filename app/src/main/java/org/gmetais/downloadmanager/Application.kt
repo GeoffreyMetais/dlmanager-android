@@ -1,5 +1,7 @@
 package org.gmetais.downloadmanager
 
+import android.support.v7.app.AppCompatDelegate
+
 class Application : android.app.Application() {
 
     companion object {
@@ -10,5 +12,6 @@ class Application : android.app.Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     }
 }

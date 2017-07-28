@@ -35,7 +35,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_remove_circle"
+            app:srcCompat="@drawable/ic_remove_circle"
             android:onClick="@{(v) -> handler.delete(item)}" />
     </android.support.constraint.ConstraintLayout>
 </layout>
