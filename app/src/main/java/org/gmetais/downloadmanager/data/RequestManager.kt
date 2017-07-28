@@ -8,7 +8,6 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.gmetais.downloadmanager.Application
 import org.gmetais.downloadmanager.BuildConfig
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
@@ -16,9 +15,9 @@ import java.util.concurrent.TimeUnit
 object RequestManager {
     private val browserService: IBrowser
 
-    fun browse(path : String?) : Call<Directory> = (if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, "")))
+    fun browse(path : String?) = (if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, "")))
 
-    fun listShares(): Call<MutableList<SharedFile>> = browserService.getShares()
+    fun listShares() = browserService.getShares()
 
     fun add(file: SharedFile) = browserService.add(file)
 
