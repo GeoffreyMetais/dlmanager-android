@@ -2,13 +2,13 @@
 
 package org.gmetais.downloadmanager.repo
 
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import org.gmetais.downloadmanager.data.RequestManager
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.model.BaseModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.coroutines.experimental.suspendCoroutine
 
 object ApiRepo {
 
@@ -43,26 +43,11 @@ object ApiRepo {
         }
     }
 
-    private suspend inline fun <reified T> retrofitSuspendCall(crossinline call: () -> Call<T>) : Response<T> {
-        return suspendCancellableCoroutine { continuation ->
-            with(call.invoke()) {
-                enqueue(object : Callback<T> {
-                    override fun onResponse(call: Call<T>?, response: Response<T>) {
-                        continuation.resume(response)
-                    }
-                    override fun onFailure(call: Call<T>, t: Throwable) {
-                        // Don't bother with resuming the continuation if it is already cancelled.
-                        if (continuation.isCancelled) return
-                        continuation.resumeWithException(t)
-                    }
-                })
-                continuation.invokeOnCompletion {
-                    if (continuation.isCancelled)
-                        try {
-                            cancel()
-                        } catch (ex: Throwable) {}
-                }
-            }
+    private suspend inline fun <reified T> retrofitSuspendCall(crossinline call: () -> Call<T>) : Response<T> = suspendCoroutine { continuation ->
+            call.invoke().enqueue(object : Callback<T> {
+                override fun onResponse(call: Call<T>?, response: Response<T>) = continuation.resume(response)
+                override fun onFailure(call: Call<T>, t: Throwable) = continuation.resumeWithException(t)
+            })
         }
     }
 }
