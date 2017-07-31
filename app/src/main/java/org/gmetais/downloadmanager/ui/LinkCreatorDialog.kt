@@ -8,16 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
 import org.gmetais.downloadmanager.getNameFromPath
 import org.gmetais.downloadmanager.model.SharesListModel
 import org.gmetais.downloadmanager.repo.ApiRepo
 
+@Suppress("EXPERIMENTAL_FEATURE_WARNING")
 class LinkCreatorDialog : BottomSheetDialogFragment() {
 
-    val mPath : String by lazy {arguments.getString("path")}
+    val mPath : String by lazy { arguments.getString("path") }
     val shares: SharesListModel by lazy { ViewModelProviders.of(activity).get(SharesListModel::class.java) }
     lateinit var mBinding: DialogLinkCreatorBinding
 
@@ -30,26 +31,22 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         mBinding.title = mPath.getNameFromPath()
         mBinding.handler = ClickHandler()
-        mBinding.editName.setOnEditorActionListener { _, _, _ ->
-            addFile()
-            true
-        }
+        mBinding.editName.setOnEditorActionListener { _,_,_ -> addFile() }
     }
 
     inner class ClickHandler {
-        fun onClick() {
-            addFile()
-        }
+        fun onClick() = addFile()
     }
 
-    private fun addFile() {
+    private fun addFile() : Boolean {
         val file = SharedFile(path = mPath, name = mBinding.editName.text.toString())
-        async(CommonPool) {
+        launch(CommonPool) {
             if (ApiRepo.add(file)) {
                 shares.loadData()
                 dismiss()
             } else
                 Snackbar.make(mBinding.root, "failure", Snackbar.LENGTH_LONG).show()
         }
+        return true
     }
 }

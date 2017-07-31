@@ -7,11 +7,10 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DividerItemDecoration
 import android.view.View
-import org.gmetais.downloadmanager.ui.adapters.SharesAdapter
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.model.BaseModel
 import org.gmetais.downloadmanager.model.SharesListModel
-
+import org.gmetais.downloadmanager.ui.adapters.SharesAdapter
 
 class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
 
@@ -35,11 +34,9 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         }
     }
 
-    override fun open(share: SharedFile) {
-        startActivity(Intent(Intent.ACTION_SEND)
+    override fun open(share: SharedFile) = startActivity(Intent(Intent.ACTION_SEND)
                 .putExtra(Intent.EXTRA_TEXT, share.link)
                 .setType("text/plain"))
-    }
 
     override fun delete(share: SharedFile) {
         showProgress()

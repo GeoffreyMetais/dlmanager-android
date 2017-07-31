@@ -11,13 +11,11 @@ class SharesListModel : BaseModel() {
     override suspend fun call() = ApiRepo.listShares()
 
     @Suppress("UNCHECKED_CAST")
-    fun delete(share: SharedFile) {
-        launch(CommonPool) {
-            if (ApiRepo.delete(share.name)) {
-                (dataResult.value as? BaseModel.Result.Success<MutableList<SharedFile>>)?.let {
-                    it.content.remove(share)
-                    dataResult.postValue(it)
-                }
+    fun delete(share: SharedFile) = launch(CommonPool) {
+        if (ApiRepo.delete(share.name)) {
+            (dataResult.value as? BaseModel.Result.Success<MutableList<SharedFile>>)?.let {
+                it.content.remove(share)
+                dataResult.postValue(it)
             }
         }
     }
