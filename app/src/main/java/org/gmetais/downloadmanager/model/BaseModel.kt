@@ -2,7 +2,7 @@ package org.gmetais.downloadmanager.model
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
@@ -15,7 +15,7 @@ abstract class BaseModel : ViewModel() {
         MutableLiveData<Result>()
     }
 
-    fun loadData() = launch(CommonPool) { dataResult.postValue(call()) }
+    fun loadData() = launch(UI) { dataResult.postValue(call()) }
 
     sealed class Result {
         data class Success<out T>(val content: T) : Result()

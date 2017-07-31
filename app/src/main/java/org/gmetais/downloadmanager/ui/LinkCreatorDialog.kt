@@ -7,7 +7,7 @@ import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
@@ -40,7 +40,7 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
 
     private fun addFile() : Boolean {
         val file = SharedFile(path = mPath, name = mBinding.editName.text.toString())
-        launch(CommonPool) {
+        launch(UI) {
             if (ApiRepo.add(file)) {
                 shares.loadData()
                 dismiss()
