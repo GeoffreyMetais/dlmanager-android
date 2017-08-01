@@ -14,7 +14,7 @@ import org.gmetais.downloadmanager.ui.adapters.SharesAdapter
 
 class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
 
-    val shares: SharesListModel by lazy { ViewModelProviders.of(this).get(SharesListModel::class.java) }
+    val shares: SharesListModel by lazy { ViewModelProviders.of(activity).get(SharesListModel::class.java) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
