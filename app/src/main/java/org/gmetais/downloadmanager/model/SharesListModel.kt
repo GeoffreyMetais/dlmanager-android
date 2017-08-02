@@ -15,7 +15,7 @@ class SharesListModel : BaseModel() {
         if (ApiRepo.delete(share.name)) {
             (dataResult.value as? BaseModel.Result.Success<MutableList<SharedFile>>)?.let {
                 it.content.remove(share)
-                dataResult.postValue(it)
+                dataResult.value = it
             }
         }
     }

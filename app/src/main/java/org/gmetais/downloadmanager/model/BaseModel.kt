@@ -15,7 +15,7 @@ abstract class BaseModel : ViewModel() {
         MutableLiveData<Result>()
     }
 
-    fun loadData() = launch(UI) { dataResult.postValue(call()) }
+    fun loadData() = launch(UI) { dataResult.value = call() }
 
     sealed class Result {
         data class Success<out T>(val content: T) : Result()
