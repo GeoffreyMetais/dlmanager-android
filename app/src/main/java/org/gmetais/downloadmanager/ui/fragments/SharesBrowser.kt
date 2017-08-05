@@ -44,6 +44,6 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
     }
 
     override fun onRefresh() {
-        shares.loadData()
+        shares.refresh()
     }
 }

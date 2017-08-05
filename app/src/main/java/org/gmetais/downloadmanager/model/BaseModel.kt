@@ -11,11 +11,11 @@ abstract class BaseModel : ViewModel() {
     abstract suspend fun call(): Result
 
     val dataResult: MutableLiveData<Result> by lazy {
-        loadData()
+        refresh()
         MutableLiveData<Result>()
     }
 
-    fun loadData() = launch(UI) { dataResult.value = call() }
+    fun refresh() = launch(UI) { dataResult.value = call() }
 
     sealed class Result {
         data class Success<out T>(val content: T) : Result()

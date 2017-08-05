@@ -40,7 +40,7 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
 
     private fun addFile() = launch(UI) {
         if (ApiRepo.add(SharedFile(path = mPath, name = mBinding.editName.text.toString()))) {
-            shares.loadData()
+            shares.refresh()
             dismiss()
         } else
             Snackbar.make(mBinding.root, "failure", Snackbar.LENGTH_LONG).show()

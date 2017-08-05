@@ -74,6 +74,6 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
     }
 
     override fun onRefresh() {
-        mCurrentDirectory.loadData()
+        mCurrentDirectory.refresh()
     }
 }
