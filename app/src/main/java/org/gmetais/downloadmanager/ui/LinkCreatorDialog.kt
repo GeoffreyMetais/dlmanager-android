@@ -31,22 +31,18 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         mBinding.title = mPath.getNameFromPath()
         mBinding.handler = ClickHandler()
-        mBinding.editName.setOnEditorActionListener { _,_,_ -> addFile() }
+        mBinding.editName.setOnEditorActionListener { _,_,_ -> addFile(); true }
     }
 
     inner class ClickHandler {
         fun onClick() = addFile()
     }
 
-    private fun addFile() : Boolean {
-        val file = SharedFile(path = mPath, name = mBinding.editName.text.toString())
-        launch(UI) {
-            if (ApiRepo.add(file)) {
-                shares.loadData()
-                dismiss()
-            } else
-                Snackbar.make(mBinding.root, "failure", Snackbar.LENGTH_LONG).show()
-        }
-        return true
+    private fun addFile() = launch(UI) {
+        if (ApiRepo.add(SharedFile(path = mPath, name = mBinding.editName.text.toString()))) {
+            shares.loadData()
+            dismiss()
+        } else
+            Snackbar.make(mBinding.root, "failure", Snackbar.LENGTH_LONG).show()
     }
 }
