@@ -12,9 +12,7 @@ kotlin {
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
-    dataBinding {
-        enabled = true
-    }
+    dataBinding.enabled = true
     defaultConfig {
         applicationId "org.gmetais.downloadmanager"
         minSdkVersion 15
