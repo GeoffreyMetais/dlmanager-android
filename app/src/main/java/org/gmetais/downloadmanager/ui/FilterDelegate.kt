@@ -7,7 +7,7 @@ import android.widget.Filterable
 import org.gmetais.downloadmanager.R
 import java.lang.ref.WeakReference
 
-class FilterDelegate(val filterable: WeakReference<Filterable>, menu: Menu) : SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+class FilterDelegate(private val filterable: WeakReference<Filterable>, menu: Menu) : SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
     private val searchItem = menu.findItem(R.id.ml_menu_filter)!!
     private val searchView = searchItem.actionView as SearchView
