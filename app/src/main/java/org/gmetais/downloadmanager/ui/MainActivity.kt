@@ -3,15 +3,13 @@ package org.gmetais.downloadmanager.ui
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import org.gmetais.downloadmanager.R
-import org.gmetais.downloadmanager.bind
 import org.gmetais.downloadmanager.ui.fragments.Browser
 import org.gmetais.downloadmanager.ui.fragments.Preferences
 import org.gmetais.downloadmanager.ui.fragments.SharesBrowser
 
 class MainActivity : AppCompatActivity() {
-
-    val mNavigation by bind<BottomNavigationView>(R.id.navigation)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +20,7 @@ class MainActivity : AppCompatActivity() {
                     .add(R.id.fragment_placeholder, SharesBrowser(), "shares")
                     .commit()
         }
-        mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
     override fun onBackPressed() {
@@ -35,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            mNavigation.selectedItemId -> false
+            navigation.selectedItemId -> false
             R.id.navigation_shares -> {
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_placeholder, SharesBrowser(), "shares")
