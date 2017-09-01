@@ -4,6 +4,9 @@ import android.app.Activity
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentTransaction
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 
 fun  String.getNameFromPath(): String {
@@ -30,3 +33,13 @@ fun Fragment.putStringExtra(key: String, value: String) : Fragment {
     arguments.putString(key, value)
     return this
 }
+
+inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) = beginTransaction().func().commit()
+
+fun AppCompatActivity.addFragment(frameId: Int, fragment: Fragment, tag: String) = supportFragmentManager.inTransaction { add(frameId, fragment, tag) }
+
+fun AppCompatActivity.removeFragment(fragment: Fragment) = supportFragmentManager.inTransaction { remove(fragment) }
+
+fun AppCompatActivity.removeFragment(tag: String) = supportFragmentManager.inTransaction { remove(supportFragmentManager.findFragmentByTag(tag)) }
+
+fun AppCompatActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String) = supportFragmentManager.inTransaction { replace(frameId, fragment, tag) }
