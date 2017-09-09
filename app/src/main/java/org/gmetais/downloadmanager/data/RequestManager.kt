@@ -30,7 +30,7 @@ object RequestManager {
                 .client(OkHttpClient.Builder()
                         .addInterceptor(BasicAuthInterceptor(pm.getString("username", BuildConfig.API_USERNAME), pm.getString("password", BuildConfig.API_SECRET)))
                         .connectTimeout(5, TimeUnit.SECONDS)
-                        .readTimeout(5, TimeUnit.SECONDS)
+                        .readTimeout(10, TimeUnit.SECONDS)
                         .build())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build().create(IBrowser::class.java)
