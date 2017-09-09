@@ -1,10 +1,14 @@
 package org.gmetais.downloadmanager
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.support.v7.app.AlertDialog
@@ -15,16 +19,19 @@ class NetworkHelper : LifecycleObserver {
     private var mAlertDialog : AlertDialog? = null
 
     companion object {
-        private val instance by lazy { NetworkHelper() }
+        @SuppressLint("StaticFieldLeak")
+        private val instance = NetworkHelper()
         fun attach(activity: LifecycleActivity) {
             instance.activity = activity.apply { lifecycle.addObserver(instance) }
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun start() = activity?.registerReceiver(networkReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun start() {
+        activity?.registerReceiver(networkReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun stop() {
         mAlertDialog?.dismiss()
         mAlertDialog = null

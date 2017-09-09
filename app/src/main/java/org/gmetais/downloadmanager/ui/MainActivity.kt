@@ -13,12 +13,16 @@ class MainActivity : LifecycleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        NetworkHelper.attach(this)
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState === null)
             addFragment(R.id.fragment_placeholder, SharesBrowser(), "shares")
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        NetworkHelper.attach(this)
     }
 
     override fun onBackPressed() {
