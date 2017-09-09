@@ -1,21 +1,19 @@
 package org.gmetais.downloadmanager.ui
 
+import android.arch.lifecycle.LifecycleActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import org.gmetais.downloadmanager.R
-import org.gmetais.downloadmanager.addFragment
-import org.gmetais.downloadmanager.removeFragment
-import org.gmetais.downloadmanager.replaceFragment
+import org.gmetais.downloadmanager.*
 import org.gmetais.downloadmanager.ui.fragments.Browser
 import org.gmetais.downloadmanager.ui.fragments.Preferences
 import org.gmetais.downloadmanager.ui.fragments.SharesBrowser
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : LifecycleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NetworkHelper.attach(this)
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState === null)

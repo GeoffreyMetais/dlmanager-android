@@ -10,4 +10,6 @@
     <string name="settings_server_url">Server URL</string>
     <string name="settings_server_url_summary">append with \':portnumber\' if needed</string>
     <string name="settings">Settings</string>
+    <string name="dialog_network_title">Device not connected!</string>
+    <string name="dialog_network_message">Please check your network connection and try again.</string>
 </resources>
