@@ -1,18 +1,23 @@
 package org.gmetais.downloadmanager.ui
 
-import android.arch.lifecycle.LifecycleActivity
+import android.arch.lifecycle.LifecycleRegistry
+import android.arch.lifecycle.LifecycleRegistryOwner
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.gmetais.downloadmanager.*
 import org.gmetais.downloadmanager.ui.fragments.Browser
 import org.gmetais.downloadmanager.ui.fragments.Preferences
 import org.gmetais.downloadmanager.ui.fragments.SharesBrowser
 
-class MainActivity : LifecycleActivity(), NetworkHelper.NetworkController {
+class MainActivity : AppCompatActivity(), LifecycleRegistryOwner, NetworkHelper.NetworkController {
 
     var mAlertDialog : AlertDialog? = null
+    private val lifecycleRegistry = LifecycleRegistry(this)
+
+    override fun getLifecycle(): LifecycleRegistry = lifecycleRegistry
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
