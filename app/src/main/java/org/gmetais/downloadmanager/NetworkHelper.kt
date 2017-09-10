@@ -11,10 +11,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import java.lang.ref.WeakReference
 
 class NetworkHelper : LifecycleObserver {
 
-    private var controller: NetworkController? = null
+    private lateinit var controller: WeakReference<NetworkController>
 
     interface NetworkController {
         fun getLifecycle() : LifecycleRegistry
@@ -24,30 +25,29 @@ class NetworkHelper : LifecycleObserver {
     }
 
     companion object {
-        @SuppressLint("StaticFieldLeak")
         private val instance = NetworkHelper()
         fun attach(controller: NetworkController) {
-            instance.controller = controller.apply { getLifecycle().addObserver(instance) }
+            instance.controller = WeakReference(controller.apply { getLifecycle().addObserver(instance) })
         }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun start() {
-        controller?.registerReceiver(networkReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        controller.get()?.registerReceiver(networkReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun stop() {
-        controller?.getLifecycle()?.removeObserver(this)
-        controller?.unregisterReceiver(networkReceiver)
-        controller = null
+        controller.get()?.getLifecycle()?.removeObserver(this)
+        controller.get()?.unregisterReceiver(networkReceiver)
+        controller.clear()
     }
 
     private val networkReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (ConnectivityManager.CONNECTIVITY_ACTION == intent.action) {
                 val networkInfo = (Application.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
-                controller?.onConnectionChanged(networkInfo == null || (networkInfo.state != NetworkInfo.State.CONNECTED  && networkInfo.state != NetworkInfo.State.CONNECTING))
+                controller.get()?.onConnectionChanged(networkInfo == null || (networkInfo.state != NetworkInfo.State.CONNECTED  && networkInfo.state != NetworkInfo.State.CONNECTING))
             }
         }
     }
