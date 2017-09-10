@@ -23,7 +23,7 @@ import java.lang.ref.WeakReference
 class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
     private val mCurrentDirectory: DirectoryModel by lazy { ViewModelProviders.of(this, DirectoryModel.Factory(arguments?.getString("path"))).get(DirectoryModel::class.java) }
-    private lateinit var mFilterDelegate : FilterDelegate
+    private var mFilterDelegate : FilterDelegate? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
     }
 
     override fun onPause() {
-        mFilterDelegate.close()
+        mFilterDelegate?.close()
         super.onPause()
     }
 
