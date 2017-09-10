@@ -3,13 +3,16 @@ package org.gmetais.downloadmanager.ui
 import android.arch.lifecycle.LifecycleActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v7.app.AlertDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import org.gmetais.downloadmanager.*
 import org.gmetais.downloadmanager.ui.fragments.Browser
 import org.gmetais.downloadmanager.ui.fragments.Preferences
 import org.gmetais.downloadmanager.ui.fragments.SharesBrowser
 
-class MainActivity : LifecycleActivity() {
+class MainActivity : LifecycleActivity(), NetworkHelper.NetworkController {
+
+    var mAlertDialog : AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +26,11 @@ class MainActivity : LifecycleActivity() {
     override fun onStart() {
         super.onStart()
         NetworkHelper.attach(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mAlertDialog?.dismiss()
     }
 
     override fun onBackPressed() {
@@ -56,4 +64,6 @@ class MainActivity : LifecycleActivity() {
             else -> false
         }
     }
+
+    override fun onConnectionChanged(disconnected: Boolean) = showNetworkDialog(disconnected)
 }

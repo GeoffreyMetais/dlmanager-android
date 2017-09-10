@@ -1,14 +1,16 @@
 package org.gmetais.downloadmanager
 
 import android.app.Activity
+import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
-import android.support.v7.app.AppCompatActivity
+import android.support.v7.app.AlertDialog
 import android.view.View
+import org.gmetais.downloadmanager.ui.MainActivity
 
 fun  String.getNameFromPath(): String {
     if (!this.endsWith('/'))
@@ -46,3 +48,22 @@ fun FragmentActivity.removeFragment(fragment: Fragment) = supportFragmentManager
 fun FragmentActivity.removeFragment(tag: String) = supportFragmentManager.inTransaction { remove(supportFragmentManager.findFragmentByTag(tag)) }
 
 fun FragmentActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String) = supportFragmentManager.inTransaction { replace(frameId, fragment, tag) }
+
+fun MainActivity.showNetworkDialog(disconnected: Boolean) {
+    if (!lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED))
+        return
+    val showing = mAlertDialog?.isShowing == true
+    if (disconnected) {
+        if (showing)
+            return
+        if (mAlertDialog === null)
+            mAlertDialog = AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.dialog_network_title))
+                    .setMessage(getString(R.string.dialog_network_message))
+                    .setPositiveButton(getString(android.R.string.ok),
+                            { dialog, _ -> dialog.dismiss() })
+                    .create()
+        mAlertDialog!!.show()
+    } else if (showing)
+        mAlertDialog!!.dismiss()
+}
