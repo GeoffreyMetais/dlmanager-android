@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import org.gmetais.downloadmanager.data.Result
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 abstract class BaseModel : ViewModel() {
@@ -16,9 +17,4 @@ abstract class BaseModel : ViewModel() {
     }
 
     fun refresh() = launch(UI) { dataResult.value = call() }
-
-    sealed class Result {
-        data class Success<out T>(val content: T) : Result()
-        data class Error(val code: Int, val message: String) : Result()
-    }
 }

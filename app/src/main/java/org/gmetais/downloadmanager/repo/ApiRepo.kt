@@ -2,9 +2,10 @@
 
 package org.gmetais.downloadmanager.repo
 
+import org.gmetais.downloadmanager.data.Error
 import org.gmetais.downloadmanager.data.RequestManager
 import org.gmetais.downloadmanager.data.SharedFile
-import org.gmetais.downloadmanager.model.BaseModel
+import org.gmetais.downloadmanager.data.Success
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,12 +24,12 @@ object ApiRepo {
     private suspend inline fun <reified T> retrofitResponseCall(crossinline call: () -> Call<T>) = try {
         with(retrofitSuspendCall(call)) {
             if (isSuccessful)
-                BaseModel.Result.Success(body()!!)
+                Success(body()!!)
             else
-                BaseModel.Result.Error(code(), message())
+                Error(code(), message())
         }
     } catch(e: Exception) {
-        BaseModel.Result.Error(408, e.localizedMessage)
+        Error(408, e.localizedMessage)
     }
 
 

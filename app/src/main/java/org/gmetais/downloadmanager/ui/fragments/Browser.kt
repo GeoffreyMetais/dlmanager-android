@@ -9,15 +9,13 @@ import android.view.MenuInflater
 import android.view.View
 import android.widget.Filterable
 import org.gmetais.downloadmanager.R
-import org.gmetais.downloadmanager.ui.adapters.BrowserAdapter
-import org.gmetais.downloadmanager.data.Directory
-import org.gmetais.downloadmanager.data.File
+import org.gmetais.downloadmanager.data.*
 import org.gmetais.downloadmanager.getNameFromPath
-import org.gmetais.downloadmanager.model.BaseModel
 import org.gmetais.downloadmanager.model.DirectoryModel
 import org.gmetais.downloadmanager.putStringExtra
 import org.gmetais.downloadmanager.ui.FilterDelegate
 import org.gmetais.downloadmanager.ui.LinkCreatorDialog
+import org.gmetais.downloadmanager.ui.adapters.BrowserAdapter
 import java.lang.ref.WeakReference
 
 class Browser : BaseBrowser(), BrowserAdapter.IHandler {
@@ -34,7 +32,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         super.onViewCreated(view, savedInstanceState)
         mBinding.filesList.adapter = BrowserAdapter(this)
         activity.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
-        mCurrentDirectory.dataResult.observe(this, Observer<BaseModel.Result> { update(it!!) })
+        mCurrentDirectory.dataResult.observe(this, Observer<Result> { update(it!!) })
         showProgress()
     }
 
@@ -49,12 +47,12 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         super.onPause()
     }
 
-    private fun update(result: BaseModel.Result) {
+    private fun update(result: Result) {
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
         when (result) {
-            is BaseModel.Result.Success<*> -> (mBinding.filesList.adapter as BrowserAdapter).update((result.content as Directory).files.sortedBy { !it.isDirectory })
-            is BaseModel.Result.Error -> Snackbar.make(mBinding.filesList, result.message, Snackbar.LENGTH_LONG).show()
+            is Success<*> -> (mBinding.filesList.adapter as BrowserAdapter).update((result.content as Directory).files.sortedBy { !it.isDirectory })
+            is Error -> Snackbar.make(mBinding.filesList, result.message, Snackbar.LENGTH_LONG).show()
         }
     }
 

@@ -16,3 +16,7 @@ data class User(val id: String,
 data class RequestBody(val path: String,
                        val user: String)
 
+sealed class Result
+data class Success<out T>(val content: T) : Result()
+data class Error(val code: Int, val message: String) : Result()
+
