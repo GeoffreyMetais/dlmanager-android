@@ -1,6 +1,5 @@
 package org.gmetais.downloadmanager
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleRegistry

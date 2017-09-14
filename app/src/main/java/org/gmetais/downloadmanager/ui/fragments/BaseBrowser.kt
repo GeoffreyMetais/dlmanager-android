@@ -1,9 +1,9 @@
 package org.gmetais.downloadmanager.ui.fragments
 
-import android.arch.lifecycle.LifecycleFragment
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import org.gmetais.downloadmanager.databinding.BrowserBinding
 
-abstract class BaseBrowser : LifecycleFragment(), SwipeRefreshLayout.OnRefreshListener {
+abstract class BaseBrowser : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     abstract override fun onRefresh()
 

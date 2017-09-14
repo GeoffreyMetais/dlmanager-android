@@ -1,7 +1,6 @@
 package org.gmetais.downloadmanager.ui
 
 import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AlertDialog
@@ -12,7 +11,7 @@ import org.gmetais.downloadmanager.ui.fragments.Browser
 import org.gmetais.downloadmanager.ui.fragments.Preferences
 import org.gmetais.downloadmanager.ui.fragments.SharesBrowser
 
-class MainActivity : AppCompatActivity(), LifecycleRegistryOwner, NetworkHelper.NetworkController {
+class MainActivity : AppCompatActivity(), NetworkHelper.NetworkController {
 
     var mAlertDialog : AlertDialog? = null
     private val lifecycleRegistry = LifecycleRegistry(this)
