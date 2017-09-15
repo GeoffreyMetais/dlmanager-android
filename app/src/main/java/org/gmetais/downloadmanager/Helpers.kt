@@ -1,16 +1,14 @@
 package org.gmetais.downloadmanager
 
 import android.app.Activity
-import android.arch.lifecycle.Lifecycle
+import android.app.Application
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
-import android.support.v7.app.AlertDialog
 import android.view.View
-import org.gmetais.downloadmanager.ui.MainActivity
 
 fun  String.getNameFromPath(): String {
     if (!this.endsWith('/'))
@@ -19,14 +17,6 @@ fun  String.getNameFromPath(): String {
 }
 
 fun <T : View> Activity.bind(@IdRes res : Int) : Lazy<T> {
-    return lazy(LazyThreadSafetyMode.NONE) { findViewById<T>(res) }
-}
-
-fun <T : View> Fragment.bind(@IdRes res : Int) : Lazy<T> {
-    return lazy(LazyThreadSafetyMode.NONE) { view!!.findViewById<T>(res) }
-}
-
-fun <T : View> View.bind(@IdRes res : Int) : Lazy<T> {
     return lazy(LazyThreadSafetyMode.NONE) { findViewById<T>(res) }
 }
 
@@ -49,21 +39,13 @@ fun FragmentActivity.removeFragment(tag: String) = supportFragmentManager.inTran
 
 fun FragmentActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String) = supportFragmentManager.inTransaction { replace(frameId, fragment, tag) }
 
-fun MainActivity.showNetworkDialog(disconnected: Boolean) {
-    if (!lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED))
-        return
-    val showing = mAlertDialog?.isShowing == true
-    if (disconnected) {
-        if (showing)
-            return
-        if (mAlertDialog === null)
-            mAlertDialog = AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.dialog_network_title))
-                    .setMessage(getString(R.string.dialog_network_message))
-                    .setPositiveButton(getString(android.R.string.ok),
-                            { dialog, _ -> dialog.dismiss() })
-                    .create()
-        mAlertDialog!!.show()
-    } else if (showing)
-        mAlertDialog!!.dismiss()
+
+object EmptyALC : Application.ActivityLifecycleCallbacks {
+    override fun onActivityPaused(activity: Activity) {}
+    override fun onActivityResumed(activity: Activity) {}
+    override fun onActivityStarted(activity: Activity) {}
+    override fun onActivityDestroyed(activity: Activity) {}
+    override fun onActivitySaveInstanceState(activity: Activity, savedInstanceState: Bundle) {}
+    override fun onActivityStopped(activity: Activity) {}
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle) {}
 }

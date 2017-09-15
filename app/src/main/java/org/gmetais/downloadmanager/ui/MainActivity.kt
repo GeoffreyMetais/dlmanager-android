@@ -1,22 +1,17 @@
 package org.gmetais.downloadmanager.ui
 
-import android.arch.lifecycle.LifecycleRegistry
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import org.gmetais.downloadmanager.*
+import org.gmetais.downloadmanager.R
+import org.gmetais.downloadmanager.addFragment
+import org.gmetais.downloadmanager.removeFragment
+import org.gmetais.downloadmanager.replaceFragment
 import org.gmetais.downloadmanager.ui.fragments.Browser
 import org.gmetais.downloadmanager.ui.fragments.Preferences
 import org.gmetais.downloadmanager.ui.fragments.SharesBrowser
 
-class MainActivity : AppCompatActivity(), NetworkHelper.NetworkController {
-
-    var mAlertDialog : AlertDialog? = null
-    private val lifecycleRegistry = LifecycleRegistry(this)
-
-    override fun getLifecycle(): LifecycleRegistry = lifecycleRegistry
+class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,16 +20,6 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkController {
         if (savedInstanceState === null)
             addFragment(R.id.fragment_placeholder, SharesBrowser(), "shares")
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        NetworkHelper.attach(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mAlertDialog?.dismiss()
     }
 
     override fun onBackPressed() {
@@ -68,6 +53,4 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkController {
             else -> false
         }
     }
-
-    override fun onConnectionChanged(disconnected: Boolean) = showNetworkDialog(disconnected)
 }
