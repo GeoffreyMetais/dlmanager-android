@@ -14,6 +14,7 @@ import org.gmetais.downloadmanager.data.*
 import org.gmetais.downloadmanager.getNameFromPath
 import org.gmetais.downloadmanager.model.DirectoryModel
 import org.gmetais.downloadmanager.putStringExtra
+import org.gmetais.downloadmanager.replaceFragment
 import org.gmetais.downloadmanager.ui.LinkCreatorDialog
 import org.gmetais.downloadmanager.ui.adapters.BrowserAdapter
 
@@ -59,18 +60,10 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
     }
 
     override fun open(file: File) {
-        if (file.isDirectory) {
-            activity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_placeholder, Browser().putStringExtra("path", file.path), file.path.getNameFromPath())
-                    .addToBackStack(activity.title.toString())
-                    .commit()
-        } else {
-            val linkCreatorDialog = LinkCreatorDialog()
-            val args = Bundle(1)
-            args.putString("path", file.path)
-            linkCreatorDialog.arguments = args
-            linkCreatorDialog.show(activity.supportFragmentManager, "linkin park")
-        }
+        if (file.isDirectory)
+            activity.replaceFragment(R.id.fragment_placeholder, Browser().putStringExtra("path", file.path), file.path.getNameFromPath(), true)
+        else
+            LinkCreatorDialog().putStringExtra("path", file.path).show(activity.supportFragmentManager, "linkin park")
     }
 
     override fun onRefresh() {

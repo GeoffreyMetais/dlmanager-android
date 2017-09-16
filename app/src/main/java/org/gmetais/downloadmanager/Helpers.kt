@@ -20,7 +20,7 @@ fun <T : View> Activity.bind(@IdRes res : Int) : Lazy<T> {
     return lazy(LazyThreadSafetyMode.NONE) { findViewById<T>(res) }
 }
 
-fun Fragment.putStringExtra(key: String, value: String) : Fragment {
+fun <T : Fragment> T.putStringExtra(key: String, value: String) : T {
     if (this.arguments == null)
         arguments = Bundle()
     arguments.putString(key, value)
@@ -37,4 +37,8 @@ fun FragmentActivity.removeFragment(fragment: Fragment) = supportFragmentManager
 
 fun FragmentActivity.removeFragment(tag: String) = supportFragmentManager.inTransaction { remove(supportFragmentManager.findFragmentByTag(tag)) }
 
-fun FragmentActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String) = supportFragmentManager.inTransaction { replace(frameId, fragment, tag) }
+fun FragmentActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String, backstack : Boolean = false) = supportFragmentManager.inTransaction {
+    if (backstack)
+        addToBackStack(tag)
+    replace(frameId, fragment, tag)
+}
