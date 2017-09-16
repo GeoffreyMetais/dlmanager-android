@@ -13,6 +13,5 @@ class Application : android.app.Application() {
         super.onCreate()
         instance = this
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-        registerActivityLifecycleCallbacks(NetworkHelper.get())
     }
 }

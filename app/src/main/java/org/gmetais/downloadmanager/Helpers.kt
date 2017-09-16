@@ -38,14 +38,3 @@ fun FragmentActivity.removeFragment(fragment: Fragment) = supportFragmentManager
 fun FragmentActivity.removeFragment(tag: String) = supportFragmentManager.inTransaction { remove(supportFragmentManager.findFragmentByTag(tag)) }
 
 fun FragmentActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String) = supportFragmentManager.inTransaction { replace(frameId, fragment, tag) }
-
-
-object EmptyALC : Application.ActivityLifecycleCallbacks {
-    override fun onActivityPaused(activity: Activity) {}
-    override fun onActivityResumed(activity: Activity) {}
-    override fun onActivityStarted(activity: Activity) {}
-    override fun onActivityDestroyed(activity: Activity) {}
-    override fun onActivitySaveInstanceState(activity: Activity, savedInstanceState: Bundle) {}
-    override fun onActivityStopped(activity: Activity) {}
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle) {}
-}

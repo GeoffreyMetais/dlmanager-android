@@ -2,21 +2,26 @@ package org.gmetais.downloadmanager.ui
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.Observer
+import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import org.gmetais.downloadmanager.NetworkHelper
 import org.gmetais.downloadmanager.R
 
 @SuppressLint("Registered")
-open class BaseActivity : AppCompatActivity(), NetworkHelper.NetworkController {
+open class BaseActivity : AppCompatActivity() {
     private var mAlertDialog : AlertDialog? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        NetworkHelper.disconnected.observe(this, Observer<Boolean> { showNetworkDialog(it!!) })
+    }
 
     override fun onStop() {
         super.onStop()
         mAlertDialog?.dismiss()
     }
-
-    override fun onConnectionChanged(disconnected: Boolean) = showNetworkDialog(disconnected)
 
     private fun showNetworkDialog(disconnected: Boolean) {
         if (!lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED))

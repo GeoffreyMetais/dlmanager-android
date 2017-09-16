@@ -8,7 +8,7 @@ import org.gmetais.downloadmanager.data.Result
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 abstract class BaseModel : ViewModel() {
-    @Suppress("EXPERIMENTAL_FEATURE_WARNING")
+
     abstract suspend fun call(): Result
 
     val dataResult: MutableLiveData<Result> by lazy {
