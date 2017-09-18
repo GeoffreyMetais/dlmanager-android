@@ -25,12 +25,12 @@ class DirectoryModel(val path: String?) : BaseModel(), SearchView.OnQueryTextLis
     }
 
     inner class FileFilter : Filter() {
-        var originalData : List<File>? = null
+        private var originalData : List<File>? = null
 
         private fun initData() : List<File> {
             @Suppress("UNCHECKED_CAST")
             if (originalData === null)
-                originalData = ((dataResult.value as Success<*>).content as Directory).files
+                originalData = ((dataResult.value as? Success<*>)?.content as? Directory)?.files
             return originalData!!
         }
 
@@ -54,11 +54,13 @@ class DirectoryModel(val path: String?) : BaseModel(), SearchView.OnQueryTextLis
 
         @Suppress("UNCHECKED_CAST")
         override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults?) {
-            val path = (dataResult.value as Success<Directory>).content.path
-            if (filterResults?.values !== null && dataResult.value is Success<*>)
-                dataResult.value = Success(Directory(path, filterResults.values as List<File>))
-            else if (originalData !== null) {
-                dataResult.value = Success(Directory(path, originalData!!))
+            if (originalData === null)
+                return
+            val directory = (dataResult.value as Success<Directory>).content
+            if (filterResults?.values !== null)
+                dataResult.value = Success(directory.copy(files = filterResults.values as List<File>))
+            else {
+                dataResult.value = Success(directory.copy(files = originalData!!))
                 originalData = null
             }
         }
