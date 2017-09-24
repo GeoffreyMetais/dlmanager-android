@@ -25,43 +25,42 @@ class DirectoryModel(val path: String?) : BaseModel(), SearchView.OnQueryTextLis
     }
 
     inner class FileFilter : Filter() {
-        private var originalData : List<File>? = null
+        private var originalData : Directory? = null
 
-        private fun initData() : List<File> {
+        private fun initData() : Directory? {
             @Suppress("UNCHECKED_CAST")
             if (originalData === null)
-                originalData = ((dataResult.value as? Success<*>)?.content as? Directory)?.files
-            return originalData!!
+                originalData = (dataResult.value as? Success<Directory>)?.content
+            return originalData
         }
 
-        override fun performFiltering(charSequence: CharSequence?): FilterResults {
-            val results = FilterResults()
-            if (charSequence !== null) {
-                val queryStrings = charSequence.trim().toString().toLowerCase().split(" ").filter { it.length > 2 }
+        override fun performFiltering(charSequence: CharSequence?) = FilterResults().apply {
+            charSequence?.let {
+                val queryStrings = it.trim().toString().toLowerCase().split(" ").filter { it.length > 2 }
                 val list = ArrayList<File>()
-                for (file in initData()) {
-                    for (query in queryStrings)
-                        if (file.path.contains(query, true)) {
-                            list.add(file)
-                            break
-                        }
+                initData()?.let {
+                    for (file in it.files) {
+                        for (query in queryStrings)
+                            if (file.path.contains(query, true)) {
+                                list.add(file)
+                                break
+                            }
+                    }
                 }
-                results.values = list
-                results.count = list.size
+                values = list
+                count = list.size
             }
-            return results
         }
 
         @Suppress("UNCHECKED_CAST")
         override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults?) {
-            if (originalData === null)
-                return
-            val directory = (dataResult.value as Success<Directory>).content
-            if (filterResults?.values !== null)
-                dataResult.value = Success(directory.copy(files = filterResults.values as List<File>))
-            else {
-                dataResult.value = Success(directory.copy(files = originalData!!))
-                originalData = null
+            originalData?.let {
+                if (filterResults?.values !== null)
+                    dataResult.value = Success(it.copy(files = filterResults.values as List<File>))
+                else {
+                    dataResult.value = Success(it)
+                    originalData = null
+                }
             }
         }
     }
