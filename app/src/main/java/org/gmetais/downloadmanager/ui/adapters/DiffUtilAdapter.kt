@@ -3,8 +3,8 @@ package org.gmetais.downloadmanager.ui.adapters
 import android.support.annotation.MainThread
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import java.util.*
 
@@ -13,6 +13,7 @@ abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.A
 
     protected var mDataset: List<D> = listOf()
     private val mPendingUpdates = ArrayDeque<List<D>>()
+    private val diffCallback by lazy(LazyThreadSafetyMode.NONE) { DiffCallback() }
 
     @MainThread
     fun update (list: List<D>) {
@@ -21,15 +22,15 @@ abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.A
             internalUpdate(list)
     }
 
-    @Suppress("EXPERIMENTAL_FEATURE_WARNING")
-    private fun internalUpdate(list: List<D>) = launch(CommonPool) {
-        val finalList = list.toList()
-        val result = DiffUtil.calculateDiff(DiffCallback(finalList), false)
-        launch(UI) {
-            mDataset = finalList
+    private fun internalUpdate(list: List<D>) = launch(UI) {
+        val items by lazy(LazyThreadSafetyMode.NONE) { list.toList() }
+        val calculation = async { DiffUtil.calculateDiff(diffCallback.apply { newList = items }, false) }
+        val result = calculation.await()
+        if (!calculation.isCompletedExceptionally) {
+            mDataset = items
             result.dispatchUpdatesTo(this@DiffUtilAdapter)
-            processQueue()
         }
+        processQueue()
     }
 
     private fun processQueue() {
@@ -38,7 +39,8 @@ abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.A
             internalUpdate(mPendingUpdates.peek())
     }
 
-    inner class DiffCallback(val newList: List<D>) : DiffUtil.Callback() {
+    private inner class DiffCallback : DiffUtil.Callback() {
+        lateinit var newList: List<D>
 
         override fun getOldListSize() = mDataset.size
 
