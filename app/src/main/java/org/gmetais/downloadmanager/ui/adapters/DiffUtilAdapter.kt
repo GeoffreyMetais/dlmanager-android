@@ -23,11 +23,10 @@ abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.A
     }
 
     private fun internalUpdate(list: List<D>) = launch(UI) {
-        val items by lazy(LazyThreadSafetyMode.NONE) { list.toList() }
-        val calculation = async { DiffUtil.calculateDiff(diffCallback.apply { newList = items }, false) }
-        val result = calculation.await()
-        if (!calculation.isCompletedExceptionally) {
-            mDataset = items
+        val calculationJob = async { DiffUtil.calculateDiff(diffCallback.apply { newList = list.toList() }, false) }
+        val result = calculationJob.await()
+        if (!calculationJob.isCompletedExceptionally) {
+            mDataset = diffCallback.newList
             result.dispatchUpdatesTo(this@DiffUtilAdapter)
         }
         processQueue()
