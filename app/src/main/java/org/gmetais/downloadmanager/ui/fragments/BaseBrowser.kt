@@ -15,7 +15,7 @@ abstract class BaseBrowser : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     abstract override fun onRefresh()
 
-    lateinit var mBinding : BrowserBinding
+    protected lateinit var mBinding : BrowserBinding
     private val mHandler: Handler by lazy { Handler(Looper.getMainLooper()) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

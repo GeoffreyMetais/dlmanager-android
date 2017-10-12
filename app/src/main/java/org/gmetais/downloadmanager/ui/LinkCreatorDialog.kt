@@ -18,9 +18,9 @@ import org.gmetais.downloadmanager.repo.ApiRepo
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 class LinkCreatorDialog : BottomSheetDialogFragment() {
 
-    val mPath : String by lazy { arguments.getString("path") }
-    val shares: SharesListModel by lazy { ViewModelProviders.of(activity).get(SharesListModel::class.java) }
-    lateinit var mBinding: DialogLinkCreatorBinding
+    private val mPath : String by lazy { arguments.getString("path") }
+    private val shares: SharesListModel by lazy { ViewModelProviders.of(activity).get(SharesListModel::class.java) }
+    private lateinit var mBinding: DialogLinkCreatorBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DialogLinkCreatorBinding.inflate(inflater, container, false)
