@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.data.SharedFile
+import org.gmetais.downloadmanager.data.Success
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
 import org.gmetais.downloadmanager.getNameFromPath
 import org.gmetais.downloadmanager.model.SharesListModel
 import org.gmetais.downloadmanager.repo.ApiRepo
+import org.gmetais.downloadmanager.share
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 class LinkCreatorDialog : BottomSheetDialogFragment() {
@@ -21,6 +23,10 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
     private val mPath : String by lazy { arguments.getString("path") }
     private val shares: SharesListModel by lazy { ViewModelProviders.of(activity).get(SharesListModel::class.java) }
     private lateinit var mBinding: DialogLinkCreatorBinding
+
+    inner class ClickHandler {
+        fun onClick() = addFile()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DialogLinkCreatorBinding.inflate(inflater, container, false)
@@ -34,15 +40,16 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
         mBinding.editName.setOnEditorActionListener { _,_,_ -> addFile(); true }
     }
 
-    inner class ClickHandler {
-        fun onClick() = addFile()
-    }
-
     private fun addFile() = launch(UI) {
-        if (ApiRepo.add(SharedFile(path = mPath, name = mBinding.editName.text.toString()))) {
-            shares.refresh()
-            dismiss()
-        } else
-            Snackbar.make(mBinding.root, "failure", Snackbar.LENGTH_LONG).show()
+        val result = ApiRepo.add(SharedFile(path = mPath, name = mBinding.editName.text.toString()))
+        when (result) {
+            is Success<*> -> {
+                val share = result.content as SharedFile
+                shares.add(share)
+                dismiss()
+                activity?.share(share)
+            }
+            is Error -> Snackbar.make(mBinding.root, result.message.toString(), Snackbar.LENGTH_LONG).show()
+        }
     }
 }

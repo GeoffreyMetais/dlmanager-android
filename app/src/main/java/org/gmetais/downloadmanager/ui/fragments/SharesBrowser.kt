@@ -12,6 +12,7 @@ import org.gmetais.downloadmanager.data.Result
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.data.Success
 import org.gmetais.downloadmanager.model.SharesListModel
+import org.gmetais.downloadmanager.share
 import org.gmetais.downloadmanager.ui.adapters.SharesAdapter
 
 class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
@@ -36,9 +37,7 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         }
     }
 
-    override fun open(share: SharedFile) = startActivity(Intent(Intent.ACTION_SEND)
-                .putExtra(Intent.EXTRA_TEXT, share.link)
-                .setType("text/plain"))
+    override fun open(share: SharedFile) = activity?.share(share)
 
     override fun delete(share: SharedFile) {
         showProgress()

@@ -6,7 +6,7 @@ import org.gmetais.downloadmanager.data.SharedFile
 class SharesAdapter(handler: ShareHandler) : BaseAdapter<SharedFile>(handler) {
 
     interface ShareHandler {
-        fun open(share: SharedFile)
+        fun open(share: SharedFile) : Unit?
         fun delete(share: SharedFile)
     }
 

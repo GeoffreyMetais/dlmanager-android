@@ -2,6 +2,7 @@ package org.gmetais.downloadmanager
 
 import android.app.Activity
 import android.app.Application
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.view.View
+import org.gmetais.downloadmanager.data.SharedFile
 
 fun  String.getNameFromPath(): String {
     if (!this.endsWith('/'))
@@ -42,3 +44,7 @@ fun FragmentActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: Stri
         addToBackStack(tag)
     replace(frameId, fragment, tag)
 }
+
+fun Activity.share(share: SharedFile) = startActivity(Intent(Intent.ACTION_SEND)
+                .putExtra(Intent.EXTRA_TEXT, share.link)
+                .setType("text/plain"))

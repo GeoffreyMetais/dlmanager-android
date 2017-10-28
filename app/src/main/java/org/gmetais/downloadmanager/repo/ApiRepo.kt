@@ -17,7 +17,7 @@ object ApiRepo {
 
     suspend fun listShares() = retrofitResponseCall { RequestManager.listShares() }
 
-    suspend fun add(file: SharedFile) = retrofitBooleanCall { RequestManager.add(file) }
+    suspend fun add(file: SharedFile) = retrofitResponseCall { RequestManager.add(file) }
 
     suspend fun delete(key: String) = retrofitBooleanCall { RequestManager.delete(key) }
 

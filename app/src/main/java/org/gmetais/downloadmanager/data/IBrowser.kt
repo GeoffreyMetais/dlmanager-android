@@ -14,7 +14,7 @@ interface IBrowser {
     fun getShares(): Call<MutableList<SharedFile>>
 
     @POST("go/add")
-    fun add(@Body file: SharedFile) : Call<Void>
+    fun add(@Body file: SharedFile) : Call<SharedFile>
 
     @DELETE("go/del/{name}")
     fun delete(@Path("name") name: String) : Call<Void>
