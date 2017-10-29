@@ -1,27 +1,26 @@
 package org.gmetais.downloadmanager.model
 
-import kotlinx.coroutines.experimental.android.UI
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.ViewModel
 import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.data.SharedFile
-import org.gmetais.downloadmanager.data.Success
+import org.gmetais.downloadmanager.data.SharesDatabase
 import org.gmetais.downloadmanager.repo.ApiRepo
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING", "UNCHECKED_CAST")
-class SharesListModel : BaseModel() {
+class SharesListModel : ViewModel() {
 
-    override suspend fun call() = ApiRepo.listShares()
-
-    fun delete(share: SharedFile) = launch(UI) {
-        if (ApiRepo.delete(share.name)) {
-            (dataResult.value as? Success<MutableList<SharedFile>>)?.let {
-                it.content.remove(share)
-                dataResult.value = it
-            }
-        }
+    val dataResult: LiveData<List<SharedFile>> by lazy {
+        refresh()
+        SharesDatabase.db.sharesDao().getShares()
     }
 
-    fun add(share: SharedFile) = (dataResult.value as? Success<MutableList<SharedFile>>)?.let {
-        it.content.add(share)
-        dataResult.value = it
+    fun refresh() = launch { ApiRepo.fetchShares() }
+
+    fun delete(share: SharedFile) = launch {
+        if (ApiRepo.delete(share.name))
+            SharesDatabase.db.sharesDao().deleteShares(share)
     }
+
+    fun add(share: SharedFile) = launch { SharesDatabase.db.sharesDao().insertShares(share) }
 }

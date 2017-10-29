@@ -10,8 +10,8 @@ class Preferences : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity.title = getString(R.string.settings)
+        activity?.title = getString(R.string.settings)
     }
 }

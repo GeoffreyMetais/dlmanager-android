@@ -2,10 +2,7 @@
 
 package org.gmetais.downloadmanager.repo
 
-import org.gmetais.downloadmanager.data.Error
-import org.gmetais.downloadmanager.data.RequestManager
-import org.gmetais.downloadmanager.data.SharedFile
-import org.gmetais.downloadmanager.data.Success
+import org.gmetais.downloadmanager.data.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,7 +12,11 @@ object ApiRepo {
 
     suspend fun browse(path: String?) = retrofitResponseCall { RequestManager.browse(path) }
 
-    suspend fun listShares() = retrofitResponseCall { RequestManager.listShares() }
+    suspend fun fetchShares() {
+        val result = retrofitResponseCall { RequestManager.listShares() }
+        if (result is Success<*>)
+            SharesDatabase.db.sharesDao().insertShares(result.content as List<SharedFile>)
+    }
 
     suspend fun add(file: SharedFile) = retrofitResponseCall { RequestManager.add(file) }
 

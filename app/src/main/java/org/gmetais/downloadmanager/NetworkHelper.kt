@@ -17,14 +17,14 @@ object NetworkHelper : BroadcastReceiver(), LifecycleObserver {
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    private fun register(): Intent = Application.instance.registerReceiver(this, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    fun register(): Intent = Application.instance.registerReceiver(this, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    private fun unregister() = Application.instance.unregisterReceiver(this)
+    fun unregister() = Application.instance.unregisterReceiver(this)
 
     override fun onReceive(context: Context, intent: Intent) {
         if (ConnectivityManager.CONNECTIVITY_ACTION == intent.action) {
-            val networkInfo = (Application.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager)?.activeNetworkInfo
+            val networkInfo = (Application.context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager)?.activeNetworkInfo
             disconnected.value = networkInfo?.state != NetworkInfo.State.CONNECTED  && networkInfo?.state != NetworkInfo.State.CONNECTING
         }
     }

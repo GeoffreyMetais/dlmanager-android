@@ -1,7 +1,6 @@
 package org.gmetais.downloadmanager
 
 import android.app.Activity
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.IdRes
@@ -25,7 +24,7 @@ fun <T : View> Activity.bind(@IdRes res : Int) : Lazy<T> {
 fun <T : Fragment> T.putStringExtra(key: String, value: String) : T {
     if (this.arguments == null)
         arguments = Bundle()
-    arguments.putString(key, value)
+    arguments!!.putString(key, value)
     return this
 }
 

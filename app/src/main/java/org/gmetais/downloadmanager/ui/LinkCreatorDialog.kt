@@ -20,8 +20,8 @@ import org.gmetais.downloadmanager.share
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 class LinkCreatorDialog : BottomSheetDialogFragment() {
 
-    private val mPath : String by lazy { arguments.getString("path") }
-    private val shares: SharesListModel by lazy { ViewModelProviders.of(activity).get(SharesListModel::class.java) }
+    private val mPath : String by lazy { arguments?.getString("path") ?: "" }
+    private val shares: SharesListModel by lazy { ViewModelProviders.of(activity!!).get(SharesListModel::class.java) }
     private lateinit var mBinding: DialogLinkCreatorBinding
 
     inner class ClickHandler {
@@ -33,7 +33,7 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.title = mPath.getNameFromPath()
         mBinding.handler = ClickHandler()

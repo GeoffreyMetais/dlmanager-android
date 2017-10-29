@@ -36,7 +36,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.filesList.adapter = BrowserAdapter(this)
-        activity.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
+        activity?.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
         mCurrentDirectory.dataResult.observe(this, Observer<Result> { update(it!!) })
         showProgress()
     }
@@ -61,9 +61,9 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
     override fun open(file: File) {
         if (file.isDirectory)
-            activity.replaceFragment(R.id.fragment_placeholder, Browser().putStringExtra("path", file.path), file.path.getNameFromPath(), true)
+            activity?.replaceFragment(R.id.fragment_placeholder, Browser().putStringExtra("path", file.path), file.path.getNameFromPath(), true)
         else
-            LinkCreatorDialog().putStringExtra("path", file.path).show(activity.supportFragmentManager, "linkin park")
+            LinkCreatorDialog().putStringExtra("path", file.path).show(activity?.supportFragmentManager, "linkin park")
     }
 
     override fun onRefresh() {

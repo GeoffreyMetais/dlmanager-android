@@ -24,7 +24,7 @@ object RequestManager {
     fun delete(key: String) = browserService.delete(key)
 
     init {
-        val pm = PreferenceManager.getDefaultSharedPreferences(Application.getContext())
+        val pm = PreferenceManager.getDefaultSharedPreferences(Application.context)
         browserService = Retrofit.Builder()
                 .baseUrl(pm.getString("server_url", BuildConfig.API_URL))
                 .client(OkHttpClient.Builder()
