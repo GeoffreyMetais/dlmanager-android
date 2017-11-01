@@ -11,7 +11,7 @@ interface SharesDao {
 
     @Update fun updateShares(vararg shares: SharedFile)
 
-    @Query("SELECT * FROM shares") fun getShares() : LiveData<List<SharedFile>>
+    @Query("SELECT * FROM shares order by name asc") fun getShares() : LiveData<List<SharedFile>>
 
     @Delete fun deleteShares(vararg shares: SharedFile)
 }
