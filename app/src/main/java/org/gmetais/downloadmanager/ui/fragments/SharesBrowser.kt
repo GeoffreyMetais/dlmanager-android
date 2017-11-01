@@ -3,6 +3,7 @@ package org.gmetais.downloadmanager.ui.fragments
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.DividerItemDecoration
 import android.view.View
 import kotlinx.coroutines.experimental.launch
@@ -13,15 +14,21 @@ import org.gmetais.downloadmanager.ui.adapters.SharesAdapter
 
 class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
 
-    private val shares: SharesListModel by lazy { ViewModelProviders.of(activity!!).get(SharesListModel::class.java) }
+    private val shares: SharesListModel by lazy { ViewModelProviders.of(this).get(SharesListModel::class.java) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.filesList.addItemDecoration(DividerItemDecoration(mBinding.filesList.context, DividerItemDecoration.VERTICAL))
         mBinding.filesList.adapter = SharesAdapter(this)
         launch { shares.dataResult.observe(this@SharesBrowser, Observer<List<SharedFile>> { update(it!!) }) }
+        shares.exception.observe(this@SharesBrowser, Observer<Exception?> { onError(it) })
         activity?.title = "Shares"
         showProgress()
+    }
+
+    private fun onError(exception: Exception?) = exception?.run {
+        showProgress(false)
+        Snackbar.make(mBinding.filesList, this.message ?: "No error", Snackbar.LENGTH_LONG).show()
     }
 
     private fun update(list: List<SharedFile>) {

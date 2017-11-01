@@ -12,15 +12,22 @@ object ApiRepo {
 
     suspend fun browse(path: String?) = retrofitResponseCall { RequestManager.browse(path) }
 
-    suspend fun fetchShares() {
-        val result = retrofitResponseCall { RequestManager.listShares() }
-        if (result is Success<*>)
-            SharesDatabase.db.sharesDao().insertShares(result.content as List<SharedFile>)
+    suspend fun fetchShares() : Any? = retrofitResponseCallTest { RequestManager.listShares() }
+
+    suspend fun add(file: SharedFile) = retrofitResponseCallTest { RequestManager.add(file) }
+
+    suspend fun delete(key: String) = retrofitResponseCallTest { RequestManager.delete(key) }
+
+    private suspend inline fun <reified T> retrofitResponseCallTest(crossinline call: () -> Call<T>) = try {
+        with(retrofitSuspendCall(call)) {
+            if (isSuccessful)
+                body()
+            else
+                Exception(message())
+        }
+    } catch(e: Exception) {
+        e
     }
-
-    suspend fun add(file: SharedFile) = retrofitResponseCall { RequestManager.add(file) }
-
-    suspend fun delete(key: String) = retrofitBooleanCall { RequestManager.delete(key) }
 
     private suspend inline fun <reified T> retrofitResponseCall(crossinline call: () -> Call<T>) = try {
         with(retrofitSuspendCall(call)) {
