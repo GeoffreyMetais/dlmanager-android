@@ -1,42 +1,29 @@
 package org.gmetais.downloadmanager.ui.adapters
 
-import android.support.annotation.MainThread
+import android.support.annotation.WorkerThread
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import kotlinx.coroutines.experimental.CoroutineStart
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
-import java.util.*
+import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.channels.actor
 
 abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
 
     protected var mDataset: List<D> = listOf()
-    private val mPendingUpdates = ArrayDeque<List<D>>()
     private val diffCallback by lazy(LazyThreadSafetyMode.NONE) { DiffCallback() }
+    private val eventActor = actor<List<D>>(capacity = Channel.CONFLATED) { for (list in channel) internalUpdate(list) }
 
-    @MainThread
-    fun update (list: List<D>) {
-        mPendingUpdates.add(list)
-        if (mPendingUpdates.size == 1)
-            internalUpdate(list)
-    }
+    fun update (list: List<D>) = eventActor.offer(list)
 
-    private fun internalUpdate(list: List<D>) = launch(UI, CoroutineStart.UNDISPATCHED) {
-        val calculationJob = async { DiffUtil.calculateDiff(diffCallback.apply { newList = list.toList() }, false) }
-        val result = calculationJob.await()
-        if (!calculationJob.isCompletedExceptionally) {
-            mDataset = diffCallback.newList
+    @WorkerThread
+    private suspend fun internalUpdate(list: List<D>) {
+        val dataSet = list.toList()
+        val result = DiffUtil.calculateDiff(diffCallback.apply { newList = dataSet }, false)
+        async(UI) {
+            mDataset = dataSet
             result.dispatchUpdatesTo(this@DiffUtilAdapter)
-        }
-        processQueue()
-    }
-
-    @MainThread
-    private fun processQueue() {
-        mPendingUpdates.remove()
-        if (!mPendingUpdates.isEmpty())
-            internalUpdate(mPendingUpdates.peek())
+        }.await()
     }
 
     private inner class DiffCallback : DiffUtil.Callback() {
