@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DividerItemDecoration
 import android.view.View
-import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.model.SharesListModel
 import org.gmetais.downloadmanager.share
@@ -20,7 +19,7 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         super.onViewCreated(view, savedInstanceState)
         mBinding.filesList.addItemDecoration(DividerItemDecoration(mBinding.filesList.context, DividerItemDecoration.VERTICAL))
         mBinding.filesList.adapter = SharesAdapter(this)
-        launch { shares.dataResult.observe(this@SharesBrowser, Observer<List<SharedFile>> { update(it!!) }) }
+        shares.dataResult.observe(this@SharesBrowser, Observer<List<SharedFile>> { update(it!!) })
         shares.exception.observe(this@SharesBrowser, Observer { onError(it) })
         activity?.title = "Shares"
         showProgress()

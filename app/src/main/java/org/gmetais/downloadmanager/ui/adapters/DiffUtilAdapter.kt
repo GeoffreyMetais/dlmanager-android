@@ -3,6 +3,7 @@ package org.gmetais.downloadmanager.ui.adapters
 import android.support.annotation.MainThread
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import kotlinx.coroutines.experimental.CoroutineStart
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
@@ -21,7 +22,7 @@ abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.A
             internalUpdate(list)
     }
 
-    private fun internalUpdate(list: List<D>) = launch(UI) {
+    private fun internalUpdate(list: List<D>) = launch(UI, CoroutineStart.UNDISPATCHED) {
         val calculationJob = async { DiffUtil.calculateDiff(diffCallback.apply { newList = list.toList() }, false) }
         val result = calculationJob.await()
         if (!calculationJob.isCompletedExceptionally) {
@@ -31,6 +32,7 @@ abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.A
         processQueue()
     }
 
+    @MainThread
     private fun processQueue() {
         mPendingUpdates.remove()
         if (!mPendingUpdates.isEmpty())

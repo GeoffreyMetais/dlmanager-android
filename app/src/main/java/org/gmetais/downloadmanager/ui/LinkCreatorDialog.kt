@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.coroutines.experimental.CoroutineStart
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.R
@@ -38,7 +39,7 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
     }
 
     private fun addFile() = activity?.run {
-        launch(UI) {
+        launch(UI, CoroutineStart.UNDISPATCHED) {
             val result = DatabaseRepo.add(SharedFile(path = mPath, name = mBinding.editName.text.toString()))
             dismiss()
             when (result) {
