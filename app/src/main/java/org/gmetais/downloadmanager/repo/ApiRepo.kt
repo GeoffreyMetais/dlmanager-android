@@ -12,13 +12,13 @@ object ApiRepo {
 
     suspend fun browse(path: String?) = retrofitResponseCall { RequestManager.browse(path) }
 
-    suspend fun fetchShares() : Any? = retrofitResponseCallTest { RequestManager.listShares() }
+    suspend fun fetchShares() = retrofitResponseWithException { RequestManager.listShares() }
 
-    suspend fun add(file: SharedFile) = retrofitResponseCallTest { RequestManager.add(file) }
+    suspend fun add(file: SharedFile) = retrofitResponseWithException { RequestManager.add(file) }
 
-    suspend fun delete(key: String) = retrofitResponseCallTest { RequestManager.delete(key) }
+    suspend fun delete(key: String) = retrofitResponseWithException { RequestManager.delete(key) }
 
-    private suspend inline fun <reified T> retrofitResponseCallTest(crossinline call: () -> Call<T>) = try {
+    private suspend inline fun <reified T> retrofitResponseWithException(crossinline call: () -> Call<T>) = try {
         with(retrofitSuspendCall(call)) {
             if (isSuccessful)
                 body()
@@ -38,13 +38,6 @@ object ApiRepo {
         }
     } catch(e: Exception) {
         Error(408, e.localizedMessage)
-    }
-
-
-    private suspend inline fun retrofitBooleanCall(crossinline call: () -> Call<Void>) = try {
-        retrofitSuspendCall(call).isSuccessful
-    } catch(e: Exception) {
-        false
     }
 
     private suspend inline fun <reified T> retrofitSuspendCall(crossinline call: () -> Call<T>) : Response<T> = suspendCoroutine { continuation ->
