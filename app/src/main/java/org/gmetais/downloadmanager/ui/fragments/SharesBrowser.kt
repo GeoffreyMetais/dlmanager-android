@@ -19,7 +19,7 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         super.onViewCreated(view, savedInstanceState)
         mBinding.filesList.addItemDecoration(DividerItemDecoration(mBinding.filesList.context, DividerItemDecoration.VERTICAL))
         mBinding.filesList.adapter = SharesAdapter(this)
-        shares.dataResult.observe(this@SharesBrowser, Observer<List<SharedFile>> { update(it!!) })
+        shares.dataResult.observe(this@SharesBrowser, Observer<List<SharedFile>> { update(it) })
         shares.exception.observe(this@SharesBrowser, Observer { onError(it) })
         activity?.title = "Shares"
         showProgress()
@@ -30,7 +30,7 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         Snackbar.make(mBinding.filesList, this.message ?: "No error", Snackbar.LENGTH_LONG).show()
     }
 
-    private fun update(list: List<SharedFile>) {
+    private fun update(list: List<SharedFile>?) = list?.run {
         showProgress(false)
         (mBinding.filesList.adapter as SharesAdapter).update(list)
     }
