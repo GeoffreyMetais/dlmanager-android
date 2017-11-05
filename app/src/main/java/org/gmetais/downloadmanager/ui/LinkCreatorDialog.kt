@@ -38,13 +38,13 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
         mBinding.editName.setOnEditorActionListener { _,_,_ -> addFile(); true }
     }
 
-    private fun addFile() = activity?.run {
-        launch(UI, CoroutineStart.UNDISPATCHED) {
-            val result = DatabaseRepo.add(SharedFile(path = mPath, name = mBinding.editName.text.toString()))
-            dismiss()
+    private fun addFile() = launch(UI, CoroutineStart.UNDISPATCHED) {
+        val result = DatabaseRepo.add(SharedFile(path = mPath, name = mBinding.editName.text.toString()))
+        dismiss()
+        if (activity !== null) {
             when (result) {
-                is SharedFile -> this@run.share(result)
-                is Exception -> Snackbar.make(this@run.supportFragmentManager.findFragmentById(R.id.fragment_placeholder)?.view ?: this@run.window.decorView, result.message.toString(), Snackbar.LENGTH_LONG).show()
+                is SharedFile -> activity.share(result)
+                is Exception -> Snackbar.make(activity.supportFragmentManager.findFragmentById(R.id.fragment_placeholder)?.view ?: activity.window.decorView, result.message.toString(), Snackbar.LENGTH_LONG).show()
             }
         }
     }
