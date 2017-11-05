@@ -5,12 +5,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.databinding.ObservableBoolean
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 
 object NetworkHelper : BroadcastReceiver(), LifecycleObserver {
 
     val disconnected = MutableLiveData<Boolean>()
+    val connected = ObservableBoolean(true)
 
     init {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
@@ -25,7 +27,8 @@ object NetworkHelper : BroadcastReceiver(), LifecycleObserver {
     override fun onReceive(context: Context, intent: Intent) {
         if (ConnectivityManager.CONNECTIVITY_ACTION == intent.action) {
             val networkInfo = (Application.context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager)?.activeNetworkInfo
-            disconnected.value = networkInfo?.state != NetworkInfo.State.CONNECTED  && networkInfo?.state != NetworkInfo.State.CONNECTING
+            connected.set(networkInfo?.state == NetworkInfo.State.CONNECTED  || networkInfo?.state == NetworkInfo.State.CONNECTING)
+            disconnected.value = !connected.get()
         }
     }
 }

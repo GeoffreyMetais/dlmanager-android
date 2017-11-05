@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="org.gmetais.downloadmanager.NetworkHelper" />
         <variable
             name="handler"
             type="org.gmetais.downloadmanager.ui.adapters.SharesAdapter.ShareHandler" />
@@ -12,7 +13,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
+        android:clickable="@{NetworkHelper.INSTANCE.connected}"
         android:focusable="true"
         android:onClick="@{(v) -> handler.open(item)}"
         android:layout_marginTop="16dp"
@@ -36,6 +37,7 @@
             android:layout_marginLeft="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_remove_circle"
-            android:onClick="@{(v) -> handler.delete(item)}" />
+            android:onClick="@{(v) -> handler.delete(item)}"
+            android:clickable="@{NetworkHelper.INSTANCE.connected}" />
     </android.support.constraint.ConstraintLayout>
 </layout>
