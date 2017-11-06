@@ -7,19 +7,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.gmetais.downloadmanager.BR
 
-abstract class BaseAdapter<D>(val handler: Any) : DiffUtilAdapter<D, BaseAdapter.ViewHolder>() {
+abstract class BaseAdapter<D, B : ViewDataBinding>(val handler: Any) : DiffUtilAdapter<D, BaseAdapter.ViewHolder<B>>() {
 
     abstract fun getLayout(): Int
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), getLayout(), parent, false), handler)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder<B>(DataBindingUtil.inflate(LayoutInflater.from(parent.context), getLayout(), parent, false), handler)
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder<B>, position: Int) {
         holder.binding.setVariable(BR.item, mDataset[position])
     }
 
     override fun getItemCount() = mDataset.size
 
-    class ViewHolder(val binding : ViewDataBinding, val handler: Any) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder<out B : ViewDataBinding>(val binding : B, val handler: Any) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.setVariable(BR.handler, handler)
         }
