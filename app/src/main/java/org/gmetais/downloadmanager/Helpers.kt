@@ -9,7 +9,9 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.view.View
+import kotlinx.coroutines.experimental.delay
 import org.gmetais.downloadmanager.data.SharedFile
+import java.io.IOException
 
 fun  String.getNameFromPath(): String {
     if (!this.endsWith('/'))
@@ -45,5 +47,26 @@ fun FragmentActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: Stri
 }
 
 fun Activity.share(share: SharedFile) = startActivity(Intent(Intent.ACTION_SEND)
-                .putExtra(Intent.EXTRA_TEXT, share.link)
-                .setType("text/plain"))
+        .putExtra(Intent.EXTRA_TEXT, share.link)
+        .setType("text/plain"))
+
+suspend fun <T> retry (
+        times: Int = Int.MAX_VALUE,
+        initialDelay: Long = 100L,
+        maxDelay: Long = 10000L,
+        factor: Long = 2L,
+        block: suspend () -> T): T
+{
+    var currentDelay = initialDelay
+    repeat(times - 1) {
+        try {
+            return block()
+        } catch (e: IOException) {
+            // you can log an error here and/or make a more finer-grained
+            // analysis of the cause to see if retry is needed
+        }
+        delay(currentDelay)
+        currentDelay = (currentDelay * factor).coerceAtMost(maxDelay)
+    }
+    return block() // last attempt
+}
