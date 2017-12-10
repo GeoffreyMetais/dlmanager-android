@@ -41,10 +41,10 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
     private fun addFile() = launch(UI, CoroutineStart.UNDISPATCHED) {
         val result = DatabaseRepo.add(SharedFile(path = mPath, name = mBinding.editName.text.toString()))
         dismiss()
-        if (activity !== null) {
+        activity?.let {
             when (result) {
-                is SharedFile -> activity.share(result)
-                is Exception -> Snackbar.make(activity.supportFragmentManager.findFragmentById(R.id.fragment_placeholder)?.view ?: activity.window.decorView, result.message.toString(), Snackbar.LENGTH_LONG).show()
+                is SharedFile -> it.share(result)
+                is Exception -> Snackbar.make(it.supportFragmentManager.findFragmentById(R.id.fragment_placeholder)?.view ?: it.window.decorView, result.message.toString(), Snackbar.LENGTH_LONG).show()
             }
         }
     }
