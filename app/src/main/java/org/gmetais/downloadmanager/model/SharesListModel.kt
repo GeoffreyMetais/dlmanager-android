@@ -1,6 +1,5 @@
 package org.gmetais.downloadmanager.model
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.MainThread
@@ -13,9 +12,9 @@ import org.gmetais.downloadmanager.repo.DatabaseRepo
 @Suppress("EXPERIMENTAL_FEATURE_WARNING", "UNCHECKED_CAST")
 class SharesListModel : ViewModel() {
 
-    val exception : MutableLiveData<Exception?> by lazy { MutableLiveData<Exception?>() }
+    val exception by lazy { MutableLiveData<Exception?>() }
 
-    val dataResult: LiveData<List<SharedFile>> by lazy {
+    val dataResult by lazy {
         refresh()
         DatabaseRepo.dao.getShares()
     }

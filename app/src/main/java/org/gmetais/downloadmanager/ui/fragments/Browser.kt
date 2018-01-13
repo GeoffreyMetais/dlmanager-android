@@ -10,7 +10,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import org.gmetais.downloadmanager.R
-import org.gmetais.downloadmanager.data.*
+import org.gmetais.downloadmanager.data.Directory
+import org.gmetais.downloadmanager.data.File
 import org.gmetais.downloadmanager.getNameFromPath
 import org.gmetais.downloadmanager.model.DirectoryModel
 import org.gmetais.downloadmanager.putStringExtra
@@ -20,7 +21,7 @@ import org.gmetais.downloadmanager.ui.adapters.BrowserAdapter
 
 class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
-    private val mCurrentDirectory: DirectoryModel by lazy { ViewModelProviders.of(this, DirectoryModel.Factory(arguments?.getString("path"))).get(DirectoryModel::class.java) }
+    private val directoryModel: DirectoryModel by lazy { ViewModelProviders.of(this, DirectoryModel.Factory(arguments?.getString("path"))).get(DirectoryModel::class.java) }
     private lateinit var searchItem : MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +38,8 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         super.onViewCreated(view, savedInstanceState)
         mBinding.filesList.adapter = BrowserAdapter(this)
         activity?.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
-        mCurrentDirectory.dataResult.observe(this, Observer<Result> { update(it!!) })
+        directoryModel.dataResult.observe(this, Observer<Directory> { update(it!!) })
+        directoryModel.exception.observe(this, Observer { onError(it!!) })
         showProgress()
     }
 
@@ -46,17 +48,19 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         searchItem = menu.findItem(R.id.ml_menu_filter)
         val searchView = searchItem.actionView as SearchView
         searchView.queryHint = "search…"
-        searchView.setOnQueryTextListener(mCurrentDirectory)
-        searchItem.setOnActionExpandListener(mCurrentDirectory)
+        searchView.setOnQueryTextListener(directoryModel)
+        searchItem.setOnActionExpandListener(directoryModel)
     }
 
-    private fun update(result: Result) {
+    private fun update(directory: Directory) {
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
-        when (result) {
-            is Success<*> -> (mBinding.filesList.adapter as BrowserAdapter).update((result.content as Directory).files.sortedBy { !it.isDirectory })
-            is Error -> Snackbar.make(mBinding.filesList, result.message, Snackbar.LENGTH_LONG).show()
-        }
+        (mBinding.filesList.adapter as BrowserAdapter).update(directory.files.sortedBy { !it.isDirectory })
+    }
+
+    private fun onError(message: String?) {
+        showProgress(false)
+        message?.let { Snackbar.make(mBinding.filesList, it, Snackbar.LENGTH_LONG).show() }
     }
 
     override fun open(file: File) {
@@ -67,6 +71,6 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
     }
 
     override fun onRefresh() {
-        mCurrentDirectory.refresh()
+        directoryModel.refresh()
     }
 }

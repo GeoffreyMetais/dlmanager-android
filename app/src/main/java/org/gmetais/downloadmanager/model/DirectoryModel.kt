@@ -4,16 +4,13 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.support.v7.widget.SearchView
 import android.view.MenuItem
-import android.widget.Filter
 import org.gmetais.downloadmanager.data.Directory
-import org.gmetais.downloadmanager.data.File
-import org.gmetais.downloadmanager.data.Success
 import org.gmetais.downloadmanager.repo.ApiRepo
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
-class DirectoryModel(val path: String?) : BaseModel(), SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+class DirectoryModel(val path: String?) : BaseModel<Directory>(), SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
-    private val filter by lazy { FileFilter() }
+    private val filter by lazy { FileFilter(this) }
 
     override suspend fun call() = ApiRepo.browse(path)
 
@@ -24,54 +21,14 @@ class DirectoryModel(val path: String?) : BaseModel(), SearchView.OnQueryTextLis
         }
     }
 
-    inner class FileFilter : Filter() {
-        private var originalData : Directory? = null
-
-        private fun initData() : Directory? {
-            @Suppress("UNCHECKED_CAST")
-            if (originalData === null)
-                originalData = (dataResult.value as? Success<Directory>)?.content
-            return originalData
-        }
-
-        override fun performFiltering(charSequence: CharSequence?) = FilterResults().apply {
-            charSequence?.let {
-                val queryStrings = it.trim().toString().toLowerCase().split(" ").filter { it.length > 2 }
-                val list = ArrayList<File>()
-                initData()?.let {
-                    for (file in it.files) {
-                        for (query in queryStrings)
-                            if (file.path.contains(query, true)) {
-                                list.add(file)
-                                break
-                            }
-                    }
-                }
-                values = list
-                count = list.size
-            }
-        }
-
-        @Suppress("UNCHECKED_CAST")
-        override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults?) {
-            originalData?.let {
-                if (filterResults?.values !== null)
-                    dataResult.value = Success(it.copy(files = filterResults.values as List<File>))
-                else {
-                    dataResult.value = Success(it)
-                    originalData = null
-                }
-            }
-        }
-    }
-
+    //FIlter listeners
     override fun onQueryTextSubmit(p0: String?) = false
 
-    override fun onQueryTextChange(filterQueryString: String): Boolean {
-        if (filterQueryString.length < 3)
-            return false
+    override fun onQueryTextChange(filterQueryString: String) = if (filterQueryString.length < 3)
+        false
+    else {
         filter.filter(filterQueryString)
-        return true
+        true
     }
 
     override fun onMenuItemActionExpand(p0: MenuItem?) = true
