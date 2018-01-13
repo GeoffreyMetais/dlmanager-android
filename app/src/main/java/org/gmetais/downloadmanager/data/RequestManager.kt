@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 object RequestManager {
     private val browserService: IBrowser
 
-    fun browse(path : String?) = (if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, "")))
+    fun browse(path : String?) = if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))
 
     fun listShares() = browserService.getShares()
 

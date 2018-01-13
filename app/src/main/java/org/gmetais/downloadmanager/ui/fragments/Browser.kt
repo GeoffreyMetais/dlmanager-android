@@ -38,8 +38,8 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         super.onViewCreated(view, savedInstanceState)
         mBinding.filesList.adapter = BrowserAdapter(this)
         activity?.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
-        directoryModel.dataResult.observe(this, Observer<Directory> { update(it!!) })
-        directoryModel.exception.observe(this, Observer { onError(it!!) })
+        directoryModel.dataResult.observe(this, Observer<Directory> { update(it) })
+        directoryModel.exception.observe(this, Observer { onError(it) })
         showProgress()
     }
 
@@ -52,7 +52,8 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         searchItem.setOnActionExpandListener(directoryModel)
     }
 
-    private fun update(directory: Directory) {
+    private fun update(directory: Directory?) {
+        if (directory === null) return
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
         (mBinding.filesList.adapter as BrowserAdapter).update(directory.files.sortedBy { !it.isDirectory })

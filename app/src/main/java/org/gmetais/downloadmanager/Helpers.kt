@@ -14,8 +14,7 @@ import org.gmetais.downloadmanager.data.SharedFile
 import java.io.IOException
 
 fun  String.getNameFromPath(): String {
-    if (!this.endsWith('/'))
-        return this.substringAfterLast('/')
+    if (!this.endsWith('/')) return this.substringAfterLast('/')
     return this.substringBeforeLast('/').substringAfterLast('/')
 }
 
@@ -24,8 +23,7 @@ fun <T : View> Activity.bind(@IdRes res : Int) : Lazy<T> {
 }
 
 fun <T : Fragment> T.putStringExtra(key: String, value: String) : T {
-    if (this.arguments == null)
-        arguments = Bundle()
+    if (this.arguments == null) arguments = Bundle()
     arguments!!.putString(key, value)
     return this
 }
@@ -41,8 +39,7 @@ fun FragmentActivity.removeFragment(fragment: Fragment) = supportFragmentManager
 fun FragmentActivity.removeFragment(tag: String) = supportFragmentManager.inTransaction { remove(supportFragmentManager.findFragmentByTag(tag)) }
 
 fun FragmentActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String, backstack : Boolean = false) = supportFragmentManager.inTransaction {
-    if (backstack)
-        addToBackStack(tag)
+    if (backstack) addToBackStack(tag)
     replace(frameId, fragment, tag)
 }
 

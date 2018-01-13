@@ -2,7 +2,8 @@
 
 package org.gmetais.downloadmanager.repo
 
-import org.gmetais.downloadmanager.data.*
+import org.gmetais.downloadmanager.data.RequestManager
+import org.gmetais.downloadmanager.data.SharedFile
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,24 +21,18 @@ object ApiRepo {
 
     private suspend inline fun <reified T> retrofitResponseWithException(crossinline call: () -> Call<T>) = try {
         with(retrofitSuspendCall(call)) {
-            if (isSuccessful)
-                body()
-            else
-                Exception(message())
+            if (isSuccessful) body()
+            else Exception(message())
         }
     } catch(e: Exception) {
         e
     }
 
-    private suspend inline fun <reified T> retrofitResponseCall(crossinline call: () -> Call<T>) = try {
+    private suspend inline fun <reified T> retrofitResponseCall(crossinline call: () -> Call<T>) : T {
         with(retrofitSuspendCall(call)) {
-            if (isSuccessful)
-                Success(body()!!)
-            else
-                Error(code(), message())
+            if (isSuccessful) return body()!!
+            else throw Exception(message())
         }
-    } catch(e: Exception) {
-        Error(408, e.localizedMessage)
     }
 
     private suspend inline fun <reified T> retrofitSuspendCall(crossinline call: () -> Call<T>) : Response<T> = suspendCoroutine { continuation ->

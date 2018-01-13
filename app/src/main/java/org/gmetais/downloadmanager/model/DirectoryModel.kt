@@ -12,7 +12,7 @@ class DirectoryModel(val path: String?) : BaseModel<Directory>(), SearchView.OnQ
 
     private val filter by lazy { FileFilter(this) }
 
-    override suspend fun call() = ApiRepo.browse(path)
+    override suspend fun update() = ApiRepo.browse(path)
 
     class Factory(val path: String?) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
