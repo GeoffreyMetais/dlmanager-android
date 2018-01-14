@@ -43,6 +43,9 @@ fun FragmentActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: Stri
     replace(frameId, fragment, tag)
 }
 
+fun FragmentActivity.getFragment(@IdRes id: Int): Fragment? = this.supportFragmentManager.findFragmentById(id)
+fun FragmentActivity.getRootView()= (this.getFragment(R.id.fragment_placeholder)?.view ?: this.window.decorView)!!
+
 fun Activity.share(share: SharedFile) = startActivity(Intent(Intent.ACTION_SEND)
         .putExtra(Intent.EXTRA_TEXT, share.link)
         .setType("text/plain"))

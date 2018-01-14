@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import kotlinx.coroutines.experimental.CoroutineStart
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import org.gmetais.downloadmanager.R
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
 import org.gmetais.downloadmanager.getNameFromPath
+import org.gmetais.downloadmanager.getRootView
 import org.gmetais.downloadmanager.repo.DatabaseRepo
 import org.gmetais.downloadmanager.share
 
@@ -39,13 +39,13 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
     }
 
     private fun addFile() = launch(UI, CoroutineStart.UNDISPATCHED) {
-        val result = DatabaseRepo.add(SharedFile(path = mPath, name = mBinding.editName.text.toString()))
-        dismiss()
-        activity?.let {
-            when (result) {
-                is SharedFile -> it.share(result)
-                is Exception -> Snackbar.make(it.supportFragmentManager.findFragmentById(R.id.fragment_placeholder)?.view ?: it.window.decorView, result.message.toString(), Snackbar.LENGTH_LONG).show()
-            }
+        try {
+            val result = DatabaseRepo.add(SharedFile(path = mPath, name = mBinding.editName.text.toString()))
+            activity?.let { it.share(result) }
+        } catch (e: Exception) {
+            activity?.let { Snackbar.make(it.getRootView(), e.message.toString(), Snackbar.LENGTH_LONG).show() }
+        } finally {
+            dismiss()
         }
     }
 }

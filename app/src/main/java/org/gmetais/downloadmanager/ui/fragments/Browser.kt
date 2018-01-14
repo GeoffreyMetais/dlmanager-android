@@ -3,7 +3,6 @@ package org.gmetais.downloadmanager.ui.fragments
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
@@ -57,11 +56,6 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
         (mBinding.filesList.adapter as BrowserAdapter).update(directory.files.sortedBy { !it.isDirectory })
-    }
-
-    private fun onError(message: String?) {
-        showProgress(false)
-        message?.let { Snackbar.make(mBinding.filesList, it, Snackbar.LENGTH_LONG).show() }
     }
 
     override fun open(file: File) {

@@ -13,19 +13,14 @@ object ApiRepo {
 
     suspend fun browse(path: String?) = retrofitResponseCall { RequestManager.browse(path) }
 
-    suspend fun fetchShares() = retrofitResponseWithException { RequestManager.listShares() }
+    suspend fun fetchShares() = retrofitResponseCall { RequestManager.listShares() }
 
-    suspend fun add(file: SharedFile) = retrofitResponseWithException { RequestManager.add(file) }
+    suspend fun add(file: SharedFile) = retrofitResponseCall { RequestManager.add(file) }
 
-    suspend fun delete(key: String) = retrofitResponseWithException { RequestManager.delete(key) }
+    suspend fun delete(key: String) = retrofitResponse { RequestManager.delete(key) }
 
-    private suspend inline fun <reified T> retrofitResponseWithException(crossinline call: () -> Call<T>) = try {
-        with(retrofitSuspendCall(call)) {
-            if (isSuccessful) body()
-            else Exception(message())
-        }
-    } catch(e: Exception) {
-        e
+    private suspend inline fun retrofitResponse(crossinline call: () -> Call<Void>) {
+        with(retrofitSuspendCall(call)) { if (!isSuccessful) throw Exception(message()) }
     }
 
     private suspend inline fun <reified T> retrofitResponseCall(crossinline call: () -> Call<T>) : T {

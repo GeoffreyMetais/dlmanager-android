@@ -3,7 +3,6 @@ package org.gmetais.downloadmanager.ui.fragments
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.DividerItemDecoration
 import android.view.View
 import org.gmetais.downloadmanager.data.SharedFile
@@ -23,11 +22,6 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         shares.exception.observe(this@SharesBrowser, Observer { onError(it) })
         activity?.title = "Shares"
         showProgress()
-    }
-
-    private fun onError(exception: Exception?) = exception?.run {
-        showProgress(false)
-        Snackbar.make(mBinding.filesList, this.message ?: "No error", Snackbar.LENGTH_LONG).show()
     }
 
     private fun update(list: List<SharedFile>?) = list?.run {
