@@ -2,7 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.2.10'
-    ext.kotlinx_version = '0.21'
+    ext.kotlinx_version = '0.21.1'
     ext.android_plugin_version = '3.0.1'
     ext.appCompatVersion = '27.0.2'
     ext.archVersion = '1.0.0'
