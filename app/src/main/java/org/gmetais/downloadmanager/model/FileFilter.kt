@@ -1,41 +1,45 @@
 package org.gmetais.downloadmanager.model
 
-import android.widget.Filter
+import kotlinx.coroutines.experimental.CoroutineStart
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.data.File
 
-class FileFilter(private val directoryModel: DirectoryModel) : Filter() {
+class FileFilter(private val directoryModel: DirectoryModel) {
     private var originalData : Directory? = null
 
     private fun initData() : Directory? {
-        @Suppress("UNCHECKED_CAST")
         if (originalData === null) originalData = (directoryModel.dataResult.value)
         return originalData
     }
 
-    override fun performFiltering(charSequence: CharSequence?) = FilterResults().apply {
-        charSequence?.let {
-            val queryStrings = it.trim().toString().toLowerCase().split(" ").filter { it.length > 2 }
-            val list = ArrayList<File>()
-            initData()?.let {
-                for (file in it.files) {
-                    for (query in queryStrings)
-                        if (file.path.contains(query, true)) {
-                            list.add(file)
-                            break
-                        }
-                }
-            }
-            values = list
-            count = list.size
-        }
+    fun filter(charSequence: CharSequence?) = launch(UI, CoroutineStart.UNDISPATCHED) {
+        publish(performfilter(charSequence))
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults?) {
+    private suspend fun performfilter(charSequence: CharSequence?) = async {
+        if (charSequence !== null) initData()?.let {
+            val list = mutableListOf<File>()
+            val queryStrings = charSequence.trim().toString().toLowerCase().split(" ").filter { it.length > 2 }
+            for (file in it.files) {
+                val filename = file.path.substringAfterLast('/')
+                for (query in queryStrings)
+                    if (filename.contains(query, true)) {
+                        list.add(file)
+                        break
+                    }
+            }
+            return@async list
+        }
+        return@async listOf<File>()
+    }.await()
+
+    private fun publish(list: List<File>?) {
         originalData?.let {
-            if (filterResults?.values !== null)
-                directoryModel.dataResult.value = it.copy(files = filterResults.values as List<File>)
+            if (list?.isEmpty() == false)
+                directoryModel.dataResult.value = it.copy(files = list)
             else {
                 directoryModel.dataResult.value = it
                 originalData = null
