@@ -16,10 +16,10 @@ class FileFilter(private val directoryModel: DirectoryModel) {
     }
 
     fun filter(charSequence: CharSequence?) = launch(UI, CoroutineStart.UNDISPATCHED) {
-        publish(performfilter(charSequence))
+        publish(filteringJob(charSequence).await())
     }
 
-    private suspend fun performfilter(charSequence: CharSequence?) = async {
+    private fun filteringJob(charSequence: CharSequence?) = async {
         if (charSequence !== null) initData()?.let {
             val list = mutableListOf<File>()
             val queryStrings = charSequence.trim().toString().toLowerCase().split(" ").filter { it.length > 2 }
@@ -34,7 +34,7 @@ class FileFilter(private val directoryModel: DirectoryModel) {
             return@async list
         }
         return@async listOf<File>()
-    }.await()
+    }
 
     private fun publish(list: List<File>?) {
         originalData?.let {
