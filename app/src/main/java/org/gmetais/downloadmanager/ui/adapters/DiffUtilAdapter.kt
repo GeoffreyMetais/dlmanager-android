@@ -4,10 +4,9 @@ import android.support.annotation.WorkerThread
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.actor
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 
 abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
 
@@ -21,10 +20,10 @@ abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.A
     private suspend fun internalUpdate(list: List<D>) {
         val dataSet = list.toList()
         val result = DiffUtil.calculateDiff(diffCallback.apply { newList = dataSet }, false)
-        launch(UI) {
+        withContext(UI) {
             mDataset = dataSet
             result.dispatchUpdatesTo(this@DiffUtilAdapter)
-        }.join()
+        }
     }
 
     private inner class DiffCallback : DiffUtil.Callback() {
