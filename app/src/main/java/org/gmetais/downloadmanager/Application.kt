@@ -1,13 +1,14 @@
 package org.gmetais.downloadmanager
 
 import android.annotation.SuppressLint
-import android.arch.persistence.room.Room
 import android.content.Context
 import android.support.v7.app.AppCompatDelegate
-import org.gmetais.downloadmanager.data.SharesDatabase
+import dagger.android.support.DaggerApplication
+import org.gmetais.downloadmanager.di.DaggerAppComponent
+
 
 @SuppressLint("StaticFieldLeak")
-class Application : android.app.Application() {
+class Application : DaggerApplication() {
 
     companion object {
         lateinit var instance : Application
@@ -20,4 +21,6 @@ class Application : android.app.Application() {
         context = applicationContext
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     }
+
+    override fun applicationInjector()= DaggerAppComponent.builder().application(this).build()
 }
