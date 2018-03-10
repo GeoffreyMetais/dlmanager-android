@@ -14,10 +14,10 @@ abstract class BaseAdapter<D, B : ViewDataBinding>(val handler: Any) : DiffUtilA
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder<B>(DataBindingUtil.inflate(LayoutInflater.from(parent.context), getLayout(), parent, false), handler)
 
     override fun onBindViewHolder(holder: ViewHolder<B>, position: Int) {
-        holder.binding.setVariable(BR.item, mDataset[position])
+        holder.binding.setVariable(BR.item, dataset[position])
     }
 
-    override fun getItemCount() = mDataset.size
+    override fun getItemCount() = dataset.size
 
     class ViewHolder<out B : ViewDataBinding>(val binding : B, val handler: Any) : RecyclerView.ViewHolder(binding.root) {
         init {
