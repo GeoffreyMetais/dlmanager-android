@@ -10,7 +10,7 @@ import kotlinx.coroutines.experimental.withContext
 
 abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
 
-    protected var mDataset: List<D> = listOf()
+    protected var dataset: List<D> = listOf()
     private val diffCallback by lazy(LazyThreadSafetyMode.NONE) { DiffCallback() }
     private val eventActor = actor<List<D>>(capacity = Channel.CONFLATED) { for (list in channel) internalUpdate(list) }
 
@@ -21,7 +21,7 @@ abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.A
         val dataSet = list.toList()
         val result = DiffUtil.calculateDiff(diffCallback.apply { newList = dataSet }, false)
         withContext(UI) {
-            mDataset = dataSet
+            dataset = dataSet
             result.dispatchUpdatesTo(this@DiffUtilAdapter)
         }
     }
@@ -29,12 +29,12 @@ abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.A
     private inner class DiffCallback : DiffUtil.Callback() {
         lateinit var newList: List<D>
 
-        override fun getOldListSize() = mDataset.size
+        override fun getOldListSize() = dataset.size
 
         override fun getNewListSize() = newList.size
 
         override fun areContentsTheSame(oldItemPosition : Int, newItemPosition : Int) = true
 
-        override fun areItemsTheSame(oldItemPosition : Int, newItemPosition : Int) = mDataset[oldItemPosition] == newList[newItemPosition]
+        override fun areItemsTheSame(oldItemPosition : Int, newItemPosition : Int) = dataset[oldItemPosition] == newList[newItemPosition]
     }
 }
