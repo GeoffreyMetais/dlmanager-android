@@ -30,7 +30,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
     override fun onPause() {
         super.onPause()
-        searchItem.collapseActionView()
+        if (this::searchItem.isInitialized) searchItem.collapseActionView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
