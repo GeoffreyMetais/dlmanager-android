@@ -61,13 +61,13 @@ dependencies {
     implementation "com.android.support:design:$rootProject.ext.appCompatVersion"
     implementation "com.android.support:support-vector-drawable:$rootProject.ext.appCompatVersion"
     implementation "com.android.support:preference-v7:$rootProject.ext.appCompatVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta5'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta6'
 
     implementation "android.arch.lifecycle:extensions:$rootProject.ext.archVersion"
     kapt "android.arch.lifecycle:compiler:$rootProject.ext.archVersion"
 
-    implementation "android.arch.persistence.room:runtime:$rootProject.ext.archVersion-alpha3"
-    kapt "android.arch.persistence.room:compiler:$rootProject.ext.archVersion-alpha3"
+    implementation "android.arch.persistence.room:runtime:1.1.0-beta1"
+    kapt "android.arch.persistence.room:compiler:1.1.0-beta1"
 
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.3.0'
