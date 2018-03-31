@@ -3,13 +3,13 @@
 buildscript {
     ext.kotlin_version = '1.2.30'
     ext.kotlinx_version = '0.22.2'
-    ext.android_plugin_version = '3.0.1'
+    ext.android_plugin_version = '3.1.0'
     ext.appCompatVersion = '27.1.0'
     ext.daggerVersion = '2.14.1'
     ext.archVersion = '1.1.1'
     repositories {
-        maven { url 'https://maven.google.com' }
         jcenter()
+        google()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$android_plugin_version"
