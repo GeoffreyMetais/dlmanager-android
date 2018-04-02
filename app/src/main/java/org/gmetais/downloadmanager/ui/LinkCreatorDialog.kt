@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.coroutines.experimental.CoroutineStart
+import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.channels.actor
 import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
@@ -19,29 +22,37 @@ import org.gmetais.downloadmanager.share
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 class LinkCreatorDialog : BottomSheetDialogFragment() {
 
-    private val mPath : String by lazy { arguments?.getString("path") ?: "" }
-    private lateinit var mBinding: DialogLinkCreatorBinding
+    private val path : String by lazy { arguments?.getString("path") ?: "" }
+    private lateinit var binding: DialogLinkCreatorBinding
+    private val job: Job = Job()
+    private val eventActor = actor<Unit>(UI, capacity = Channel.CONFLATED, parent = job) { for (event in channel) addFile() }
 
     inner class ClickHandler {
-        fun onClick() = addFile()
+        fun onClick() = eventActor.offer(Unit)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DialogLinkCreatorBinding.inflate(inflater, container, false)
-        return mBinding.root
+        binding = DialogLinkCreatorBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding.title = mPath.getNameFromPath()
-        mBinding.handler = ClickHandler()
-        mBinding.editName.setOnEditorActionListener { _,_,_ -> addFile(); true }
+        binding.title = path.getNameFromPath()
+        binding.handler = ClickHandler()
+        binding.editName.setOnEditorActionListener { _, _, _ -> eventActor.offer(Unit); true }
+    }
+
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
     }
 
     private fun addFile() = launch(UI, CoroutineStart.UNDISPATCHED) {
         try {
-            val result = DatabaseRepo.add(SharedFile(path = mPath, name = mBinding.editName.text.toString()))
-            activity?.let { it.share(result) }
+            if (!isActive) return@launch
+            val result = DatabaseRepo.add(SharedFile(path = path, name = binding.editName.text.toString()))
+            if (isActive) activity?.share(result)
         } catch (e: Exception) {
             activity?.let { Snackbar.make(it.getRootView(), e.message.toString(), Snackbar.LENGTH_LONG).show() }
         } finally {

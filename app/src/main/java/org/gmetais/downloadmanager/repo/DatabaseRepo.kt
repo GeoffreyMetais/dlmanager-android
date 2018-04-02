@@ -2,6 +2,7 @@ package org.gmetais.downloadmanager.repo
 
 import android.arch.persistence.room.Room
 import android.support.annotation.MainThread
+import kotlinx.coroutines.experimental.NonCancellable
 import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.Application
 import org.gmetais.downloadmanager.data.SharedFile
@@ -26,7 +27,7 @@ object DatabaseRepo {
     @MainThread
     suspend fun add(share: SharedFile) : SharedFile {
         val result = ApiRepo.add(share)
-        asyncDbJob { dao.insertShares(result) }
+        if (NonCancellable.isActive) asyncDbJob { dao.insertShares(result) }
         return result
 
     }
