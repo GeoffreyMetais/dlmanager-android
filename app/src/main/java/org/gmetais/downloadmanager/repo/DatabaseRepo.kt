@@ -4,9 +4,12 @@ import android.arch.persistence.room.Room
 import android.support.annotation.MainThread
 import kotlinx.coroutines.experimental.NonCancellable
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.newSingleThreadContext
 import org.gmetais.downloadmanager.Application
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.data.SharesDatabase
+
+private val BlockingContext = newSingleThreadContext("io")
 
 @Suppress("UNCHECKED_CAST")
 object DatabaseRepo {
@@ -33,7 +36,7 @@ object DatabaseRepo {
     }
 
     private suspend inline fun asyncDbJob(crossinline dbCall: () -> Unit) {
-        val job = launch { dbCall.invoke() }
+        val job = launch(BlockingContext) { dbCall.invoke() }
         job.join()
         if (job.isCancelled) throw job.getCancellationException()
     }
