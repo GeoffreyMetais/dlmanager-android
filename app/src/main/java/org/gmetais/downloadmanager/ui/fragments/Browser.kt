@@ -38,7 +38,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         mBinding.filesList.adapter = BrowserAdapter(this)
         activity?.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
         directoryModel.dataResult.observe(this, Observer<Directory> { update(it) })
-        directoryModel.exception.observe(this, Observer { onError(it) })
+        directoryModel.exception.observe(this, Observer { onError(it?.getContent()) })
         showProgress()
     }
 

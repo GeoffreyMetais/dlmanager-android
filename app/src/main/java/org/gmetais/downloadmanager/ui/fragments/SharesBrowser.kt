@@ -19,7 +19,7 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
         mBinding.filesList.addItemDecoration(DividerItemDecoration(mBinding.filesList.context, DividerItemDecoration.VERTICAL))
         mBinding.filesList.adapter = SharesAdapter(this)
         shares.dataResult.observe(this@SharesBrowser, Observer<List<SharedFile>> { update(it) })
-        shares.exception.observe(this@SharesBrowser, Observer { onError(it) })
+        shares.exception.observe(this@SharesBrowser, Observer { onError(it?.getContent()) })
         activity?.title = "Shares"
         showProgress()
     }

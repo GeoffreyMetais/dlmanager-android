@@ -7,13 +7,14 @@ import kotlinx.coroutines.experimental.CoroutineStart
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import org.gmetais.tools.Event
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 abstract class BaseModel<out T> : ViewModel() {
 
-    val exception by lazy { MutableLiveData<Exception?>() }
+    val exception by lazy { MutableLiveData<Event<Exception>>() }
     val dataResult: T by lazy { initData() }
-    private val exceptionHandler = CoroutineExceptionHandler { _, throwable -> exception.value = throwable as? Exception ?: Exception(throwable) }
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable -> exception.value = Event(throwable as? Exception ?: Exception(throwable)) }
 
     abstract fun refresh() : Job
     abstract fun initData(): T
