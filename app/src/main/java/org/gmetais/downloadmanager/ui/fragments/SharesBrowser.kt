@@ -16,8 +16,8 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding.filesList.addItemDecoration(DividerItemDecoration(mBinding.filesList.context, DividerItemDecoration.VERTICAL))
-        mBinding.filesList.adapter = SharesAdapter(this)
+        binding.filesList.addItemDecoration(DividerItemDecoration(binding.filesList.context, DividerItemDecoration.VERTICAL))
+        binding.filesList.adapter = SharesAdapter(this)
         shares.dataResult.observe(this@SharesBrowser, Observer<List<SharedFile>> { update(it) })
         shares.exception.observe(this@SharesBrowser, Observer { onError(it?.getContent()) })
         activity?.title = "Shares"
@@ -26,7 +26,7 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
 
     private fun update(list: List<SharedFile>?) = list?.run {
         showProgress(false)
-        (mBinding.filesList.adapter as SharesAdapter).update(list)
+        (binding.filesList.adapter as SharesAdapter).update(list)
     }
 
     override fun open(share: SharedFile) = activity?.share(share)

@@ -3,6 +3,7 @@ package org.gmetais.downloadmanager.ui.fragments
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
@@ -17,6 +18,7 @@ import org.gmetais.downloadmanager.putStringExtra
 import org.gmetais.downloadmanager.replaceFragment
 import org.gmetais.downloadmanager.ui.LinkCreatorDialog
 import org.gmetais.downloadmanager.ui.adapters.BrowserAdapter
+import org.gmetais.downloadmanager.ui.adapters.PathAdapter
 
 class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
@@ -35,11 +37,17 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding.filesList.adapter = BrowserAdapter(this)
-        activity?.title = arguments?.getString("path")?.getNameFromPath() ?: "root"
+        binding.filesList.adapter = BrowserAdapter(this)
+        val path = arguments?.getString("path")
+        activity?.title = path?.getNameFromPath() ?: "root"
         directoryModel.dataResult.observe(this, Observer<Directory> { update(it) })
         directoryModel.exception.observe(this, Observer { onError(it?.getContent()) })
         showProgress()
+        if (path != null) {
+            binding.ariane.visibility = View.VISIBLE
+            binding.ariane.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+            binding.ariane.adapter = PathAdapter(this, path)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -55,7 +63,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         if (directory === null) return
         showProgress(false)
         @Suppress("UNCHECKED_CAST")
-        (mBinding.filesList.adapter as BrowserAdapter).update(directory.files.sortedBy { !it.isDirectory })
+        (binding.filesList.adapter as BrowserAdapter).update(directory.files.sortedBy { !it.isDirectory })
     }
 
     override fun open(file: File) {
@@ -63,6 +71,11 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
             activity?.replaceFragment(R.id.fragment_placeholder, Browser().putStringExtra("path", file.path), file.path.getNameFromPath(), true)
         else
             LinkCreatorDialog().putStringExtra("path", file.path).show(activity?.supportFragmentManager, "linkin park")
+    }
+
+
+    fun backTo(tag: String) {
+        activity?.supportFragmentManager?.popBackStack(tag, 0)
     }
 
     override fun onRefresh() {

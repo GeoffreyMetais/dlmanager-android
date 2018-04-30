@@ -16,30 +16,30 @@ abstract class BaseBrowser : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     abstract override fun onRefresh()
 
-    protected lateinit var mBinding : BrowserBinding
+    protected lateinit var binding : BrowserBinding
     private val mHandler: Handler by lazy { Handler(Looper.getMainLooper()) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = BrowserBinding.inflate(inflater, container, false)
-        return mBinding.root
+        binding = BrowserBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mBinding.swiperefresh.setOnRefreshListener(this)
-        mBinding.filesList.layoutManager = LinearLayoutManager(view.context)
+        binding.swiperefresh.setOnRefreshListener(this)
+        binding.filesList.layoutManager = LinearLayoutManager(view.context)
     }
 
     fun showProgress(show: Boolean = true) {
         if (show)
-            mHandler.postDelayed({mBinding.swiperefresh.isRefreshing = true}, 300)
+            mHandler.postDelayed({binding.swiperefresh.isRefreshing = true}, 300)
         else {
             mHandler.removeCallbacksAndMessages(null)
-            mBinding.swiperefresh.isRefreshing = false
+            binding.swiperefresh.isRefreshing = false
         }
     }
 
     protected fun onError(exception: Exception?) {
         showProgress(false)
-        exception?.let { Snackbar.make(mBinding.filesList, it.message ?: it.localizedMessage, Snackbar.LENGTH_LONG).show() }
+        exception?.let { Snackbar.make(binding.filesList, it.message ?: it.localizedMessage, Snackbar.LENGTH_LONG).show() }
     }
 }
