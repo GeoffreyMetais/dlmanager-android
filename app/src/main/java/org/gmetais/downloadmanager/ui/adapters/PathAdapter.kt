@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import org.gmetais.downloadmanager.R
+import org.gmetais.downloadmanager.goTo
 import org.gmetais.downloadmanager.ui.fragments.Browser
 
 class PathAdapter(val browser: Browser, path: String) : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
@@ -23,7 +24,7 @@ class PathAdapter(val browser: Browser, path: String) : RecyclerView.Adapter<Pat
 
     inner class ViewHolder(val root : TextView) : RecyclerView.ViewHolder(root) {
         init {
-            root.setOnClickListener { browser.backTo(segments[adapterPosition]) }
+            root.setOnClickListener { browser.goTo(segments[adapterPosition]) }
         }
     }
 }

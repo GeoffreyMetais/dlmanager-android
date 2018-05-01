@@ -73,11 +73,6 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
             LinkCreatorDialog().putStringExtra("path", file.path).show(activity?.supportFragmentManager, "linkin park")
     }
 
-
-    fun backTo(tag: String) {
-        activity?.supportFragmentManager?.popBackStack(tag, 0)
-    }
-
     override fun onRefresh() {
         directoryModel.refresh()
     }

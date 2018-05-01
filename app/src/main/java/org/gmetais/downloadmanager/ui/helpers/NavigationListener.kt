@@ -23,7 +23,7 @@ class NavigationListener(private val activity: MainActivity): BottomNavigationVi
                 if (popBackStackImmediate("root", android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE))
                     activity.removeFragment("shares")
                 else
-                    activity.replaceFragment(R.id.fragment_placeholder, Browser(), "root")
+                    activity.replaceFragment(R.id.fragment_placeholder, Browser(), "root", true)
             }
             true
         }
