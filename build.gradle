@@ -7,6 +7,7 @@ buildscript {
     ext.appCompatVersion = '27.1.1'
     ext.daggerVersion = '2.14.1'
     ext.archVersion = '1.1.1'
+    ext.roomVersion = '1.1.0-rc1'
     repositories {
         jcenter()
         google()
@@ -24,18 +25,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-    }
-}
-
-subprojects {
-    configurations.all {
-        resolutionStrategy {
-            eachDependency {
-                if (requested.name == "kotlin-compiler-embeddable") {
-                    useVersion("1.2.30")
-                }
-            }
-        }
     }
 }
 
