@@ -3,6 +3,8 @@ package org.gmetais.downloadmanager.ui.fragments
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
@@ -46,7 +48,9 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         if (path != null) {
             binding.ariane.visibility = View.VISIBLE
             binding.ariane.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+            binding.ariane.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL).apply { setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_keyboard_arrow_right_indigo_700_18dp)!!) })
             binding.ariane.adapter = PathAdapter(this, path)
+            binding.ariane.scrollToPosition(binding.ariane.adapter.itemCount-1)
         }
     }
 
