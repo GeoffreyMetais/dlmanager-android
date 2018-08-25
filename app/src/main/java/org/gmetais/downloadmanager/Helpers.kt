@@ -46,6 +46,7 @@ fun FragmentActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: Stri
 fun Fragment.goTo(tag: String) = activity?.supportFragmentManager?.popBackStack(tag, 0)
 
 fun FragmentActivity.getFragment(@IdRes id: Int): Fragment? = supportFragmentManager.findFragmentById(id)
+fun FragmentActivity.getFragment(tag: String): Fragment? = supportFragmentManager.findFragmentByTag(tag)
 fun FragmentActivity.getRootView()= (this.getFragment(R.id.fragment_placeholder)?.view ?: this.window.decorView)!!
 
 fun Activity.share(share: SharedFile) = startActivity(Intent(Intent.ACTION_SEND)
