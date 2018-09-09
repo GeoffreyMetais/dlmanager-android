@@ -2,12 +2,12 @@ package org.gmetais.downloadmanager.repo
 
 import android.arch.persistence.room.Room
 import android.support.annotation.MainThread
+import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.NonCancellable
 import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.Application
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.data.SharesDatabase
-import org.gmetais.tools.IO
 
 @Suppress("UNCHECKED_CAST")
 object DatabaseRepo {
