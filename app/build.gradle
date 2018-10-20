@@ -69,11 +69,6 @@ dependencies {
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.4.0'
-    //Dagger
-    kapt "com.google.dagger:dagger-android-processor:$rootProject.ext.daggerVersion"
-    implementation "com.google.dagger:dagger:$rootProject.ext.daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$rootProject.ext.daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$rootProject.ext.daggerVersion"
     //Testing
     //    androidTestImplementation "android.arch.persistence.room:testing:$rootProject.ext.archVersion"
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {

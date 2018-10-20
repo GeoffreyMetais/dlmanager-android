@@ -5,7 +5,6 @@ buildscript {
     ext.kotlinx_version = '0.26.0'
     ext.android_plugin_version = '3.2.0-rc02'
     ext.appCompatVersion = '27.1.1'
-    ext.daggerVersion = '2.17'
     ext.archVersion = '1.1.1'
     ext.roomVersion = '1.1.1'
     repositories {
