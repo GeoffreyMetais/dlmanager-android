@@ -1,6 +1,12 @@
 apply plugin: 'com.android.feature'
 apply plugin: 'kotlin-android'
 
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}
+
 android {
     compileSdkVersion 28
 

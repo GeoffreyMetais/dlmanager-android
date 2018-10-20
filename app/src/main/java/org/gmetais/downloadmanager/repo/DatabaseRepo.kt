@@ -1,8 +1,9 @@
 package org.gmetais.downloadmanager.repo
 
-import androidx.room.Room
 import androidx.annotation.MainThread
-import kotlinx.coroutines.experimental.IO
+import androidx.room.Room
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.NonCancellable
 import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.Application
@@ -10,7 +11,8 @@ import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.data.SharesDatabase
 
 @Suppress("UNCHECKED_CAST")
-object DatabaseRepo {
+object DatabaseRepo : CoroutineScope {
+    override val coroutineContext = Dispatchers.IO
     val dao by lazy { Room.databaseBuilder(Application.context, SharesDatabase::class.java, "shares").build().sharesDao() }
 
     @MainThread
@@ -34,7 +36,7 @@ object DatabaseRepo {
     }
 
     private suspend inline fun asyncDbJob(crossinline dbCall: () -> Unit) {
-        val job = launch(IO) { dbCall.invoke() }
+        val job = launch { dbCall.invoke() }
         job.join()
         if (job.isCancelled) throw job.getCancellationException()
     }

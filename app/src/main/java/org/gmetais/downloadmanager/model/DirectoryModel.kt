@@ -1,11 +1,10 @@
 package org.gmetais.downloadmanager.model
 
+import android.view.MenuItem
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.appcompat.widget.SearchView
-import android.view.MenuItem
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.repo.ApiRepo
@@ -16,7 +15,7 @@ class DirectoryModel(val path: String?) : BaseModel<MutableLiveData<Directory>>(
     private val filter by lazy { FileFilter(this) }
 
     override fun initData(): MutableLiveData<Directory> {
-        launch(UI) { refresh() }
+        launch { refresh() }
         return MutableLiveData()
     }
 

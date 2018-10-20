@@ -1,8 +1,7 @@
 package org.gmetais.downloadmanager.model
 
-import androidx.lifecycle.LiveData
 import androidx.annotation.MainThread
-import kotlinx.coroutines.experimental.android.UI
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.repo.DatabaseRepo
@@ -11,7 +10,7 @@ import org.gmetais.downloadmanager.repo.DatabaseRepo
 class SharesListModel : BaseModel<LiveData<List<SharedFile>>>() {
 
     override fun initData(): LiveData<List<SharedFile>> {
-        launch(UI) { refresh() }
+        launch { refresh() }
         return DatabaseRepo.dao.getShares()
     }
 

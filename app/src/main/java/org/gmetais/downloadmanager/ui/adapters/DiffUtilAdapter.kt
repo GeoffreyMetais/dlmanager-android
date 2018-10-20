@@ -1,29 +1,27 @@
 package org.gmetais.downloadmanager.ui.adapters
 
-import androidx.annotation.WorkerThread
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.actor
+import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.withContext
 
-abstract class DiffUtilAdapter<D, VH : androidx.recyclerview.widget.RecyclerView.ViewHolder> : androidx.recyclerview.widget.RecyclerView.Adapter<VH>() {
+abstract class DiffUtilAdapter<D, VH : androidx.recyclerview.widget.RecyclerView.ViewHolder> : androidx.recyclerview.widget.RecyclerView.Adapter<VH>(), CoroutineScope {
+    override val coroutineContext = Dispatchers.Main
 
     protected var dataset: List<D> = listOf()
     private val diffCallback by lazy(LazyThreadSafetyMode.NONE) { DiffCallback() }
-    private val eventActor = actor<List<D>>(capacity = Channel.CONFLATED) { for (list in channel) internalUpdate(list) }
+    private val eventActor = actor<List<D>>(capacity = Channel.CONFLATED) { channel.consumeEach { internalUpdate(it) } }
 
     fun update (list: List<D>) = eventActor.offer(list)
 
-    @WorkerThread
     private suspend fun internalUpdate(list: List<D>) {
         val dataSet = list.toList()
-        val result = DiffUtil.calculateDiff(diffCallback.apply { newList = dataSet }, false)
-        withContext(UI) {
-            dataset = dataSet
-            result.dispatchUpdatesTo(this@DiffUtilAdapter)
-        }
+        val result = withContext(Dispatchers.Default) { DiffUtil.calculateDiff(diffCallback.apply { newList = dataSet }, false) }
+        dataset = dataSet
+        result.dispatchUpdatesTo(this@DiffUtilAdapter)
     }
 
     private inner class DiffCallback : DiffUtil.Callback() {

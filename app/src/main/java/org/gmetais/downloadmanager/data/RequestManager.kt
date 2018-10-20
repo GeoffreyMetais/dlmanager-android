@@ -26,9 +26,9 @@ object RequestManager {
     init {
         val pm = PreferenceManager.getDefaultSharedPreferences(Application.context)
         browserService = Retrofit.Builder()
-                .baseUrl(pm.getString("server_url", BuildConfig.API_URL))
+                .baseUrl(pm.getString("server_url", BuildConfig.API_URL)!!)
                 .client(OkHttpClient.Builder()
-                        .addInterceptor(BasicAuthInterceptor(pm.getString("username", BuildConfig.API_USERNAME), pm.getString("password", BuildConfig.API_SECRET)))
+                        .addInterceptor(BasicAuthInterceptor(pm.getString("username", BuildConfig.API_USERNAME)!!, pm.getString("password", BuildConfig.API_SECRET)!!))
                         .connectTimeout(5, TimeUnit.SECONDS)
                         .readTimeout(10, TimeUnit.SECONDS)
                         .build())

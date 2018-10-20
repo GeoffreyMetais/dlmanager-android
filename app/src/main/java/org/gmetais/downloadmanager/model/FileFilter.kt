@@ -1,13 +1,11 @@
 package org.gmetais.downloadmanager.model
 
-import kotlinx.coroutines.experimental.CoroutineStart
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.*
 import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.data.File
 
-class FileFilter(private val directoryModel: DirectoryModel) {
+class FileFilter(private val directoryModel: DirectoryModel) : CoroutineScope {
+    override val coroutineContext = Dispatchers.Main
     private var originalData : Directory? = null
 
     private fun initData() : Directory? {
@@ -15,11 +13,11 @@ class FileFilter(private val directoryModel: DirectoryModel) {
         return originalData
     }
 
-    fun filter(charSequence: CharSequence?) = launch(UI, CoroutineStart.UNDISPATCHED) {
+    fun filter(charSequence: CharSequence?) = launch(start = CoroutineStart.UNDISPATCHED) {
         publish(filteringJob(charSequence).await())
     }
 
-    private fun filteringJob(charSequence: CharSequence?) = async {
+    private fun filteringJob(charSequence: CharSequence?) = async(Dispatchers.Default) {
         if (charSequence !== null) initData()?.let {
             val list = mutableListOf<File>()
             val queryStrings = charSequence.trim().toString().toLowerCase().split(" ").filter { it.length > 2 }
