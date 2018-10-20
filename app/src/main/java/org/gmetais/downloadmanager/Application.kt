@@ -1,9 +1,9 @@
 package org.gmetais.downloadmanager
 
 import android.annotation.SuppressLint
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import android.content.Context
-import android.support.v7.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate
 import org.gmetais.downloadmanager.data.SharesDatabase
 
 @SuppressLint("StaticFieldLeak")

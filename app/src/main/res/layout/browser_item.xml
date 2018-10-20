@@ -9,7 +9,7 @@
             name="item"
             type="org.gmetais.downloadmanager.data.File" />
     </data>
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -33,5 +33,5 @@
             android:maxLines="2"
             android:gravity="center_vertical"
             android:text="@{HelpersKt.getNameFromPath(item.path)}"/>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

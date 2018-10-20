@@ -1,7 +1,7 @@
 package org.gmetais.downloadmanager.model
 
-import android.arch.lifecycle.LiveData
-import android.support.annotation.MainThread
+import androidx.lifecycle.LiveData
+import androidx.annotation.MainThread
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.gmetais.downloadmanager.data.SharedFile

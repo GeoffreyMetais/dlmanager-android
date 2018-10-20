@@ -1,9 +1,9 @@
 package org.gmetais.downloadmanager.ui.fragments
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
+import androidx.recyclerview.widget.DividerItemDecoration
 import android.view.View
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.model.SharesListModel
@@ -16,7 +16,7 @@ class SharesBrowser : BaseBrowser(), SharesAdapter.ShareHandler {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.filesList.addItemDecoration(DividerItemDecoration(binding.filesList.context, DividerItemDecoration.VERTICAL))
+        binding.filesList.addItemDecoration(androidx.recyclerview.widget.DividerItemDecoration(binding.filesList.context, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL))
         binding.filesList.adapter = SharesAdapter(this)
         shares.dataResult.observe(this@SharesBrowser, Observer<List<SharedFile>> { update(it) })
         shares.exception.observe(this@SharesBrowser, Observer { onError(it?.getContent()) })

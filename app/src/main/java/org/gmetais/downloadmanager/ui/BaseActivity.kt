@@ -1,11 +1,11 @@
 package org.gmetais.downloadmanager.ui
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import org.gmetais.downloadmanager.NetworkHelper
 import org.gmetais.downloadmanager.R
 import kotlin.properties.Delegates

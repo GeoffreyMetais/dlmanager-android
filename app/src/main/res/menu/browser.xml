@@ -5,7 +5,7 @@
         android:orderInCategory="1"
         android:id="@+id/ml_menu_filter"
         android:icon="@drawable/ic_search"
-        vlc:actionViewClass="android.support.v7.widget.SearchView"
+        vlc:actionViewClass="androidx.appcompat.widget.SearchView"
         android:title="search…"
         vlc:showAsAction="always|collapseActionView"/>
 </menu>

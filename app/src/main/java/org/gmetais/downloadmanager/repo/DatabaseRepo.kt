@@ -1,7 +1,7 @@
 package org.gmetais.downloadmanager.repo
 
-import android.arch.persistence.room.Room
-import android.support.annotation.MainThread
+import androidx.room.Room
+import androidx.annotation.MainThread
 import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.NonCancellable
 import kotlinx.coroutines.experimental.launch

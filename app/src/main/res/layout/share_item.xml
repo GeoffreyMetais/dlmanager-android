@@ -10,7 +10,7 @@
             name="item"
             type="org.gmetais.downloadmanager.data.SharedFile" />
     </data>
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="@{NetworkHelper.INSTANCE.connected}"
@@ -39,5 +39,5 @@
             app:srcCompat="@drawable/ic_remove_circle"
             android:onClick="@{(v) -> handler.delete(item)}"
             android:clickable="@{NetworkHelper.INSTANCE.connected}" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

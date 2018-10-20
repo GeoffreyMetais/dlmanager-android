@@ -1,8 +1,8 @@
 package org.gmetais.downloadmanager.data
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import org.gmetais.downloadmanager.Application
 
 @Database(entities = [(SharedFile::class)], version = 1, exportSchema = false)

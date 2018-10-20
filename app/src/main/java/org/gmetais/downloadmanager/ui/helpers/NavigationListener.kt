@@ -1,6 +1,6 @@
 package org.gmetais.downloadmanager.ui.helpers
 
-import android.support.design.widget.BottomNavigationView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import org.gmetais.downloadmanager.R

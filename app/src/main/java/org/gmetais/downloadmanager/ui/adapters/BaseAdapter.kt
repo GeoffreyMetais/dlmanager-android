@@ -1,8 +1,8 @@
 package org.gmetais.downloadmanager.ui.adapters
 
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
-import android.support.v7.widget.RecyclerView
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.gmetais.downloadmanager.BR
@@ -19,7 +19,7 @@ abstract class BaseAdapter<D, B : ViewDataBinding>(val handler: Any) : DiffUtilA
 
     override fun getItemCount() = dataset.size
 
-    class ViewHolder<out B : ViewDataBinding>(val binding : B, val handler: Any) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder<out B : ViewDataBinding>(val binding : B, val handler: Any) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
         init {
             binding.setVariable(BR.handler, handler)
         }

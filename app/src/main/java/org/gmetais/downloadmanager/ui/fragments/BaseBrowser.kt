@@ -3,16 +3,16 @@ package org.gmetais.downloadmanager.ui.fragments
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.gmetais.downloadmanager.databinding.BrowserBinding
 
-abstract class BaseBrowser : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+abstract class BaseBrowser : androidx.fragment.app.Fragment(), androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener {
 
     abstract override fun onRefresh()
 
@@ -26,7 +26,7 @@ abstract class BaseBrowser : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.swiperefresh.setOnRefreshListener(this)
-        binding.filesList.layoutManager = LinearLayoutManager(view.context)
+        binding.filesList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.context)
     }
 
     fun showProgress(show: Boolean = true) {

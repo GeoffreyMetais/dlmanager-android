@@ -1,6 +1,6 @@
 package org.gmetais.downloadmanager.ui.adapters
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -8,7 +8,7 @@ import org.gmetais.downloadmanager.R
 import org.gmetais.downloadmanager.goTo
 import org.gmetais.downloadmanager.ui.fragments.Browser
 
-class PathAdapter(val browser: Browser, path: String) : RecyclerView.Adapter<PathAdapter.ViewHolder>() {
+class PathAdapter(val browser: Browser, path: String) : androidx.recyclerview.widget.RecyclerView.Adapter<PathAdapter.ViewHolder>() {
 
     private val segments = path.replace("/home/geoffrey/Vidéos", "root").split('/').filter { !it.isEmpty() }
 
@@ -22,7 +22,7 @@ class PathAdapter(val browser: Browser, path: String) : RecyclerView.Adapter<Pat
         holder.root.text = segments[position]
     }
 
-    inner class ViewHolder(val root : TextView) : RecyclerView.ViewHolder(root) {
+    inner class ViewHolder(val root : TextView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(root) {
         init {
             root.setOnClickListener { browser.goTo(segments[adapterPosition]) }
         }

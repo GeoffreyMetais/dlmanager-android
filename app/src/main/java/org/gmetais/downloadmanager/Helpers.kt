@@ -3,11 +3,11 @@ package org.gmetais.downloadmanager
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
+import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import android.view.View
 import kotlinx.coroutines.experimental.delay
 import org.gmetais.downloadmanager.data.SharedFile
@@ -22,32 +22,32 @@ fun <T : View> Activity.bind(@IdRes res : Int) : Lazy<T> {
     return lazy(LazyThreadSafetyMode.NONE) { findViewById<T>(res) }
 }
 
-fun <T : Fragment> T.putStringExtra(key: String, value: String) : T {
+fun <T : androidx.fragment.app.Fragment> T.putStringExtra(key: String, value: String) : T {
     if (this.arguments == null) arguments = Bundle()
     arguments!!.putString(key, value)
     return this
 }
 
-inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) = beginTransaction().func().commit()
+inline fun androidx.fragment.app.FragmentManager.inTransaction(func: androidx.fragment.app.FragmentTransaction.() -> androidx.fragment.app.FragmentTransaction) = beginTransaction().func().commit()
 
-fun FragmentActivity.addFragment(frameId: Int, fragment: Fragment, tag: String) = supportFragmentManager.inTransaction { add(frameId, fragment, tag) }
+fun androidx.fragment.app.FragmentActivity.addFragment(frameId: Int, fragment: androidx.fragment.app.Fragment, tag: String) = supportFragmentManager.inTransaction { add(frameId, fragment, tag) }
 
-fun FragmentActivity.addFragment(fragment: Fragment, tag: String) = supportFragmentManager.inTransaction { add(fragment, tag) }
+fun androidx.fragment.app.FragmentActivity.addFragment(fragment: androidx.fragment.app.Fragment, tag: String) = supportFragmentManager.inTransaction { add(fragment, tag) }
 
-fun FragmentActivity.removeFragment(fragment: Fragment) = supportFragmentManager.inTransaction { remove(fragment) }
+fun androidx.fragment.app.FragmentActivity.removeFragment(fragment: androidx.fragment.app.Fragment) = supportFragmentManager.inTransaction { remove(fragment) }
 
-fun FragmentActivity.removeFragment(tag: String) = supportFragmentManager.inTransaction { remove(supportFragmentManager.findFragmentByTag(tag)) }
+fun androidx.fragment.app.FragmentActivity.removeFragment(tag: String) = supportFragmentManager.inTransaction { remove(supportFragmentManager.findFragmentByTag(tag)!!) }
 
-fun FragmentActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String, backstack : Boolean = false) = supportFragmentManager.inTransaction {
+fun androidx.fragment.app.FragmentActivity.replaceFragment(frameId: Int, fragment: androidx.fragment.app.Fragment, tag: String, backstack : Boolean = false) = supportFragmentManager.inTransaction {
     if (backstack) addToBackStack(tag)
     replace(frameId, fragment, tag)
 }
 
-fun Fragment.goTo(tag: String) = activity?.supportFragmentManager?.popBackStack(tag, 0)
+fun androidx.fragment.app.Fragment.goTo(tag: String) = activity?.supportFragmentManager?.popBackStack(tag, 0)
 
-fun FragmentActivity.getFragment(@IdRes id: Int): Fragment? = supportFragmentManager.findFragmentById(id)
-fun FragmentActivity.getFragment(tag: String): Fragment? = supportFragmentManager.findFragmentByTag(tag)
-fun FragmentActivity.getRootView()= (this.getFragment(R.id.fragment_placeholder)?.view ?: this.window.decorView)!!
+fun androidx.fragment.app.FragmentActivity.getFragment(@IdRes id: Int): androidx.fragment.app.Fragment? = supportFragmentManager.findFragmentById(id)
+fun androidx.fragment.app.FragmentActivity.getFragment(tag: String): androidx.fragment.app.Fragment? = supportFragmentManager.findFragmentByTag(tag)
+fun androidx.fragment.app.FragmentActivity.getRootView()= (this.getFragment(R.id.fragment_placeholder)?.view ?: this.window.decorView)!!
 
 fun Activity.share(share: SharedFile) = startActivity(Intent(Intent.ACTION_SEND)
         .putExtra(Intent.EXTRA_TEXT, share.link)
