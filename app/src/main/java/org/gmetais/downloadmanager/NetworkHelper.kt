@@ -1,34 +1,64 @@
+@file:Suppress("DEPRECATION", "unused")
+
 package org.gmetais.downloadmanager
 
-import androidx.lifecycle.*
+import android.annotation.TargetApi
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.databinding.ObservableBoolean
 import android.net.ConnectivityManager
+import android.net.Network
 import android.net.NetworkInfo
+import android.net.NetworkRequest
+import android.os.Build
+import androidx.lifecycle.*
+import org.gmetais.tools.SingletonHolder
 
-object NetworkHelper : BroadcastReceiver(), LifecycleObserver {
+private const val TAG = "NetworkHelper"
 
-    val disconnected = MutableLiveData<Boolean>()
-    val connected = ObservableBoolean(true)
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+class NetworkHelper(private val ctx: Context) : LifecycleObserver {
+
+    val connected = MutableLiveData<Boolean>().apply { value = false }
+    var cm : ConnectivityManager? = null
 
     init {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun register(): Intent = Application.instance.registerReceiver(this, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    fun register() {
+        cm = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager else null
+        cm?.apply {
+            registerNetworkCallback(NetworkRequest.Builder().build(), networkCallback)
+        } ?: Application.instance.registerReceiver(br, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun unregister() = Application.instance.unregisterReceiver(this)
+    fun unregister() = cm?.apply { unregisterNetworkCallback(networkCallback) } ?: Application.instance.unregisterReceiver(br)
 
-    override fun onReceive(context: Context, intent: Intent) {
-        if (ConnectivityManager.CONNECTIVITY_ACTION == intent.action) {
-            val networkInfo = (Application.context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager)?.activeNetworkInfo
-            connected.set(networkInfo?.state == NetworkInfo.State.CONNECTED  || networkInfo?.state == NetworkInfo.State.CONNECTING)
-            disconnected.value = !connected.get()
+    private val networkCallback by lazy {
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network?) {
+                connected.postValue(true)
+            }
+
+            override fun onLost(network: Network?) {
+                connected.postValue(true)
+            }
         }
     }
+
+    private val br by lazy { object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (ConnectivityManager.CONNECTIVITY_ACTION == intent?.action) {
+                val networkInfo = (ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager)?.activeNetworkInfo
+                connected.value = networkInfo?.state == NetworkInfo.State.CONNECTED || networkInfo?.state == NetworkInfo.State.CONNECTING
+            }
+        }
+    } }
+
+    companion object : SingletonHolder<NetworkHelper, Context>({ NetworkHelper(it.applicationContext) })
 }

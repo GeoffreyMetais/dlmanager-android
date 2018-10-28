@@ -9,11 +9,14 @@
         <variable
             name="item"
             type="org.gmetais.downloadmanager.data.SharedFile" />
+        <variable
+            name="connected"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="@{NetworkHelper.INSTANCE.connected}"
+        android:clickable="@{connected}"
         android:focusable="true"
         android:onClick="@{(v) -> handler.open(item)}"
         android:layout_marginTop="16dp"
@@ -38,6 +41,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_remove_circle"
             android:onClick="@{(v) -> handler.delete(item)}"
-            android:clickable="@{NetworkHelper.INSTANCE.connected}" />
+            android:clickable="@{connected}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
