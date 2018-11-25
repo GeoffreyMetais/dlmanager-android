@@ -5,7 +5,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.launch
 import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.repo.ApiRepo
 

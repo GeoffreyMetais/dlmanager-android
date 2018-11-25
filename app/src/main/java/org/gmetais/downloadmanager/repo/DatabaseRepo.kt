@@ -2,10 +2,7 @@ package org.gmetais.downloadmanager.repo
 
 import androidx.annotation.MainThread
 import androidx.room.Room
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.NonCancellable
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
 import org.gmetais.downloadmanager.Application
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.data.SharesDatabase
@@ -30,7 +27,7 @@ object DatabaseRepo : CoroutineScope {
     @MainThread
     suspend fun add(share: SharedFile) : SharedFile {
         val result = ApiRepo.add(share)
-        if (NonCancellable.isActive) asyncDbJob { dao.insertShares(result) }
+        if (isActive) asyncDbJob { dao.insertShares(result) }
         return result
 
     }
@@ -38,6 +35,5 @@ object DatabaseRepo : CoroutineScope {
     private suspend inline fun asyncDbJob(crossinline dbCall: () -> Unit) {
         val job = launch { dbCall.invoke() }
         job.join()
-        if (job.isCancelled) throw job.getCancellationException()
     }
 }

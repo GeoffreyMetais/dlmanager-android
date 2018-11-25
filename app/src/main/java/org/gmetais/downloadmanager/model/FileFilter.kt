@@ -1,6 +1,6 @@
 package org.gmetais.downloadmanager.model
 
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.data.File
 

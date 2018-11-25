@@ -2,7 +2,7 @@ package org.gmetais.downloadmanager.model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import org.gmetais.tools.Event
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")

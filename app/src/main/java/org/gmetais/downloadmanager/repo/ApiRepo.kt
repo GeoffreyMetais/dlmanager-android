@@ -7,7 +7,9 @@ import org.gmetais.downloadmanager.data.SharedFile
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlin.coroutines.suspendCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 object ApiRepo {
 

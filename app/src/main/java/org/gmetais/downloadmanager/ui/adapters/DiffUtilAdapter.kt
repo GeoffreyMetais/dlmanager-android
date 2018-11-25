@@ -1,12 +1,12 @@
 package org.gmetais.downloadmanager.ui.adapters
 
 import androidx.recyclerview.widget.DiffUtil
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.channels.actor
-import kotlinx.coroutines.experimental.channels.consumeEach
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.withContext
 
 abstract class DiffUtilAdapter<D, VH : androidx.recyclerview.widget.RecyclerView.ViewHolder> : androidx.recyclerview.widget.RecyclerView.Adapter<VH>(), CoroutineScope {
     override val coroutineContext = Dispatchers.Main

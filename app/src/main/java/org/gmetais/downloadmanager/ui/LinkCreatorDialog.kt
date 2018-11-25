@@ -6,8 +6,8 @@ import com.google.android.material.snackbar.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.isActive
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
 import org.gmetais.downloadmanager.getNameFromPath

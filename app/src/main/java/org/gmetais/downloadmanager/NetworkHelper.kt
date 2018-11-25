@@ -38,27 +38,24 @@ class NetworkHelper(private val ctx: Context) : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun unregister() = cm?.apply { unregisterNetworkCallback(networkCallback) } ?: Application.instance.unregisterReceiver(br)
 
-    private val networkCallback by lazy {
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-        object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network?) {
-                connected.postValue(true)
-            }
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network?) {
+            connected.postValue(true)
+        }
 
-            override fun onLost(network: Network?) {
-                connected.postValue(true)
-            }
+        override fun onLost(network: Network?) {
+            connected.postValue(true)
         }
     }
 
-    private val br by lazy { object : BroadcastReceiver() {
+    private val br = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (ConnectivityManager.CONNECTIVITY_ACTION == intent?.action) {
                 val networkInfo = (ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager)?.activeNetworkInfo
                 connected.value = networkInfo?.state == NetworkInfo.State.CONNECTED || networkInfo?.state == NetworkInfo.State.CONNECTING
             }
         }
-    } }
+    }
 
     companion object : SingletonHolder<NetworkHelper, Context>({ NetworkHelper(it.applicationContext) })
 }

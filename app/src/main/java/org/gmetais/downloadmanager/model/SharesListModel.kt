@@ -2,7 +2,7 @@ package org.gmetais.downloadmanager.model
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.launch
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.repo.DatabaseRepo
 

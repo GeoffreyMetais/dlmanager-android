@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import android.view.View
-import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.delay
 import org.gmetais.downloadmanager.data.SharedFile
 import java.io.IOException
 
