@@ -16,7 +16,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="@{connected}"
+        android:clickable="@{safeUnbox(connected)}"
         android:focusable="true"
         android:onClick="@{(v) -> handler.open(item)}"
         android:layout_marginTop="16dp"
@@ -41,6 +41,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_remove_circle"
             android:onClick="@{(v) -> handler.delete(item)}"
-            android:clickable="@{connected}" />
+            android:clickable="@{safeUnbox(connected)}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

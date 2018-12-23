@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import org.gmetais.tools.Event
 
+@ExperimentalCoroutinesApi
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
-abstract class BaseModel<out T> : ViewModel(), CoroutineScope {
-    override val coroutineContext = Dispatchers.Main
+abstract class BaseModel<out T> : ViewModel(), CoroutineScope by MainScope() {
 
     val exception by lazy { MutableLiveData<Event<Exception>>() }
     val dataResult: T by lazy { initData() }

@@ -49,12 +49,12 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.ext.kotlinx_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.ext.kotlinx_version"
     //AppCompat
-    implementation "androidx.appcompat:appcompat:$rootProject.ext.androidxVersion"
+    implementation "androidx.appcompat:appcompat:$rootProject.ext.androidxAppCompatVersion"
     implementation "androidx.fragment:fragment:$rootProject.ext.androidxVersion"
     implementation "com.google.android.material:material:$rootProject.ext.androidxVersion"
-    implementation "androidx.vectordrawable:vectordrawable:$rootProject.ext.androidxVersion"
+    implementation "androidx.vectordrawable:vectordrawable:$rootProject.ext.androidxVectorDrawableVersion"
     implementation "androidx.preference:preference:$rootProject.ext.androidxVersion"
-    implementation "androidx.constraintlayout:constraintlayout:2.0.0-alpha2"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.0-alpha3"
     //Arch Components
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.ext.archVersion"
     kapt "androidx.lifecycle:lifecycle-compiler:$rootProject.ext.archVersion"
