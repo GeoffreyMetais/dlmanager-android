@@ -1,10 +1,9 @@
 package org.gmetais.downloadmanager.ui.adapters
 
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import org.gmetais.downloadmanager.BR
 
 abstract class BaseAdapter<D, B : ViewDataBinding>(val handler: Any) : DiffUtilAdapter<D, BaseAdapter.ViewHolder<B>>() {

@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.google.android.material.snackbar.Snackbar
-import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +14,7 @@ abstract class BaseBrowser : androidx.fragment.app.Fragment(), androidx.swiperef
     abstract override fun onRefresh()
 
     protected lateinit var binding : BrowserBinding
-    private val mHandler: Handler by lazy { Handler(Looper.getMainLooper()) }
+    private val handler: Handler by lazy { Handler(Looper.getMainLooper()) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = BrowserBinding.inflate(inflater, container, false)
@@ -30,10 +27,9 @@ abstract class BaseBrowser : androidx.fragment.app.Fragment(), androidx.swiperef
     }
 
     fun showProgress(show: Boolean = true) {
-        if (show)
-            mHandler.postDelayed({binding.swiperefresh.isRefreshing = true}, 300)
+        if (show) handler.postDelayed({binding.swiperefresh.isRefreshing = true}, 300)
         else {
-            mHandler.removeCallbacksAndMessages(null)
+            handler.removeCallbacksAndMessages(null)
             binding.swiperefresh.isRefreshing = false
         }
     }

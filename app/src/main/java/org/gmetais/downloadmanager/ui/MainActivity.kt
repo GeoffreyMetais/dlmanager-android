@@ -13,8 +13,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (savedInstanceState === null)
-            addFragment(R.id.fragment_placeholder, SharesBrowser(), "shares")
+        savedInstanceState ?: addFragment(R.id.fragment_placeholder, SharesBrowser(), "shares")
         navigation.setOnNavigationItemSelectedListener(NavigationListener(this))
     }
 

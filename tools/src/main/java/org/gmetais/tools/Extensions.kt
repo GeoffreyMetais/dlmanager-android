@@ -18,7 +18,7 @@ fun LifecycleOwner.createJob(cancelEvent: Lifecycle.Event = Lifecycle.Event.ON_D
 
 private val lifecycleCoroutineScopes = mutableMapOf<Lifecycle, CoroutineScope>()
 
-@UseExperimental(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 val LifecycleOwner.coroutineScope: CoroutineScope
     get() = lifecycleCoroutineScopes[lifecycle] ?: createJob().let {
         val newScope = CoroutineScope(it + Dispatchers.Main.immediate)

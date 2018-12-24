@@ -1,16 +1,15 @@
 package org.gmetais.downloadmanager.ui
 
 import android.os.Bundle
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
 import org.gmetais.downloadmanager.getNameFromPath
-import org.gmetais.downloadmanager.getRootView
 import org.gmetais.downloadmanager.repo.DataRepo
 import org.gmetais.downloadmanager.share
 
@@ -20,7 +19,6 @@ class LinkCreatorDialog : BottomSheetDialogFragment(), CoroutineScope by MainSco
 
     private val path : String by lazy { arguments?.getString("path") ?: "" }
     private lateinit var binding: DialogLinkCreatorBinding
-    private val job: Job = Job()
 
     inner class ClickHandler {
         fun onClick() = addFile()
@@ -35,23 +33,25 @@ class LinkCreatorDialog : BottomSheetDialogFragment(), CoroutineScope by MainSco
         super.onViewCreated(view, savedInstanceState)
         binding.title = path.getNameFromPath()
         binding.handler = ClickHandler()
-        binding.editName.setOnEditorActionListener { _, _, _ -> addFile(); true }
+        binding.editName.setOnEditorActionListener { _, _, _ -> addFile() }
     }
 
     override fun onDestroy() {
-        job.cancel()
+        coroutineContext.cancel()
         super.onDestroy()
     }
 
-    private fun addFile() = launch {
-        try {
-            if (!isActive) return@launch
-            val result = DataRepo.add(SharedFile(path = path, name = binding.editName.text.toString()))
-            if (isActive) activity?.share(result)
-        } catch (e: Exception) {
-            activity?.let { Snackbar.make(it.getRootView(), e.message.toString(), Snackbar.LENGTH_LONG).show() }
-        } finally {
-            dismiss()
+    private fun addFile() : Boolean {
+        launch {
+            if (isActive) try {
+                val result = DataRepo.add(SharedFile(path = path, name = binding.editName.text.toString()))
+                if (isActive) activity?.share(result)
+            } catch (e: Exception) {
+                activity?.run { Snackbar.make(binding.root, e.message.toString(), Snackbar.LENGTH_LONG).show() }
+            } finally {
+                dismiss()
+            }
         }
+        return true
     }
 }

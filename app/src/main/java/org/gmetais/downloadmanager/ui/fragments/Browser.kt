@@ -9,6 +9,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.gmetais.downloadmanager.R
 import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.data.File
@@ -43,12 +45,14 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         directoryModel.dataResult.observe(this, Observer<Directory> { update(it) })
         directoryModel.exception.observe(this, Observer { onError(it?.getContent()) })
         showProgress()
-        if (path != null) {
-            binding.ariane.visibility = View.VISIBLE
-            binding.ariane.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.context, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
-            binding.ariane.addItemDecoration(androidx.recyclerview.widget.DividerItemDecoration(requireContext(), androidx.recyclerview.widget.DividerItemDecoration.HORIZONTAL).apply { setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_keyboard_arrow_right_indigo_700_18dp)!!) })
-            binding.ariane.adapter = PathAdapter(this, path)
-            binding.ariane.scrollToPosition(binding.ariane.adapter!!.itemCount-1)
+        if (path != null) binding.ariane.apply{
+            visibility = View.VISIBLE
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.context, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL).apply {
+                setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_keyboard_arrow_right_indigo_700_18dp)!!)
+            })
+            adapter = PathAdapter(this@Browser, path)
+            adapter?.run { scrollToPosition(itemCount-1) }
         }
     }
 
@@ -56,7 +60,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         inflater.inflate(R.menu.browser, menu)
         searchItem = menu.findItem(R.id.ml_menu_filter)
         val searchView = searchItem.actionView as SearchView
-        searchView.queryHint = "search…"
+        searchView.queryHint = getString(R.string.edit_hint_search)
         searchView.setOnQueryTextListener(directoryModel)
         searchItem.setOnActionExpandListener(directoryModel)
     }
@@ -68,6 +72,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         (binding.filesList.adapter as BrowserAdapter).update(directory.files.sortedBy { !it.isDirectory })
     }
 
+    @ExperimentalCoroutinesApi
     override fun open(file: File) {
         if (file.isDirectory)
             activity?.replaceFragment(R.id.fragment_placeholder, Browser().putStringExtra("path", file.path), file.path.getNameFromPath(), true)
