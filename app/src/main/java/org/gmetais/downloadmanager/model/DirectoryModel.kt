@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
 import org.gmetais.downloadmanager.data.Directory
-import org.gmetais.downloadmanager.repo.ApiRepo
+import org.gmetais.downloadmanager.repo.browse
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 class DirectoryModel(val path: String?) : BaseModel<MutableLiveData<Directory>>(), SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
@@ -19,7 +19,7 @@ class DirectoryModel(val path: String?) : BaseModel<MutableLiveData<Directory>>(
         return MutableLiveData()
     }
 
-    override fun refresh() = execute { dataResult.value = ApiRepo.browse(path) }
+    override fun refresh() = execute { dataResult.value = browse(path) }
 
     class Factory(val path: String?): ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

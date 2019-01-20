@@ -12,7 +12,7 @@ import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
 import org.gmetais.downloadmanager.getNameFromPath
 import org.gmetais.downloadmanager.getRootView
-import org.gmetais.downloadmanager.repo.DatabaseRepo
+import org.gmetais.downloadmanager.repo.DataRepo
 import org.gmetais.downloadmanager.share
 import org.gmetais.tools.uiTask
 
@@ -47,7 +47,7 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
     private fun addFile() = uiTask {
         try {
             if (!isActive) return@uiTask
-            val result = DatabaseRepo.add(SharedFile(path = path, name = binding.editName.text.toString()))
+            val result = DataRepo.add(SharedFile(path = path, name = binding.editName.text.toString()))
             if (isActive) activity?.share(result)
         } catch (e: Exception) {
             activity?.let { Snackbar.make(it.getRootView(), e.message.toString(), Snackbar.LENGTH_LONG).show() }

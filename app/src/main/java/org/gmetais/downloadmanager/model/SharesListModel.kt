@@ -4,18 +4,18 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.launch
 import org.gmetais.downloadmanager.data.SharedFile
-import org.gmetais.downloadmanager.repo.DatabaseRepo
+import org.gmetais.downloadmanager.repo.DataRepo
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING", "UNCHECKED_CAST")
 class SharesListModel : BaseModel<LiveData<List<SharedFile>>>() {
 
     override fun initData(): LiveData<List<SharedFile>> {
         launch { refresh() }
-        return DatabaseRepo.dao.getShares()
+        return DataRepo.dao.getShares()
     }
 
-    override fun refresh() = execute { DatabaseRepo.fetchShares() }
+    override fun refresh() = execute { DataRepo.fetchShares() }
 
     @MainThread
-    fun delete(share: SharedFile) = execute { DatabaseRepo.delete(share) }
+    fun delete(share: SharedFile) = execute { DataRepo.delete(share) }
 }
