@@ -59,18 +59,18 @@ dependencies {
     implementation("com.google.android.material:material:1.0.0")
     implementation("androidx.vectordrawable:vectordrawable:1.0.1")
     implementation("androidx.preference:preference:1.0.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.0-alpha3")
+    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
     //Arch Components
     implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
     kapt("androidx.lifecycle:lifecycle-compiler:2.0.0")
-    implementation("androidx.room:room-runtime:2.1.0-alpha03")
-    kapt("androidx.room:room-compiler:2.1.0-alpha03")
+    implementation("androidx.room:room-runtime:2.0.0")
+    kapt("androidx.room:room-compiler:2.0.0")
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.4.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.4.0")
     //Testing
     //    androidTestimplementation("android.arch.persistence.room:testing:$rootProject.ext.archVersion"
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.1.0-beta02") {
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1") {
         exclude(group = "com.android.support", module = "support-annotations")
     }
     testImplementation("junit:junit:4.12")
