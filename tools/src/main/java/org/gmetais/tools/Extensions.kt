@@ -3,10 +3,7 @@ package org.gmetais.tools
 import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 fun LifecycleOwner.createJob(cancelEvent: Lifecycle.Event = Lifecycle.Event.ON_DESTROY): Job = Job().also { job ->
     lifecycle.addObserver(object : GenericLifecycleObserver {
@@ -25,8 +22,9 @@ val LifecycleOwner.coroutineScope: CoroutineScope
     get() = lifecycleCoroutineScopes[lifecycle] ?: createJob().let {
         val newScope = CoroutineScope(it + Dispatchers.Main.immediate)
         lifecycleCoroutineScopes[lifecycle] = newScope
-        it.invokeOnCompletion { _ -> lifecycleCoroutineScopes -= lifecycle }
+        it.invokeOnCompletion { lifecycleCoroutineScopes -= lifecycle }
         newScope
     }
 
-fun LifecycleOwner.uiTask(block: suspend CoroutineScope.() -> Unit) = coroutineScope.launch(block = block)
+@Suppress("FunctionName")
+fun IoScope() = CoroutineScope(Dispatchers.IO + SupervisorJob())

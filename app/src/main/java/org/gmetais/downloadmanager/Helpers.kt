@@ -56,7 +56,7 @@ fun Activity.share(share: SharedFile) = startActivity(Intent(Intent.ACTION_SEND)
 suspend fun <T> retry (
         times: Int = Int.MAX_VALUE,
         initialDelay: Long = 100L,
-        maxDelay: Long = 10000L,
+        maxDelay: Long = 10_000L,
         factor: Long = 2L,
         block: suspend () -> T): T
 {

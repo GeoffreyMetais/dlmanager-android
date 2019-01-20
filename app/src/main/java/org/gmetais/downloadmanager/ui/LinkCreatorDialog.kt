@@ -6,18 +6,17 @@ import com.google.android.material.snackbar.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.*
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
 import org.gmetais.downloadmanager.getNameFromPath
 import org.gmetais.downloadmanager.getRootView
 import org.gmetais.downloadmanager.repo.DataRepo
 import org.gmetais.downloadmanager.share
-import org.gmetais.tools.uiTask
 
+@ExperimentalCoroutinesApi
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
-class LinkCreatorDialog : BottomSheetDialogFragment() {
+class LinkCreatorDialog : BottomSheetDialogFragment(), CoroutineScope by MainScope() {
 
     private val path : String by lazy { arguments?.getString("path") ?: "" }
     private lateinit var binding: DialogLinkCreatorBinding
@@ -44,9 +43,9 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
         super.onDestroy()
     }
 
-    private fun addFile() = uiTask {
+    private fun addFile() = launch {
         try {
-            if (!isActive) return@uiTask
+            if (!isActive) return@launch
             val result = DataRepo.add(SharedFile(path = path, name = binding.editName.text.toString()))
             if (isActive) activity?.share(result)
         } catch (e: Exception) {

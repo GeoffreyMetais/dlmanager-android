@@ -7,6 +7,7 @@ import org.gmetais.downloadmanager.Application
 import org.gmetais.downloadmanager.data.RequestManager
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.data.SharesDatabase
+import org.gmetais.tools.IoScope
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,8 +16,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Suppress("UNCHECKED_CAST")
-object DataRepo : CoroutineScope {
-    override val coroutineContext = Dispatchers.IO
+object DataRepo : CoroutineScope by IoScope() {
     val dao by lazy { Room.databaseBuilder(Application.context, SharesDatabase::class.java, "shares").build().sharesDao() }
 
     @MainThread
