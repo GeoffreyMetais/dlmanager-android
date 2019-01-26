@@ -16,32 +16,27 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Suppress("UNCHECKED_CAST")
-object DataRepo : CoroutineScope by IoScope() {
+object DataRepo {
     val dao by lazy { Room.databaseBuilder(Application.context, SharesDatabase::class.java, "shares").build().sharesDao() }
 
     @MainThread
     suspend fun fetchShares() {
         val result = getShares()
-        asyncDbJob { dao.insertShares(result as List<SharedFile>) }
+        withContext(Dispatchers.IO) { dao.insertShares(result as List<SharedFile>) }
     }
 
     @MainThread
     suspend fun delete(share: SharedFile) {
         delete(share.name)
-        asyncDbJob { dao.deleteShares(share) }
+        withContext(Dispatchers.IO) { dao.deleteShares(share) }
     }
 
     @MainThread
     suspend fun add(share: SharedFile) : SharedFile {
         val result = addFile(share)
-        if (isActive) asyncDbJob { dao.insertShares(result) }
+        withContext(Dispatchers.IO) { dao.insertShares(result) }
         return result
 
-    }
-
-    private suspend inline fun asyncDbJob(crossinline dbCall: () -> Unit) {
-        val job = launch { dbCall.invoke() }
-        job.join()
     }
 }
 
@@ -64,9 +59,12 @@ private suspend inline fun <reified T> retrofitResponseCall(crossinline call: ()
     }
 }
 
-private suspend inline fun <reified T> retrofitSuspendCall(crossinline call: () -> Call<T>) : Response<T> = suspendCoroutine { continuation ->
-    call.invoke().enqueue(object : Callback<T> {
-        override fun onResponse(call: Call<T>?, response: Response<T>) = continuation.resume(response)
-        override fun onFailure(call: Call<T>, t: Throwable) = continuation.resumeWithException(t)
-    })
+private suspend inline fun <reified T> retrofitSuspendCall(crossinline call: () -> Call<T>) : Response<T> = suspendCancellableCoroutine { continuation ->
+    call.invoke().run {
+        continuation.invokeOnCancellation { cancel() }
+        enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>?, response: Response<T>) = continuation.resume(response)
+            override fun onFailure(call: Call<T>, t: Throwable) = continuation.resumeWithException(t)
+        })
+    }
 }
