@@ -47,8 +47,8 @@ android {
 
 
 dependencies {
-    val ktVersion = "1.3.11"
-    val ktxVersion = "1.1.0"
+    val ktVersion = "1.3.31"
+    val ktxVersion = "1.2.1"
     implementation(project(":tools"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$ktVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$ktxVersion")
