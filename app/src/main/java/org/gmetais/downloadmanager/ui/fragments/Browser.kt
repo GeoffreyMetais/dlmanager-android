@@ -45,14 +45,14 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         directoryModel.dataResult.observe(this, Observer<Directory> { update(it) })
         directoryModel.exception.observe(this, Observer { onError(it?.getContent()) })
         showProgress()
-        if (path != null) binding.ariane.apply{
+        if (path != null) binding.ariane.run {
             visibility = View.VISIBLE
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.context, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL).apply {
                 setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_keyboard_arrow_right_indigo_700_18dp)!!)
             })
-            adapter = PathAdapter(this@Browser, path)
-            adapter?.run { scrollToPosition(itemCount-1) }
+            val pathAdapter = PathAdapter(this@Browser, path)
+            adapter = pathAdapter
+            scrollToPosition(pathAdapter.itemCount-1)
         }
     }
 

@@ -23,7 +23,6 @@ abstract class BaseBrowser : androidx.fragment.app.Fragment(), androidx.swiperef
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.swiperefresh.setOnRefreshListener(this)
-        binding.filesList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.context)
     }
 
     fun showProgress(show: Boolean = true) {
