@@ -47,27 +47,27 @@ android {
 
 
 dependencies {
-    val ktVersion = "1.3.31"
-    val ktxVersion = "1.2.1"
+    val ktVersion = "1.3.50"
+    val ktxVersion = "1.3.2"
     implementation(project(":tools"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$ktVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$ktxVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$ktxVersion")
     //AppCompat
-    implementation("androidx.appcompat:appcompat:1.0.2")
-    implementation("androidx.fragment:fragment:1.0.0")
+    implementation("androidx.appcompat:appcompat:1.1.0")
+    implementation("androidx.fragment:fragment:1.1.0")
     implementation("com.google.android.material:material:1.0.0")
-    implementation("androidx.vectordrawable:vectordrawable:1.0.1")
-    implementation("androidx.preference:preference:1.0.0")
+    implementation("androidx.vectordrawable:vectordrawable:1.1.0")
+    implementation("androidx.preference:preference:1.1.0")
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
     //Arch Components
-    implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
-    kapt("androidx.lifecycle:lifecycle-compiler:2.0.0")
-    implementation("androidx.room:room-runtime:2.0.0")
-    kapt("androidx.room:room-compiler:2.0.0")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.1.0")
+    kapt("androidx.lifecycle:lifecycle-compiler:2.1.0")
+    implementation("androidx.room:room-ktx:2.2.0")
+    kapt("androidx.room:room-compiler:2.2.0")
     //Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.4.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.4.0")
+    implementation("com.squareup.retrofit2:retrofit:2.6.1")
+    implementation("com.squareup.retrofit2:converter-moshi:2.6.1")
     //Testing
     //    androidTestimplementation("android.arch.persistence.room:testing:$rootProject.ext.archVersion"
     androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1") {

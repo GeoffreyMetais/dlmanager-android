@@ -40,31 +40,10 @@ object DataRepo {
     }
 }
 
-suspend fun browse(path: String?) = retrofitResponseCall { RequestManager.browse(path) }
+suspend fun browse(path: String?) = RequestManager.browse(path)
 
-suspend fun getShares() = retrofitResponseCall { RequestManager.listShares() }
+suspend fun getShares() = RequestManager.listShares()
 
-suspend fun addFile(file: SharedFile) = retrofitResponseCall { RequestManager.add(file) }
+suspend fun addFile(file: SharedFile) = RequestManager.add(file)
 
-suspend fun delete(key: String) = retrofitResponse { RequestManager.delete(key) }
-
-private suspend inline fun retrofitResponse(crossinline call: () -> Call<Void>) {
-    with(retrofitSuspendCall(call)) { if (!isSuccessful) throw Exception(message()) }
-}
-
-private suspend inline fun <reified T> retrofitResponseCall(crossinline call: () -> Call<T>) : T {
-    with(retrofitSuspendCall(call)) {
-        if (isSuccessful) return body()!!
-        else throw Exception(message())
-    }
-}
-
-private suspend inline fun <reified T> retrofitSuspendCall(crossinline call: () -> Call<T>) : Response<T> = suspendCancellableCoroutine { continuation ->
-    call.invoke().run {
-        continuation.invokeOnCancellation { cancel() }
-        enqueue(object : Callback<T> {
-            override fun onResponse(call: Call<T>?, response: Response<T>) = continuation.resume(response)
-            override fun onFailure(call: Call<T>, t: Throwable) = continuation.resumeWithException(t)
-        })
-    }
-}
+suspend fun delete(key: String) = RequestManager.delete(key)

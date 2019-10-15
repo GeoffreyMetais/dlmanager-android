@@ -15,13 +15,13 @@ import java.util.concurrent.TimeUnit
 object RequestManager {
     private val browserService: IBrowser
 
-    fun browse(path : String?) = if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))
+    suspend fun browse(path : String?) = if (path === null) browserService.browseRoot() else browserService.browseDir(RequestBody(path, ""))
 
-    fun listShares() = browserService.getShares()
+    suspend fun listShares() = browserService.getShares()
 
-    fun add(file: SharedFile) = browserService.add(file)
+    suspend fun add(file: SharedFile) = browserService.add(file)
 
-    fun delete(key: String) = browserService.delete(key)
+    suspend fun delete(key: String) = browserService.delete(key)
 
     init {
         val pm = PreferenceManager.getDefaultSharedPreferences(Application.context)

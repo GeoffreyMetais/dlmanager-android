@@ -77,7 +77,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         if (file.isDirectory)
             activity?.replaceFragment(R.id.fragment_placeholder, Browser().putStringExtra("path", file.path), file.path.getNameFromPath(), true)
         else
-            LinkCreatorDialog().putStringExtra("path", file.path).show(activity?.supportFragmentManager, "linkin park")
+            activity?.supportFragmentManager?.let { LinkCreatorDialog().putStringExtra("path", file.path).show(it, "linkin park") }
     }
 
     override fun onRefresh() {

@@ -4,18 +4,18 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface IBrowser {
-    @POST("go/browse")
-    fun browseDir(@Body request: RequestBody): Call<Directory>
+    @POST("browse")
+    suspend fun browseDir(@Body request: RequestBody): Directory
 
-    @GET("go/browse")
-    fun browseRoot(): Call<Directory>
+    @GET("browse")
+    suspend fun browseRoot(): Directory
 
-    @GET("go/list")
-    fun getShares(): Call<MutableList<SharedFile>>
+    @GET("list")
+    suspend fun getShares(): MutableList<SharedFile>
 
-    @POST("go/add")
-    fun add(@Body file: SharedFile) : Call<SharedFile>
+    @POST("add")
+    suspend fun add(@Body file: SharedFile) : SharedFile
 
-    @DELETE("go/del/{name}")
-    fun delete(@Path("name") name: String) : Call<Void>
+    @DELETE("del/{name}")
+    suspend fun delete(@Path("name") name: String) : Void
 }
