@@ -30,6 +30,7 @@ android {
             }
         }
     }
+
     // used by Room, to test migrations
     sourceSets {
         getByName("androidTest").java.apply {
@@ -47,7 +48,7 @@ android {
 
 
 dependencies {
-    val ktVersion = "1.3.50"
+    val ktVersion = "1.3.61"
     val ktxVersion = "1.3.2"
     implementation(project(":tools"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$ktVersion")
@@ -63,8 +64,10 @@ dependencies {
     //Arch Components
     implementation("androidx.lifecycle:lifecycle-extensions:2.1.0")
     kapt("androidx.lifecycle:lifecycle-compiler:2.1.0")
-    implementation("androidx.room:room-ktx:2.2.0")
-    kapt("androidx.room:room-compiler:2.2.0")
+    implementation("androidx.room:room-ktx:2.2.2")
+    kapt("androidx.room:room-compiler:2.2.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-rc03")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-rc03")
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.6.1")
     implementation("com.squareup.retrofit2:converter-moshi:2.6.1")

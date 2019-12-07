@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
@@ -15,7 +16,7 @@ import org.gmetais.downloadmanager.share
 
 @ExperimentalCoroutinesApi
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
-class LinkCreatorDialog : BottomSheetDialogFragment(), CoroutineScope by MainScope() {
+class LinkCreatorDialog : BottomSheetDialogFragment() {
 
     private val path : String by lazy { arguments?.getString("path") ?: "" }
     private lateinit var binding: DialogLinkCreatorBinding
@@ -36,16 +37,11 @@ class LinkCreatorDialog : BottomSheetDialogFragment(), CoroutineScope by MainSco
         binding.editName.setOnEditorActionListener { _, _, _ -> addFile() }
     }
 
-    override fun onDestroy() {
-        coroutineContext.cancel()
-        super.onDestroy()
-    }
-
     private fun addFile() : Boolean {
-        launch {
-            if (isActive) try {
+        lifecycleScope.launchWhenStarted {
+            try {
                 val result = DataRepo.add(SharedFile(path = path, name = binding.editName.text.toString()))
-                if (isActive) activity?.share(result)
+                activity?.share(result)
             } catch (e: Exception) {
                 activity?.run { Snackbar.make(binding.root, e.message.toString(), Snackbar.LENGTH_LONG).show() }
             } finally {

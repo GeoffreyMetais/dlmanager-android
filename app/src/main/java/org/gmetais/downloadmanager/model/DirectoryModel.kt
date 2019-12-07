@@ -5,6 +5,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.repo.browse
@@ -15,7 +16,7 @@ class DirectoryModel(val path: String?) : BaseModel<MutableLiveData<Directory>>(
     private val filter by lazy { FileFilter(this) }
 
     override fun initData(): MutableLiveData<Directory> {
-        launch { refresh() }
+        viewModelScope.launch { refresh() }
         return MutableLiveData()
     }
 
