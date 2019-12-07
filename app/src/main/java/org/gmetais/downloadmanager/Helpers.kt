@@ -9,7 +9,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import android.view.View
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import org.gmetais.downloadmanager.data.SharedFile
 import java.io.IOException
 
@@ -72,4 +75,9 @@ suspend fun <T> retry (
         currentDelay = (currentDelay * factor).coerceAtMost(maxDelay)
     }
     return block() // last attempt
+}
+
+fun View.clicks(): Flow<Unit> = callbackFlow {
+    setOnClickListener{ offer(Unit) }
+    awaitClose { setOnClickListener(null) }
 }
