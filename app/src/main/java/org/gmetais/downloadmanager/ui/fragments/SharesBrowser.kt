@@ -2,8 +2,8 @@ package org.gmetais.downloadmanager.ui.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,7 +22,7 @@ import org.gmetais.tools.SimpleClick
 @ExperimentalCoroutinesApi
 class SharesBrowser : BaseBrowser() {
 
-    private val shares: SharesListModel by lazy { ViewModelProviders.of(this).get(SharesListModel::class.java) }
+    private val shares: SharesListModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

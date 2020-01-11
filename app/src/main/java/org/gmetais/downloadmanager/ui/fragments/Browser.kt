@@ -7,16 +7,14 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.gmetais.downloadmanager.R
 import org.gmetais.downloadmanager.data.Directory
-import org.gmetais.downloadmanager.data.File
 import org.gmetais.downloadmanager.getNameFromPath
 import org.gmetais.downloadmanager.model.DirectoryModel
 import org.gmetais.downloadmanager.putStringExtra
@@ -28,7 +26,7 @@ import org.gmetais.tools.Click
 
 class Browser : BaseBrowser() {
 
-    private val directoryModel: DirectoryModel by lazy { ViewModelProviders.of(this, DirectoryModel.Factory(arguments?.getString("path"))).get(DirectoryModel::class.java) }
+    private val directoryModel: DirectoryModel by activityViewModels { DirectoryModel.Factory(arguments?.getString("path")) }
     private lateinit var searchItem : MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
