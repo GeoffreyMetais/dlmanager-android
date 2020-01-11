@@ -11,7 +11,7 @@ import org.gmetais.tools.Event
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 abstract class BaseModel<T> : ViewModel() {
 
-    val exception by lazy { MutableLiveData<Event<Exception>>() }
+    val exception = MutableLiveData<Event<Exception>>()
     open val dataResult : LiveData<T> = MutableLiveData()
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable -> exception.value = Event(throwable as? Exception ?: Exception(throwable)) }
 

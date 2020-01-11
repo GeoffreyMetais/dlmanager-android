@@ -3,17 +3,15 @@ package org.gmetais.downloadmanager
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.annotation.IdRes
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import android.view.View
+import androidx.annotation.IdRes
+import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import org.gmetais.downloadmanager.data.SharedFile
+import org.gmetais.tools.lifecycleOwner
 import java.io.IOException
 
 fun  String.getNameFromPath(): String {
@@ -81,3 +79,6 @@ fun View.clicks(): Flow<Unit> = callbackFlow {
     setOnClickListener{ offer(Unit) }
     awaitClose { setOnClickListener(null) }
 }
+
+val ViewBinding.lifecycleOwner
+    get() = root.lifecycleOwner

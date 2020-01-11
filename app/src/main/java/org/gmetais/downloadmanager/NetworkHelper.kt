@@ -44,7 +44,7 @@ class NetworkHelper(private val ctx: Context) : LifecycleObserver {
         }
 
         override fun onLost(network: Network?) {
-            connected.postValue(true)
+            connected.postValue(false)
         }
     }
 

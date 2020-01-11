@@ -8,7 +8,7 @@ abstract class BaseAdapter<D, B : ViewBinding>() : DiffUtilAdapter<D, BaseAdapte
 
     override fun getItemCount() = dataset.size
 
-    inner class ViewHolder<B : ViewBinding>(val binding: B) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
+    open inner class ViewHolder<B : ViewBinding>(val binding: B) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener { eventsChannel.safeOffer(SimpleClick(layoutPosition)) }
             itemView.setOnLongClickListener { eventsChannel.safeOffer(LongClick(layoutPosition)) }
