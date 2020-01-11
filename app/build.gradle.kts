@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
 }
 
@@ -9,7 +8,7 @@ plugins {
 
 android {
     compileSdkVersion(28)
-    dataBinding.isEnabled = true
+    viewBinding.isEnabled = true
 
 //kotlinOptions {
 //    jvmTarget = "1.8"

@@ -1,5 +1,6 @@
 package org.gmetais.downloadmanager.model
 
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
 import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.data.File
@@ -37,9 +38,9 @@ class FileFilter(private val directoryModel: DirectoryModel) : CoroutineScope {
     private fun publish(list: List<File>?) {
         originalData?.let {
             if (list?.isEmpty() == false)
-                directoryModel.dataResult.value = it.copy(files = list)
+                (directoryModel.dataResult as MutableLiveData).value = it.copy(files = list)
             else {
-                directoryModel.dataResult.value = it
+                (directoryModel.dataResult as MutableLiveData).value = it
                 originalData = null
             }
         }

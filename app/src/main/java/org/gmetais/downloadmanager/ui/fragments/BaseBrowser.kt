@@ -3,10 +3,10 @@ package org.gmetais.downloadmanager.ui.fragments
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import com.google.android.material.snackbar.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.snackbar.Snackbar
 import org.gmetais.downloadmanager.databinding.BrowserBinding
 
 abstract class BaseBrowser : androidx.fragment.app.Fragment(), androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener {

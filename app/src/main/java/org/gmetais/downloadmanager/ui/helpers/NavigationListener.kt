@@ -2,7 +2,6 @@ package org.gmetais.downloadmanager.ui.helpers
 
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.gmetais.downloadmanager.R
 import org.gmetais.downloadmanager.getFragment
@@ -17,7 +16,7 @@ private const val TAG = "NavigationListener"
 @ExperimentalCoroutinesApi
 class NavigationListener(private val activity: MainActivity): BottomNavigationView.OnNavigationItemSelectedListener {
     override fun onNavigationItemSelected(item: MenuItem) = when (item.itemId) {
-        activity.navigation.selectedItemId -> false
+        activity.binding.navigation.selectedItemId -> false
         R.id.navigation_shares -> {
             activity.replaceFragment(R.id.fragment_placeholder, SharesBrowser(), "shares")
             true

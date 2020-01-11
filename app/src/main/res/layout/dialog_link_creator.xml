@@ -1,59 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <data>
-        <variable
-            name="handler"
-            type="org.gmetais.downloadmanager.ui.LinkCreatorDialog.ClickHandler" />
-        <variable
-            name="title"
-            type="String" />
-    </data>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <TextView
-            android:id="@+id/dialog_title"
-            android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        android:textColor="@color/colorPrimary"
+        android:text="@{@string/create_download_link_for(title)}"/>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_title"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+        android:textColor="@color/colorPrimary"
+        android:hint="@string/edit_share_hint">
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:textColor="@color/colorPrimary"
-            android:text="@{@string/create_download_link_for(title)}"/>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_title"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-            android:textColor="@color/colorPrimary"
-            android:hint="@string/edit_share_hint">
-            <EditText
-                android:id="@+id/edit_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{title}"
-                android:maxLines="1"
-                android:inputType="text"
-                android:imeOptions="actionSend"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <Button
-            android:id="@+id/link_action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/input_layout"
-            android:layout_marginTop="16dp"
-            android:text="@string/share_ok"
-            android:textColor="@color/colorPrimary"
-            style="?android:attr/borderlessButtonStyle"
-            android:onClick="@{() -> handler.onClick()}"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+            android:text="@{title}"
+            android:maxLines="1"
+            android:inputType="text"
+            android:imeOptions="actionSend"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:id="@+id/link_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_layout"
+        android:layout_marginTop="16dp"
+        android:text="@string/share_ok"
+        android:textColor="@color/colorPrimary"
+        style="?android:attr/borderlessButtonStyle"
+        android:onClick="@{() -> handler.onClick()}"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

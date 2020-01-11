@@ -1,25 +1,25 @@
 package org.gmetais.downloadmanager.ui.adapters
 
-import androidx.lifecycle.LiveData
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import org.gmetais.downloadmanager.NetworkHelper
-import org.gmetais.downloadmanager.R
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.ShareItemBinding
+import org.gmetais.tools.ImageClick
+import org.gmetais.tools.safeOffer
 
-class SharesAdapter(handler: ShareHandler) : BaseAdapter<SharedFile, ShareItemBinding>(handler) {
+class SharesAdapter : BaseAdapter<SharedFile, ShareItemBinding>() {
 
-    private lateinit var connected : LiveData<Boolean>
-
-    interface ShareHandler {
-        fun open(share: SharedFile) : Unit?
-        fun delete(share: SharedFile)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<ShareItemBinding> {
+        return ViewHolder(ShareItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)).apply {
+            binding.itemDeleteIcon.setOnClickListener { eventsChannel.safeOffer(ImageClick(layoutPosition)) }
+        }
     }
 
-    override fun getLayout() = R.layout.share_item
-
     override fun onBindViewHolder(holder: ViewHolder<ShareItemBinding>, position: Int) {
-        super.onBindViewHolder(holder, position)
-        if (!this::connected.isInitialized) connected = NetworkHelper.getInstance(holder.itemView.context).connected
-        holder.binding.connected = connected
+        holder.binding.itemName.text = dataset[position].name
+        val connected = NetworkHelper.getInstance(holder.itemView.context).connected.value ?: false
+        holder.binding.itemDeleteIcon.isClickable = connected
+        holder.itemView.isClickable = connected
     }
 }

@@ -1,5 +1,6 @@
 package org.gmetais.downloadmanager.model
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,14 +9,17 @@ import org.gmetais.tools.Event
 
 @ExperimentalCoroutinesApi
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
-abstract class BaseModel<out T> : ViewModel() {
+abstract class BaseModel<T> : ViewModel() {
 
     val exception by lazy { MutableLiveData<Event<Exception>>() }
-    val dataResult: T by lazy { initData() }
+    open val dataResult : LiveData<T> = MutableLiveData()
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable -> exception.value = Event(throwable as? Exception ?: Exception(throwable)) }
 
     abstract fun refresh() : Job
-    abstract fun initData(): T
 
-    protected fun execute(call: suspend () -> Unit): Job = viewModelScope.launch(exceptionHandler, CoroutineStart.UNDISPATCHED) { call.invoke() }
+    init {
+        viewModelScope.launch { refresh() }
+    }
+
+    protected fun execute(call: suspend () -> Unit): Job = viewModelScope.launch(exceptionHandler, CoroutineStart.UNDISPATCHED) { call() }
 }

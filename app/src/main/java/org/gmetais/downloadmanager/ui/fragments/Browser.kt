@@ -9,8 +9,11 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.gmetais.downloadmanager.R
 import org.gmetais.downloadmanager.data.Directory
 import org.gmetais.downloadmanager.data.File
@@ -21,8 +24,9 @@ import org.gmetais.downloadmanager.replaceFragment
 import org.gmetais.downloadmanager.ui.LinkCreatorDialog
 import org.gmetais.downloadmanager.ui.adapters.BrowserAdapter
 import org.gmetais.downloadmanager.ui.adapters.PathAdapter
+import org.gmetais.tools.Click
 
-class Browser : BaseBrowser(), BrowserAdapter.IHandler {
+class Browser : BaseBrowser() {
 
     private val directoryModel: DirectoryModel by lazy { ViewModelProviders.of(this, DirectoryModel.Factory(arguments?.getString("path"))).get(DirectoryModel::class.java) }
     private lateinit var searchItem : MenuItem
@@ -39,11 +43,14 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.filesList.adapter = BrowserAdapter(this)
+        val browserAdapter = BrowserAdapter()
+        binding.filesList.adapter = browserAdapter
         val path = arguments?.getString("path")
         activity?.title = path?.getNameFromPath() ?: "root"
-        directoryModel.dataResult.observe(this, Observer<Directory> { update(it) })
-        directoryModel.exception.observe(this, Observer { onError(it?.getContent()) })
+        directoryModel.dataResult.observe(viewLifecycleOwner, Observer<Directory> {
+            update(it)
+        })
+        directoryModel.exception.observe(viewLifecycleOwner, Observer { onError(it?.getContent()) })
         showProgress()
         if (path != null) binding.ariane.run {
             visibility = View.VISIBLE
@@ -54,6 +61,7 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
             adapter = pathAdapter
             scrollToPosition(pathAdapter.itemCount-1)
         }
+        browserAdapter.events.onEach { it.process() }.launchIn(lifecycleScope)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -72,15 +80,15 @@ class Browser : BaseBrowser(), BrowserAdapter.IHandler {
         (binding.filesList.adapter as BrowserAdapter).update(directory.files.sortedBy { !it.isDirectory })
     }
 
-    @ExperimentalCoroutinesApi
-    override fun open(file: File) {
-        if (file.isDirectory)
-            activity?.replaceFragment(R.id.fragment_placeholder, Browser().putStringExtra("path", file.path), file.path.getNameFromPath(), true)
-        else
-            activity?.supportFragmentManager?.let { LinkCreatorDialog().putStringExtra("path", file.path).show(it, "linkin park") }
-    }
-
     override fun onRefresh() {
         directoryModel.refresh()
+    }
+
+    private fun Click.process() {
+        val item = directoryModel.dataResult.value?.files?.get(position) ?: return
+        if (item.isDirectory)
+            activity?.replaceFragment(R.id.fragment_placeholder, Browser().putStringExtra("path", item.path), item.path.getNameFromPath(), true)
+        else
+            activity?.supportFragmentManager?.let { LinkCreatorDialog().putStringExtra("path", item.path).show(it, "linkin park") }
     }
 }

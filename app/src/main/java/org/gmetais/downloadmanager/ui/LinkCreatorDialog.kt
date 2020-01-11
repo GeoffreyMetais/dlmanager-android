@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.gmetais.downloadmanager.data.SharedFile
 import org.gmetais.downloadmanager.databinding.DialogLinkCreatorBinding
 import org.gmetais.downloadmanager.getNameFromPath
@@ -21,10 +21,6 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
     private val path : String by lazy { arguments?.getString("path") ?: "" }
     private lateinit var binding: DialogLinkCreatorBinding
 
-    inner class ClickHandler {
-        fun onClick() = addFile()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogLinkCreatorBinding.inflate(inflater, container, false)
         return binding.root
@@ -32,8 +28,8 @@ class LinkCreatorDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.title = path.getNameFromPath()
-        binding.handler = ClickHandler()
+        binding.dialogTitle.text = path.getNameFromPath()
+        binding.root.setOnClickListener { addFile() }
         binding.editName.setOnEditorActionListener { _, _, _ -> addFile() }
     }
 
